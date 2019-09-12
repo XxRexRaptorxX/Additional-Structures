@@ -156,7 +156,7 @@ public class StructureList {
 		public static final StructureGenerator NETHER_TOTEM_2 = new StructureGenerator("nether_totem2");
 		public static final StructureGenerator UNDERGROUND_BASE = new StructureGenerator("underground_base");
 		public static final StructureGenerator UNDERGROUND_PRISON = new StructureGenerator("underground_prison");
-		public static final StructureGenerator SEWAGE_SYSTEM = new StructureGenerator("underground_system");
+		public static final StructureGenerator SEWAGE_SYSTEM = new StructureGenerator("underground_sewage_system");
 		public static final StructureGenerator UNDERGROUND_STOLLEN = new StructureGenerator("underground_stollen");
 		public static final StructureGenerator UNDERGROUND_VILLAGE = new StructureGenerator("underground_village");
 		
