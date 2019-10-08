@@ -28,9 +28,9 @@ public class Events {
 		if (ConfigGeneral.activateUpdateChecker) {
 		if (UpdateChecker.isNewVersionAvailable() && !hasShownUp && Minecraft.getMinecraft().currentScreen == null) {
 	        
-				ClickEvent versionCheckChatClickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://minecraft.curseforge.com/projects/additional-structures");
+				ClickEvent versionCheckChatClickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/mc-mods/additional-structures");
 	            Style clickableChatStyle = new Style().setClickEvent(versionCheckChatClickEvent);
-	            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.BLUE + "A newer version of Additional Structures is available!"));
+	            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.BLUE + "A newer version of " + TextFormatting.YELLOW + Reference.NAME + TextFormatting.BLUE + " is available!"));
 	            TextComponentString versionWarningChatComponent = new TextComponentString(TextFormatting.GRAY + "Click here to update!");
 	            versionWarningChatComponent.setStyle(clickableChatStyle);
 	            Minecraft.getMinecraft().player.sendMessage(versionWarningChatComponent);

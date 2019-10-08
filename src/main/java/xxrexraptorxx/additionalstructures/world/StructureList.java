@@ -180,5 +180,25 @@ public class StructureList {
 		public static final StructureGenerator NETHER_DUNGEON_2 = new StructureGenerator("nether_dungeon2");
 		public static final StructureGenerator NETHER_DUNGEON_3 = new StructureGenerator("nether_dungeon3");
 		public static final StructureGenerator NETHER_VILLAGER_HOUSE = new StructureGenerator("nether_villager_house");
+		
+		//v.2.3
+		public static final StructureGenerator SILVERFISH_CLUSTER_SMALL = new StructureGenerator("silverfish_cluster_small");
+		public static final StructureGenerator SILVERFISH_CLUSTER_BIG = new StructureGenerator("silverfish_cluster_big");
+		public static final StructureGenerator BUSH_4 = new StructureGenerator("bush4");
+		public static final StructureGenerator ROCK_4 = new StructureGenerator("rock4");
+		public static final StructureGenerator MUSHROOM = new StructureGenerator("mushroom");
+		public static final StructureGenerator CHEST_TRAP = new StructureGenerator("chest_trap");
+		public static final StructureGenerator FLOTSAM_1 = new StructureGenerator("flotsam1");
+		public static final StructureGenerator FLOTSAM_2 = new StructureGenerator("flotsam2");
+		public static final StructureGenerator FLOTSAM_3 = new StructureGenerator("flotsam3");
+		public static final StructureGenerator OBSIDIAN_SPIKES_1 = new StructureGenerator("obsidian_spikes1");
+		public static final StructureGenerator OBSIDIAN_SPIKES_2 = new StructureGenerator("obsidian_spikes2");
+		public static final StructureGenerator OBSIDIAN_SPIKES_3 = new StructureGenerator("obsidian_spikes3");
+		public static final StructureGenerator ALTAR_TOTEM_1 = new StructureGenerator("totem_altar1");
+		public static final StructureGenerator ALTAR_TOTEM_2 = new StructureGenerator("totem_altar2");
+		public static final StructureGenerator ALTAR_TOTEM_3 = new StructureGenerator("totem_altar3");
+		public static final StructureGenerator TOWER_1 = new StructureGenerator("tower1");
+		public static final StructureGenerator TOWER_2 = new StructureGenerator("tower2");
+
 
 }

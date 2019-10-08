@@ -8,6 +8,7 @@ import java.util.Set;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -27,7 +28,7 @@ public class WorldGenStructures implements IWorldGenerator {
     
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if(world.getWorldInfo().isMapFeaturesEnabled()) {
+		if(world.getWorldInfo().isMapFeaturesEnabled() && world.getWorldType() != WorldType.FLAT) {
 			int blockX = (chunkX * 16) + random.nextInt(15);			//int blockX = chunkX * 16 + random.nextInt(16) + 8;   OLD
 			int blockZ = (chunkZ * 16) + random.nextInt(15);
 			
@@ -64,6 +65,9 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateDownsetStructure(StructureList.END_RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.END));
 				generateDownsetStructure(StructureList.ENDBRICK_PILLAR_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceStonePillars, BiomeDictionary.getBiomes(Type.END));
 				generateDownsetStructure(StructureList.ENDBRICK_PILLAR_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceStonePillars, BiomeDictionary.getBiomes(Type.END));
+				generateBuryStructure(StructureList.OBSIDIAN_SPIKES_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceObsidianSpikes, BiomeDictionary.getBiomes(Type.END));
+				generateBuryStructure(StructureList.OBSIDIAN_SPIKES_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceObsidianSpikes, BiomeDictionary.getBiomes(Type.END));
+				generateBuryStructure(StructureList.OBSIDIAN_SPIKES_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceObsidianSpikes, BiomeDictionary.getBiomes(Type.END));
 			}
 		} else if (world.provider.getDimension() == DimensionType.NETHER.getId()) {
 			if(ConfigGeneral.activateNetherGeneration) {
@@ -109,6 +113,7 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateStructure(StructureList.ROCK_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));
 				generateStructure(StructureList.ROCK_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));
 				generateStructure(StructureList.ROCK_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));			
+				generateDownsetStructure(StructureList.ROCK_4, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));			
 				generateStructure(StructureList.SAND_ROCK_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));
 				generateStructure(StructureList.SAND_ROCK_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));
 				generateStructure(StructureList.SAND_ROCK_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.SANDY));
@@ -158,6 +163,11 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateBuryStructure(StructureList.HORCRUX, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpecials, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.SWAMP));
+				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));				
+				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));	
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
 				//Jungle
 				generateStructure(StructureList.TREE_HOLE, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.JUNGLE));
 				generateStructure(StructureList.DEAD_JUNGLE_TREE, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.JUNGLE));
@@ -175,6 +185,7 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.JUNGLE));
 				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.JUNGLE));
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.JUNGLE));
+				generateStructure(StructureList.MUSHROOM, world, random, blockX, blockZ, ConfigStructures.spawnchanceMushrooms, BiomeDictionary.getBiomes(Type.JUNGLE));
 				//Forest
 				generateStructure(StructureList.OAK_LOG, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.OAK_LOG_SHORT, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.FOREST));
@@ -187,6 +198,7 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateStructure(StructureList.ROCK_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.ROCK_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.ROCK_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
+				generateDownsetStructure(StructureList.ROCK_4, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.ROCK_COBBLE_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.ROCK_COBBLE_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
 				generateStructure(StructureList.ROCK_COBBLE_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.FOREST));
@@ -218,11 +230,19 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateStructure(StructureList.RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.FOREST));
 				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.FOREST));
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.FOREST));				
+				generateBuryStructure(StructureList.CHEST_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTraps, BiomeDictionary.getBiomes(Type.FOREST));				
 				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.FOREST));
+				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));				
+				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));	
+				generateStructure(StructureList.MUSHROOM, world, random, blockX, blockZ, ConfigStructures.spawnchanceMushrooms, BiomeDictionary.getBiomes(Type.FOREST));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.FOREST));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.FOREST));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.FOREST));
 				//Plains
 				generateStructure(StructureList.ROCK_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateStructure(StructureList.ROCK_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateStructure(StructureList.ROCK_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.PLAINS));
+				generateDownsetStructure(StructureList.ROCK_4, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateDownsetStructure(StructureList.CAMP, world, random, blockX, blockZ, ConfigStructures.spawnchanceCamps, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateStructure(StructureList.SCARECROW, world, random, blockX, blockZ, ConfigStructures.spawnchanceScarecrow, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateStructure(StructureList.BUSH_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceBushes, BiomeDictionary.getBiomes(Type.PLAINS));
@@ -250,30 +270,35 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.UNDERGROUND_PRISON, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.PLAINS));				
 				generateUndergroundStructure(StructureList.SEWAGE_SYSTEM, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.PLAINS));							
 				generateStructure(StructureList.RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.PLAINS));
-				generateStructure(StructureList.STONE_CIRCLE_RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.PLAINS));
-				//Hills
-				generateStructure(StructureList.ROCK_COBBLE_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.HILLS));
-				generateStructure(StructureList.ROCK_COBBLE_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.HILLS));
-				generateStructure(StructureList.ROCK_COBBLE_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.HILLS));
-				generateStructure(StructureList.STONE_PILLAR, world, random, blockX, blockZ, ConfigStructures.spawnchanceStonePillars, BiomeDictionary.getBiomes(Type.HILLS));
-				generateBuryStructure(StructureList.LAVA_FOUNTAIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceLavaFountain, BiomeDictionary.getBiomes(Type.HILLS));
-				generateBuryStructure(StructureList.METEOR, world, random, blockX, blockZ, ConfigStructures.spawnchanceMeteor, BiomeDictionary.getBiomes(Type.HILLS));
-				generateBuryStructure(StructureList.MINE_ENTRY, world, random, blockX, blockZ, ConfigStructures.spawnchanceMineEntry ,BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.HILLS));
-				generateBuryStructure(StructureList.FLAG, world, random, blockX, blockZ, ConfigStructures.spawnchanceOthers + 1500, BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.SPIDER_NEST_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.SPIDER_NEST_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.SPIDER_NEST_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.UNDERGROUND_BASE, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.UNDERGROUND_VILLAGE, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.UNDERGROUND_STOLLEN, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.UNDERGROUND_PRISON, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.SEWAGE_SYSTEM, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.HILLS));							
-				generateUndergroundStructure(StructureList.DUNGEON_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundDungeons, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.DUNGEON_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundDungeons, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.HILLS));				
-				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.HILLS));
-				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.HILLS));				
+				generateBuryStructure(StructureList.STONE_CIRCLE_RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.PLAINS));
+				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));				
+				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));	
+				generateStructure(StructureList.MUSHROOM, world, random, blockX, blockZ, ConfigStructures.spawnchanceMushrooms + 5000, BiomeDictionary.getBiomes(Type.PLAINS));
+				//Mountain
+				generateStructure(StructureList.ROCK_COBBLE_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateStructure(StructureList.ROCK_COBBLE_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateStructure(StructureList.ROCK_COBBLE_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateStructure(StructureList.STONE_PILLAR, world, random, blockX, blockZ, ConfigStructures.spawnchanceStonePillars, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateBuryStructure(StructureList.LAVA_FOUNTAIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceLavaFountain, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateBuryStructure(StructureList.METEOR, world, random, blockX, blockZ, ConfigStructures.spawnchanceMeteor, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateBuryStructure(StructureList.MINE_ENTRY, world, random, blockX, blockZ, ConfigStructures.spawnchanceMineEntry ,BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateBuryStructure(StructureList.FLAG, world, random, blockX, blockZ, ConfigStructures.spawnchanceOthers + 1500, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.SPIDER_NEST_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.SPIDER_NEST_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.SPIDER_NEST_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpiderNests, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.UNDERGROUND_BASE, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.UNDERGROUND_VILLAGE, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.UNDERGROUND_STOLLEN, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.UNDERGROUND_PRISON, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.SEWAGE_SYSTEM, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.MOUNTAIN));							
+				generateUndergroundStructure(StructureList.DUNGEON_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundDungeons, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.DUNGEON_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundDungeons, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.MOUNTAIN));
+				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.SILVERFISH_CLUSTER_SMALL, world, random, blockX, blockZ, ConfigStructures.spawnchanceSilverfishCluster, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
+				generateUndergroundStructure(StructureList.SILVERFISH_CLUSTER_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceSilverfishCluster, BiomeDictionary.getBiomes(Type.MOUNTAIN));				
 				//Mesa
 				generateStructure(StructureList.ACACIA_LOG, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.MESA));
 				generateStructure(StructureList.SKULL, world, random, blockX, blockZ, ConfigStructures.spawnchanceSkulls, BiomeDictionary.getBiomes(Type.MESA));
@@ -286,7 +311,10 @@ public class WorldGenStructures implements IWorldGenerator {
 				//Ocean
 				generateDownsetStructure(StructureList.BOAT, world, random, blockX, blockZ, ConfigStructures.spawnchanceBoats, BiomeDictionary.getBiomes(Type.OCEAN));
 				generateDownsetStructure(StructureList.RAFT, world, random, blockX, blockZ, ConfigStructures.spawnchanceBoats, BiomeDictionary.getBiomes(Type.OCEAN));
-				generateDownsetStructure(StructureList.OAK_LOG, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs + 3000, BiomeDictionary.getBiomes(Type.OCEAN));
+				generateDownsetStructure(StructureList.OAK_LOG, world, random, blockX, blockZ, ConfigStructures.spawnchanceFlotsam, BiomeDictionary.getBiomes(Type.OCEAN));
+				generateDownsetStructure(StructureList.FLOTSAM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceFlotsam, BiomeDictionary.getBiomes(Type.OCEAN));
+				generateDownsetStructure(StructureList.FLOTSAM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceFlotsam, BiomeDictionary.getBiomes(Type.OCEAN));
+				generateDownsetStructure(StructureList.FLOTSAM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceFlotsam, BiomeDictionary.getBiomes(Type.OCEAN));
 				//Savanna
 				generateStructure(StructureList.ACACIA_LOG, world, random, blockX, blockZ, ConfigStructures.spawnchanceLogs, BiomeDictionary.getBiomes(Type.SAVANNA));
 				generateStructure(StructureList.SKULL, world, random, blockX, blockZ, ConfigStructures.spawnchanceSkulls, BiomeDictionary.getBiomes(Type.SAVANNA));
@@ -308,7 +336,20 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateStructure(StructureList.FALLEN_DEAD_TREE_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceFallenTrees, BiomeDictionary.getBiomes(Type.WASTELAND));
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.WASTELAND));				
 				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.WASTELAND));
-				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.WASTELAND));				
+				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.WASTELAND));		
+				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));				
+				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));	
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
+				//Spooky
+				generateUndergroundStructure(StructureList.SILVERFISH_CLUSTER_SMALL, world, random, blockX, blockZ, ConfigStructures.spawnchanceSilverfishCluster, BiomeDictionary.getBiomes(Type.SPOOKY));				
+				generateUndergroundStructure(StructureList.SILVERFISH_CLUSTER_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceSilverfishCluster, BiomeDictionary.getBiomes(Type.HILLS));				
+				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.SPOOKY));
+				generateStructure(StructureList.SKULL, world, random, blockX, blockZ, ConfigStructures.spawnchanceSkulls, BiomeDictionary.getBiomes(Type.SPOOKY));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SPOOKY));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SPOOKY));
+				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SPOOKY));
 			    }
 			  }
 			}
