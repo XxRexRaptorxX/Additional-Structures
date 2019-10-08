@@ -122,6 +122,9 @@ public class ConfigStructures {
     
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceWallRuins = 2000;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceSilverfishCluster = 5000;
     
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceWheatBalls = 3000;
@@ -142,16 +145,16 @@ public class ConfigStructures {
 	public static int spawnchanceFossils = 2000;
     
 	@Config.RangeInt(min = 1)
-	public static int spawnchanceObsidianPillars = 2000;
+	public static int spawnchanceObsidianPillars = 1000;
     
 	@Config.RangeInt(min = 1)
-	public static int spawnchanceEndTowers = 3000;
+	public static int spawnchanceEndTowers = 2500;
     
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceEndCrystals = 2000;
     
 	@Config.RangeInt(min = 1)
-	public static int spawnchanceEndBuildings = 5000;
+	public static int spawnchanceEndBuildings = 3500;
     
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceSpiderNests = 5000;
@@ -161,5 +164,20 @@ public class ConfigStructures {
 	
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceNetherBuildings = 5000;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceTowers = 3000;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceMushrooms = 8000;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceObsidianSpikes = 500;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceFlotsam = 5000;
+	
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceTraps = 5000;
     
 }
