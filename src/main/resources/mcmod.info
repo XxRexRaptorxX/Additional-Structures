@@ -3,7 +3,11 @@
   "modid": "additionalstructures",
   "name": "Rex's Additional Structures",
   "description": "Adds new structures into the game!",
+<<<<<<< HEAD
   "version": "2.3.0",
+=======
+  "version": "2.2.4",
+>>>>>>> 7fd37795002750d0d574bb76338067725f0bb20f
   "mcversion": "1.12.0,1.12.2",
   "url": "https://minecraft.curseforge.com/projects/additional-structures",
   "updateUrl": "https://minecraft.curseforge.com/projects/additional-structures",

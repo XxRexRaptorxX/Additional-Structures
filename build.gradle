@@ -11,8 +11,13 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
+<<<<<<< HEAD
 version = "2.3.0"
 group= "xxrexraptorxx.additionalstructures.main" 
+=======
+version = "2.2.4"
+group= "xxrexraptorxx.additionalstructures.main" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+>>>>>>> 7fd37795002750d0d574bb76338067725f0bb20f
 archivesBaseName = "additionalstructures"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.

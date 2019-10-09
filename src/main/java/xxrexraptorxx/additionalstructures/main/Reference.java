@@ -9,7 +9,11 @@ public class Reference {
 	
 	public static final String NAME = "Additional Structures";
     public static final String MODID = "additionalstructures";
+<<<<<<< HEAD
     public static final String VERSION = "2.3.0";
+=======
+    public static final String VERSION = "2.2.4";
+>>>>>>> 7fd37795002750d0d574bb76338067725f0bb20f
     public static final String MCVERSIONS = "[1.12.0,1.12.2]";
     public static final String CLIENT = "xxrexraptorxx.additionalstructures.proxy.ClientProxy";
     public static final String SERVER = "xxrexraptorxx.additionalstructures.proxy.ServerProxy";
