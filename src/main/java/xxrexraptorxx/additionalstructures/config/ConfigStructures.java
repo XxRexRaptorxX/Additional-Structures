@@ -166,7 +166,7 @@ public class ConfigStructures {
 	public static int spawnchanceNetherBuildings = 5000;
 	
 	@Config.RangeInt(min = 1)
-	public static int spawnchanceTowers = 3000;
+	public static int spawnchanceTowers = 5000;
 	
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceMushrooms = 8000;

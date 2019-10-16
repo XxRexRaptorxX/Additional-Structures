@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import xxrexraptorxx.additionalstructures.config.ConfigGeneral;
 import xxrexraptorxx.additionalstructures.config.ConfigStructures;
+import xxrexraptorxx.additionalstructures.util.DebugHelper;
 
 public class WorldGenStructures implements IWorldGenerator {
 	
@@ -29,8 +30,8 @@ public class WorldGenStructures implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.getWorldInfo().isMapFeaturesEnabled() && world.getWorldType() != WorldType.FLAT) {
-			int blockX = (chunkX * 16) + random.nextInt(15);			//int blockX = chunkX * 16 + random.nextInt(16) + 8;   OLD
-			int blockZ = (chunkZ * 16) + random.nextInt(15);
+			int blockX = chunkX * 16 + random.nextInt(16);			//(chunkZ * 16) + random.nextInt(15)   OLD
+			int blockZ = chunkZ * 16 + random.nextInt(16);
 			
 		if (world.provider.getDimension() == DimensionType.THE_END.getId()) {
 			if(ConfigGeneral.activateEndGeneration) {
@@ -163,8 +164,8 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.TOMB, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateBuryStructure(StructureList.HORCRUX, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpecials, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.SWAMP));
-				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));				
-				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));	
+				generateDownsetStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));				
+				generateDownsetStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.SWAMP));	
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.SWAMP));
@@ -232,8 +233,8 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.FOREST));				
 				generateBuryStructure(StructureList.CHEST_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTraps, BiomeDictionary.getBiomes(Type.FOREST));				
 				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.FOREST));
-				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));				
-				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));	
+				generateDownsetStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));				
+				generateDownsetStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.FOREST));	
 				generateStructure(StructureList.MUSHROOM, world, random, blockX, blockZ, ConfigStructures.spawnchanceMushrooms, BiomeDictionary.getBiomes(Type.FOREST));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.FOREST));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.FOREST));
@@ -271,8 +272,8 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.SEWAGE_SYSTEM, world, random, blockX, blockZ, ConfigStructures.spawnchanceUndergroundBases, BiomeDictionary.getBiomes(Type.PLAINS));							
 				generateStructure(StructureList.RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.PLAINS));
 				generateBuryStructure(StructureList.STONE_CIRCLE_RUIN, world, random, blockX, blockZ, ConfigStructures.spawnchanceRuins, BiomeDictionary.getBiomes(Type.PLAINS));
-				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));				
-				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));	
+				generateDownsetStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));				
+				generateDownsetStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.PLAINS));	
 				generateStructure(StructureList.MUSHROOM, world, random, blockX, blockZ, ConfigStructures.spawnchanceMushrooms + 5000, BiomeDictionary.getBiomes(Type.PLAINS));
 				//Mountain
 				generateStructure(StructureList.ROCK_COBBLE_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceRocks, BiomeDictionary.getBiomes(Type.MOUNTAIN));
@@ -337,8 +338,8 @@ public class WorldGenStructures implements IWorldGenerator {
 				generateUndergroundStructure(StructureList.TOMB_BIG, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs + 500, BiomeDictionary.getBiomes(Type.WASTELAND));				
 				generateUndergroundStructure(StructureList.UNDERGOUND_NETHER_PORTAL, world, random, blockX, blockZ, ConfigStructures.spawnchanceNetherPortals, BiomeDictionary.getBiomes(Type.WASTELAND));
 				generateUndergroundStructure(StructureList.FALL_TRAP, world, random, blockX, blockZ, ConfigStructures.spawnchanceTombs, BiomeDictionary.getBiomes(Type.WASTELAND));		
-				generateBuryStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));				
-				generateBuryStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));	
+				generateDownsetStructure(StructureList.TOWER_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));				
+				generateDownsetStructure(StructureList.TOWER_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceTowers, BiomeDictionary.getBiomes(Type.WASTELAND));	
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_1, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_2, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
 				generateDownsetStructure(StructureList.ALTAR_TOTEM_3, world, random, blockX, blockZ, ConfigStructures.spawnchanceSpawnAltars, BiomeDictionary.getBiomes(Type.WASTELAND));
@@ -360,7 +361,7 @@ public class WorldGenStructures implements IWorldGenerator {
 
 	
 	private void generateStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		float chanceModified = ConfigStructures.generationModifier * chance;    
+		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY + 1, blockZ);
@@ -368,16 +369,15 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(random.nextInt((int) chanceModified) == 0) {
-					
+			if(chanceModified == 0) {
 					generator.generate(world, random, pos);
-				}
 			}
+		}
 	}
 	
 	
 	private void generateDownsetStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		float chanceModified = ConfigStructures.generationModifier * chance;    
+		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
 
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY , blockZ);
@@ -385,16 +385,15 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(random.nextInt((int) chanceModified) == 0) {
-					
+			if(chanceModified == 0) {
 					generator.generate(world, random, pos);
-				}
 			}
+		}
 	}
 	
 	
 	private void generateBuryStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		float chanceModified = ConfigStructures.generationModifier * chance;    
+		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
 
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY - 2, blockZ);
@@ -402,16 +401,15 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(random.nextInt((int) chanceModified) == 0) {
-					
+			if(chanceModified == 0) {
 					generator.generate(world, random, pos);
-				}
 			}
+		}
 	}
 	
 
 	private void generateUndergroundStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		float chanceModified = ConfigStructures.generationModifier * chance;    
+		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, 	(int)(Math.random() * ((blockY - 20 - 25) + 1)) + 25,	 blockZ);
@@ -419,16 +417,15 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(random.nextInt((int) chanceModified) == 0) {
-					
+			if(chanceModified == 0) {		
 					generator.generate(world, random, pos);
-				}
 			}
+		}
 	}
 	
 	
 	private void generateFlyingStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		float chanceModified = ConfigStructures.generationModifier * chance;    
+		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, random.nextInt(230) + blockY + 35, blockZ);
@@ -436,11 +433,10 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(random.nextInt((int) chanceModified) == 0) {
-					
+			if(chanceModified == 0) {	
 					generator.generate(world, random, pos);
-				}
 			}
+		}
 	}
 	
 	
