@@ -11,7 +11,7 @@ import xxrexraptorxx.additionalstructures.main.Reference;
 
 public class UpdateChecker {
 
-	private static final String UPDATE_URL = "https://www.dropbox.com/s/r2qo3tmaw721m79/Additional%20Structures%201.12.2.txt?dl=1";
+	private static final String UPDATE_URL = "https://1drv.ms/t/s!Agq2FTsQMus2geYnjSgCFD7NIaH-TQ?e=LKhDCj?dl=1";
 
 	private static boolean newVersionAvailable = false;
 			

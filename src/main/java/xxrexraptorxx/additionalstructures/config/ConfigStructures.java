@@ -149,7 +149,13 @@ public class ConfigStructures {
     
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceEndTowers = 2500;
-    
+
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceEndTrees = 3000;
+
+	@Config.RangeInt(min = 1)
+	public static int spawnchanceShulkerClusters = 2500;
+
 	@Config.RangeInt(min = 1)
 	public static int spawnchanceEndCrystals = 2000;
     

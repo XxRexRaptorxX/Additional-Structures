@@ -77,7 +77,7 @@ public class StructureList {
 		public static final StructureGenerator SNOW_PILE_2 = new StructureGenerator("snow_pile2");
 		public static final StructureGenerator SNOW_PILE_3 = new StructureGenerator("snow_pile3");
 		public static final StructureGenerator SPRUCE_LOG_SHORT = new StructureGenerator("spruce_log_short");
-		public static final StructureGenerator STONE_PILLAR = new StructureGenerator("stone_pillar");
+		public static final StructureGenerator STONE_PILLAR_1 = new StructureGenerator("stone_pillar");
 		public static final StructureGenerator TOMB = new StructureGenerator("underground_tomb");
 		public static final StructureGenerator VILLAGER_HOUSE = new StructureGenerator("villager_house");
 		public static final StructureGenerator VILLAGER_HOUSE_SMALL = new StructureGenerator("villager_house_small");
@@ -199,6 +199,14 @@ public class StructureList {
 		public static final StructureGenerator ALTAR_TOTEM_3 = new StructureGenerator("totem_altar3");
 		public static final StructureGenerator TOWER_1 = new StructureGenerator("tower1");
 		public static final StructureGenerator TOWER_2 = new StructureGenerator("tower2");
+
+		//v.2.4
+		public static final StructureGenerator STONE_PILLAR_2 = new StructureGenerator("stone_pillar2");
+		public static final StructureGenerator STONE_PILLAR_3 = new StructureGenerator("stone_pillar3");
+		public static final StructureGenerator END_TREE_1 = new StructureGenerator("end_tree");
+		public static final StructureGenerator END_TREE_2 = new StructureGenerator("end_tree2");
+		public static final StructureGenerator SHULKER_CLUSTER_1 = new StructureGenerator("shulker_cluster");
+		public static final StructureGenerator SHULKER_CLUSTER_2 = new StructureGenerator("shulker_cluster2");
 
 
 }
