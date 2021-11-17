@@ -5,13 +5,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.lwjgl.Sys;
 import xxrexraptorxx.additionalstructures.main.AdditionalStructures;
 import xxrexraptorxx.additionalstructures.main.Reference;
 
 
 public class UpdateChecker {
 
-	private static final String UPDATE_URL = "https://1drv.ms/t/s!Agq2FTsQMus2geYnjSgCFD7NIaH-TQ?e=LKhDCj?dl=1";
+	private static final String UPDATE_URL = "https://raw.githubusercontent.com/XxRexRaptorxX/Update-Checker/main/AdditionalStructures%201.12.x?dl=0";
 
 	private static boolean newVersionAvailable = false;
 			
@@ -24,7 +25,6 @@ public class UpdateChecker {
 				Scanner scanner = new Scanner(url.openStream());
 				String latestVersion = scanner.nextLine();
 				scanner.close();
-				
 				if (!Reference.VERSION.equals(latestVersion)) {
 					newVersionAvailable = true;
 				}
