@@ -378,10 +378,17 @@ public class WorldGenStructures implements IWorldGenerator {
 		}
 	}
 
+	private boolean generationChanceRoll(Random random, int chance) {
+		if(chance <= 0) {
+			return false;
+		}
+
+		return random.nextInt(Math.max((int)(ConfigStructures.generationModifier * chance), 1)) == 0;
+	}
 
 	
 	private void generateStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
+		boolean rollPassed = generationChanceRoll(random, chance);
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY + 1, blockZ);
@@ -389,7 +396,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(chanceModified == 0) {
+			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
 		}
@@ -397,7 +404,7 @@ public class WorldGenStructures implements IWorldGenerator {
 	
 	
 	private void generateDownsetStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
+		boolean rollPassed = generationChanceRoll(random, chance);
 
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY , blockZ);
@@ -405,7 +412,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(chanceModified == 0) {
+			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
 		}
@@ -413,7 +420,7 @@ public class WorldGenStructures implements IWorldGenerator {
 	
 	
 	private void generateBuryStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
+		boolean rollPassed = generationChanceRoll(random, chance);
 
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, blockY - 2, blockZ);
@@ -421,7 +428,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(chanceModified == 0) {
+			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
 		}
@@ -429,7 +436,7 @@ public class WorldGenStructures implements IWorldGenerator {
 	
 
 	private void generateUndergroundStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
+		boolean rollPassed = generationChanceRoll(random, chance);
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, 	(int)(Math.random() * ((blockY - 20 - 25) + 1)) + 25,	 blockZ);
@@ -437,7 +444,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(chanceModified == 0) {		
+			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
 		}
@@ -445,7 +452,7 @@ public class WorldGenStructures implements IWorldGenerator {
 	
 	
 	private void generateFlyingStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
-		int chanceModified = random.nextInt((int) Math.max(ConfigStructures.generationModifier * chance, 1.0f));    
+		boolean rollPassed = generationChanceRoll(random, chance);
 		
 		int blockY = StructureGenerator.getGroundFromAbove(world, blockX, blockZ);
 		BlockPos pos = new BlockPos(blockX, random.nextInt(230) + blockY + 35, blockZ);
@@ -453,7 +460,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
 		if(set.contains(biome)) {
-			if(chanceModified == 0) {	
+			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
 		}
