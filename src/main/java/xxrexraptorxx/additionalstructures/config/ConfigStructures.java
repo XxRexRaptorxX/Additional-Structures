@@ -11,7 +11,7 @@ public class ConfigStructures {
     @Config.RangeDouble(min = 0.1f, max = 10.0f)
 	public static float generationModifier = 1.0f;
 	
-	@Config.Comment(value = "This are the chances of the structure types (higher value = rarer structure, zero to disable)")
+	@Config.Comment(value = "This are the chances of the structure types (higher value = rarer structure, 0 to disable)")
 	@Config.RangeInt(min = 0)
     public static int spawnchanceBiggerCacti = 1000;
 	

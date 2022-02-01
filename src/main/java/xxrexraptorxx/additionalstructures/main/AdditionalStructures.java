@@ -13,8 +13,6 @@ import xxrexraptorxx.additionalstructures.proxy.CommonProxy;
  * @author XxRexRaptorxX (RexRaptor)
  * @projectPage https://minecraft.curseforge.com/projects/additional-structures
  **---------------------------------------------------------------------------------*/
-
-
 @Mod(modid = Reference.MODID, version = Reference.VERSION, acceptedMinecraftVersions = Reference.MCVERSIONS, acceptableRemoteVersions = "*")
 public class AdditionalStructures {
 
