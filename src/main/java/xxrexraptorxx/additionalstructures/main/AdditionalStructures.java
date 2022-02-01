@@ -7,12 +7,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import xxrexraptorxx.additionalstructures.proxy.CommonProxy;
+import xxrexraptorxx.additionalstructures.mystcraft.MystcraftProxy;
 
 /**---------------------------------------------------------------------------------*
  * @author XxRexRaptorxX (RexRaptor)
  * @projectPage https://minecraft.curseforge.com/projects/additional-structures
  **---------------------------------------------------------------------------------*/
-@Mod(modid = Reference.MODID, version = Reference.VERSION, acceptedMinecraftVersions = Reference.MCVERSIONS, acceptableRemoteVersions = "*")
+
+@Mod(modid = Reference.MODID, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES, acceptedMinecraftVersions = Reference.MCVERSIONS, acceptableRemoteVersions = "*")
 public class AdditionalStructures {
 
     @Mod.Instance
@@ -20,6 +22,8 @@ public class AdditionalStructures {
     
     @SidedProxy(clientSide = Reference.CLIENT, serverSide = Reference.SERVER)
     public static CommonProxy proxy;
+    
+    public static MystcraftProxy mystcraft_proxy;
     
     
     /***********************************************************************************************************************************/ 
