@@ -5,8 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-import org.lwjgl.Sys;
-import xxrexraptorxx.additionalstructures.main.AdditionalStructures;
 import xxrexraptorxx.additionalstructures.main.Reference;
 
 
@@ -37,10 +35,6 @@ public class UpdateChecker {
 			
 		}.start();
 		
-	}
-
-	private static synchronized void setNewVersionAvaiable() {
-		newVersionAvailable = true;
 	}
 	
 	public static synchronized boolean isNewVersionAvailable() {

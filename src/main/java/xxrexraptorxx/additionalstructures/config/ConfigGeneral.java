@@ -1,7 +1,6 @@
 package xxrexraptorxx.additionalstructures.config;
 
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Configuration;
 import xxrexraptorxx.additionalstructures.main.Reference;
 
 @Config(modid = Reference.MODID, category = "general", name = "Additional Structures - General")

@@ -1,7 +1,5 @@
 package xxrexraptorxx.additionalstructures.world;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -16,17 +14,10 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import xxrexraptorxx.additionalstructures.config.ConfigGeneral;
 import xxrexraptorxx.additionalstructures.config.ConfigStructures;
-import xxrexraptorxx.additionalstructures.util.DebugHelper;
 
 public class WorldGenStructures implements IWorldGenerator {
-	
-    private static List<Biome> biomeList = ForgeRegistries.BIOMES.getValues();
-    
-
-    
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.getWorldInfo().isMapFeaturesEnabled() && world.getWorldType() != WorldType.FLAT) {
@@ -450,7 +441,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		}
 	}
 	
-	
+	/*
 	private void generateFlyingStructure(WorldGenerator generator, World world, Random random, int blockX, int blockZ, int chance, Set<Biome> set) {
 		boolean rollPassed = generationChanceRoll(random, chance);
 		
@@ -464,10 +455,10 @@ public class WorldGenStructures implements IWorldGenerator {
 					generator.generate(world, random, pos);
 			}
 		}
-	}
+	}*/
 	
 	
-		
+	/*
     private static List<?> getBiomeList() {
         ArrayList<Class> biomeClassList = new ArrayList<>();
         for (Biome biome : biomeList) {
@@ -476,5 +467,5 @@ public class WorldGenStructures implements IWorldGenerator {
             }
         }
         return biomeClassList;
-    }
+    }*/
 }
