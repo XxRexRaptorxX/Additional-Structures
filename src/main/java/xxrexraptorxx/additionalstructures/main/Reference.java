@@ -3,19 +3,20 @@ package xxrexraptorxx.additionalstructures.main;
 import net.minecraft.util.ResourceLocation;
 
 /**
-	 *	 @author XxRexRaptorxX (RexRaptor)
-	 *	 @projectPage https://minecraft.curseforge.com/projects/additional-structures
-	 **/
+ *	 @author XxRexRaptorxX (RexRaptor)
+ *	 @projectPage https://minecraft.curseforge.com/projects/additional-structures
+ **/
 public class Reference {
 	
 	public static final String NAME = "Additional Structures";
     public static final String MODID = "additionalstructures";
-    public static final String VERSION = "2.4.2";
+    public static final String VERSION = "2.5.0";
     public static final String MCVERSIONS = "[1.12.0,1.12.2]";
     public static final String DEPENDENCIES = "after:mystcraft@[0.13.7.01,)";
     public static final String CLIENT = "xxrexraptorxx.additionalstructures.proxy.ClientProxy";
     public static final String SERVER = "xxrexraptorxx.additionalstructures.proxy.ServerProxy";
-    
+
+
     public static final ResourceLocation SYMBOL_NORMAL_STRUCTURE_GENERATION = forAdditionalStrctures("normal_generation");
 
     public static final ResourceLocation SYMBOL_END_STRUCTURES = forAdditionalStrctures("end_structures");
