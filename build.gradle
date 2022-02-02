@@ -70,7 +70,7 @@ repositories {
 
 // Removed runtime part since we don't hard-depend of mystcraft
 dependencies {
-    deobfProvided "com.xcompwiz.mystcraft:mystcraft:${mystcraft_version}:dev"
+    compileOnly "com.xcompwiz.mystcraft:mystcraft:${mystcraft_version}:dev"
 }
 
 // Mystcraft integration end

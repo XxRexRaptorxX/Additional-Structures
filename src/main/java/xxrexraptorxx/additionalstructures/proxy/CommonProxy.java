@@ -1,7 +1,5 @@
 package xxrexraptorxx.additionalstructures.proxy;
  
-import java.lang.reflect.InvocationTargetException;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +21,6 @@ public class CommonProxy {
         UpdateChecker.checkForUpdates();  
         MinecraftForge.EVENT_BUS.register(new Events());
         
-        // TODO: option to disable integration in config
         if (Loader.isModLoaded("mystcraft")) {
         	try {
         		System.out.println("Loading Mystcraft integration");
@@ -34,7 +31,7 @@ public class CommonProxy {
 				AdditionalStructures.mystcraft_proxy = new MystcraftProxy();
 			}
         } else {
-    		System.out.println("Mystcraft integration not active");
+    		System.out.println("Mystcraft not found - integration not active");
         	AdditionalStructures.mystcraft_proxy = new MystcraftProxy();
         }
         

@@ -435,7 +435,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
-		if(set.contains(biome)) {
+		if(set == null || set.contains(biome)) {
 			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
@@ -451,7 +451,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
-		if(set.contains(biome)) {
+		if(set == null || set.contains(biome)) {
 			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
@@ -483,7 +483,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
-		if(set.contains(biome)) {
+		if(set == null || set.contains(biome)) {
 			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
@@ -499,7 +499,7 @@ public class WorldGenStructures implements IWorldGenerator {
 		
 		Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
 		
-		if(set.contains(biome)) {
+		if(set == null || set.contains(biome)) {
 			if(rollPassed) {
 					generator.generate(world, random, pos);
 			}
