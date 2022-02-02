@@ -19,15 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import xxrexraptorxx.additionalstructures.config.ConfigGeneral;
-import xxrexraptorxx.additionalstructures.main.AdditionalStructures;
 import xxrexraptorxx.additionalstructures.main.Reference;
 import xxrexraptorxx.additionalstructures.util.DebugHelper;
 
@@ -164,25 +161,25 @@ public class StructureGenerator extends WorldGenerator {
 						}
 						posY = position.getY() - 1;
 						
-						if(settings.getRotation() == rotation.NONE) {
+						if(settings.getRotation() == Rotation.NONE) {
 							posZ = posZ + 1;
-						} else if (settings.getRotation() == rotation.CLOCKWISE_180) {
+						} else if (settings.getRotation() == Rotation.CLOCKWISE_180) {
 							posZ = posZ - 1;
-						} else if (settings.getRotation() == rotation.CLOCKWISE_90) {
+						} else if (settings.getRotation() == Rotation.CLOCKWISE_90) {
 							posZ = posZ + 1;
-						} else if (settings.getRotation() == rotation.COUNTERCLOCKWISE_90) {
+						} else if (settings.getRotation() == Rotation.COUNTERCLOCKWISE_90) {
 							posZ = posZ - 1;
 						}
 					}
 					posZ = position.getZ();
 					
-					if(settings.getRotation() == rotation.NONE) {
+					if(settings.getRotation() == Rotation.NONE) {
 						posX = posX + 1;
-					} else if (settings.getRotation() == rotation.CLOCKWISE_180) {
+					} else if (settings.getRotation() == Rotation.CLOCKWISE_180) {
 						posX = posX - 1;
-					} else if (settings.getRotation() == rotation.CLOCKWISE_90) {
+					} else if (settings.getRotation() == Rotation.CLOCKWISE_90) {
 						posX = posX - 1;
-					} else if (settings.getRotation() == rotation.COUNTERCLOCKWISE_90) {
+					} else if (settings.getRotation() == Rotation.COUNTERCLOCKWISE_90) {
 						posX = posX + 1;
 					}
 				}

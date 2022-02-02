@@ -57,6 +57,24 @@ dependencies {
 
 }
 
+// Mystcraft integration start
+
+def mystcraft_version = "0.13.7.01"
+
+repositories {
+    maven {
+        name "xcompwiz"
+        url "http://maven.xcompwiz.com"
+    }
+}
+
+// Removed runtime part since we don't hard-depend of mystcraft
+dependencies {
+    compileOnly "com.xcompwiz.mystcraft:mystcraft:${mystcraft_version}:dev"
+}
+
+// Mystcraft integration end
+
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
