@@ -1,0 +1,15 @@
+{
+  "name": "additionalstructures:skeleton_skull",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "additionalstructures:skeleton_skull",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}
