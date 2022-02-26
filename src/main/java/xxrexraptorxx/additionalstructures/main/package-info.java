@@ -1,5 +1,6 @@
+
 /**
- *	 @author XxRexRaptorxX (RexRaptor)
- *	 @projectPage https://minecraft.curseforge.com/projects/additional-structures
+ * @author XxRexRaptorxX (RexRaptor)
+ * @projectPage https://www.curseforge.com/minecraft/mc-mods/additional-structures
  **/
 package xxrexraptorxx.additionalstructures.main;

@@ -1,50 +1,28 @@
 package xxrexraptorxx.additionalstructures.main;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import xxrexraptorxx.additionalstructures.proxy.CommonProxy;
-import xxrexraptorxx.additionalstructures.mystcraft.MystcraftProxy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import xxrexraptorxx.additionalstructures.utils.Config;
 
-/**---------------------------------------------------------------------------------*
+/**
  * @author XxRexRaptorxX (RexRaptor)
- * @projectPage https://minecraft.curseforge.com/projects/additional-structures
- **---------------------------------------------------------------------------------*/
-@Mod(modid = Reference.MODID, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES, acceptedMinecraftVersions = Reference.MCVERSIONS, acceptableRemoteVersions = "*")
+ * @projectPage https://www.curseforge.com/minecraft/mc-mods/additional-structures
+ **/
+@Mod(References.MODID)
 public class AdditionalStructures {
 
-    @Mod.Instance
-    public static AdditionalStructures instance;
-    
-    @SidedProxy(clientSide = Reference.CLIENT, serverSide = Reference.SERVER)
-    public static CommonProxy proxy;
-    
-    public static MystcraftProxy mystcraft_proxy;
-    
-    
-    /***********************************************************************************************************************************/ 
-    /***********************************************************************************************************************************/
+    public static final Logger LOGGER = LogManager.getLogger();
 
-    
-    
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-    	proxy.preInit(event);
+    public AdditionalStructures() {
+        Config.init();
+
     }
-  
-    
-    @Mod.EventHandler
-    public void Init(FMLInitializationEvent event) {
-    	proxy.init(event);
+
+    public static ResourceLocation locate(String key) {
+        return new ResourceLocation(References.MODID, key);
     }
-   
- 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-    	proxy.postInit(event);
-    }
- 
+
+
 }
