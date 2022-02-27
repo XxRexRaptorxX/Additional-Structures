@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:fallen_jungle_tree_1",
+    "size": 1
+  },
+  "biomes": "#minecraft:is_jungle",
+  "adapt_noise": true,
+  "spawn_overrides": {}
+}

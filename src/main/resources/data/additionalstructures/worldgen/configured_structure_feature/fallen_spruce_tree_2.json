@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:fallen_spruce_tree_2",
+    "size": 1
+  },
+  "biomes": "#minecraft:is_taiga",
+  "adapt_noise": true,
+  "spawn_overrides": {}
+}
