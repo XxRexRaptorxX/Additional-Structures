@@ -15,13 +15,7 @@ public class Config {
     public static ForgeConfigSpec CLIENT_CONFIG;
 
     public static ForgeConfigSpec.BooleanValue UPDATE_CHECKER;
-    public static ForgeConfigSpec.BooleanValue DEBUG_MODE;
 
-    public static ForgeConfigSpec.BooleanValue OVERWORLD_GENERATOR;
-    public static ForgeConfigSpec.BooleanValue NETHER_GENERATOR;
-    public static ForgeConfigSpec.BooleanValue END_GENERATOR;
-
-    public static ForgeConfigSpec.DoubleValue GENERATION_MODIFIER;
 
 
     public static void init() {
@@ -38,7 +32,6 @@ public class Config {
 
         builder.comment("General").push(CATEGORY_GENERAL);
         UPDATE_CHECKER = builder.comment("Activate the Update-Checker").define("update-checker", true);
-        DEBUG_MODE = builder.comment("Activate the Debug Mode").define("debug_mode", false);
         builder.pop();
 
         CLIENT_CONFIG = builder.build();

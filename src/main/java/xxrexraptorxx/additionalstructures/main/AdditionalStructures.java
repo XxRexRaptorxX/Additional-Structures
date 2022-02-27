@@ -1,6 +1,5 @@
 package xxrexraptorxx.additionalstructures.main;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,10 +18,5 @@ public class AdditionalStructures {
         Config.init();
 
     }
-
-    public static ResourceLocation locate(String key) {
-        return new ResourceLocation(References.MODID, key);
-    }
-
 
 }
