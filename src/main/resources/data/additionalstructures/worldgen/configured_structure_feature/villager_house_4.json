@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:villager_house_4",
+    "size": 1
+  },
+  "biomes": "minecraft:plains",
+  "adapt_noise": true,
+  "spawn_overrides": {}
+}

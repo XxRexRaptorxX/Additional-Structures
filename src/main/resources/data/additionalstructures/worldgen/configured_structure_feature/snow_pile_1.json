@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:snow_pile_1",
+    "size": 1
+  },
+  "biomes": "minecraft:snowy_plains",
+  "adapt_noise": true,
+  "spawn_overrides": {}
+}

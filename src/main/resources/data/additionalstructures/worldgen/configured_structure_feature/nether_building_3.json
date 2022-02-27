@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:nether_building_3",
+    "size": 1
+  },
+  "biomes": "#minecraft:is_nether",
+  "adapt_noise": true,
+  "spawn_overrides": {}
+}
