@@ -1,7 +1,7 @@
 {
   "type": "minecraft:bastion_remnant",
   "config": {
-    "start_pool": "additionalstructures:spider_nest_1",
+    "start_pool": "additionalstructures:spider_nest_2",
     "size": 1
   },
   "biomes": "#minecraft:has_structure/mineshaft",

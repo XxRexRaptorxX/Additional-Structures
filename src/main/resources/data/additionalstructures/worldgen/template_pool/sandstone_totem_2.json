@@ -1,12 +1,12 @@
 {
-  "name": "additionalstructures:hay_ball_3",
+  "name": "additionalstructures:sandstone_totem_2",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "additionalstructures:hay_ball_3",
+        "location": "additionalstructures:sandstone_totem_2",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

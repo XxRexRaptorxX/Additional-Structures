@@ -1,7 +1,7 @@
 {
   "type": "minecraft:village",
   "config": {
-    "start_pool": "additionalstructures:end_ruin_1",
+    "start_pool": "additionalstructures:end_pillar_ruin_1",
     "size": 1
   },
   "biomes": "minecraft:end_highlands",

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:bastion_remnant",
   "config": {
-    "start_pool": "additionalstructures:sewage_system",
+    "start_pool": "additionalstructures:sewage_system_1",
     "size": 1
   },
   "biomes": "#minecraft:has_structure/mineshaft",
