@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:village",
+  "type": "minecraft:bastion_remnant",
   "config": {
     "start_pool": "additionalstructures:nether_wall_ruin_1",
     "size": 1
