@@ -5,6 +5,6 @@
     "size": 1
   },
   "biomes": "#minecraft:has_structure/mineshaft",
-  "adapt_noise": true,
+  "adapt_noise": false,
   "spawn_overrides": {}
 }

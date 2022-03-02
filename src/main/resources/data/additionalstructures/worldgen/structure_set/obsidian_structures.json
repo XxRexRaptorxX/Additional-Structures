@@ -35,6 +35,10 @@
     {
       "structure": "additionalstructures:obsidian_spike_2",
       "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_spike_3",
+      "weight": 1
     }
   ],
   "placement": {
