@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:fossil_2",
     "size": 1
   },
-  "biomes": "#minecraft:is_nether",
+  "biomes": "minecraft:end_midlands",
   "adapt_noise": true,
   "spawn_overrides": {}
 }
