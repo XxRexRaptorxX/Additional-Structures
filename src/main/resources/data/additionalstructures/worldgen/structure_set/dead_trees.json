@@ -9,6 +9,10 @@
       "weight": 1
     },
     {
+      "structure": "additionalstructures:standing_dark_oak_log",
+      "weight": 1
+    },
+    {
       "structure": "additionalstructures:standing_jungle_log",
       "weight": 1
     },
@@ -90,6 +94,14 @@
     },
     {
       "structure": "additionalstructures:acacia_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:damaged_mushroom_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:damaged_mushroom_2",
       "weight": 1
     }
   ],

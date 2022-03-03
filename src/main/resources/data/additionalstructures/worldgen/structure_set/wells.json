@@ -1,11 +1,11 @@
 {
   "structures": [
     {
-      "structure": "additionalstructures:underground_base_1",
+      "structure": "additionalstructures:well_1",
       "weight": 1
     },
     {
-      "structure": "additionalstructures:underground_base_2",
+      "structure": "additionalstructures:well_2",
       "weight": 1
     }
   ],
@@ -13,6 +13,6 @@
     "type": "minecraft:random_spread",
     "spacing": 20,
     "separation": 5,
-    "salt": 9321923
+    "salt": 12984311
   }
 }
