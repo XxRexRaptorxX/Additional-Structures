@@ -11,7 +11,7 @@ public class Config {
     public static final String CATEGORY_GENERAL = "general";
     public static final String CATEGORY_STRUCTURES = "structures";
 
-    public static ForgeConfigSpec COMMON_CONFIG;
+    public static ForgeConfigSpec SERVER_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
 
     public static ForgeConfigSpec.BooleanValue UPDATE_CHECKER;
@@ -19,10 +19,10 @@ public class Config {
 
 
     public static void init() {
-        initCommon();
+        //initServer();
         initClient();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
+        //ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
     }
 
@@ -37,13 +37,14 @@ public class Config {
         CLIENT_CONFIG = builder.build();
     }
 
-
-    public static void initCommon() {
+/**
+    public static void initServer() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
         builder.comment("Structures").push(CATEGORY_STRUCTURES);
         builder.pop();
 
-        COMMON_CONFIG = builder.build();
+        SERVER_CONFIG = builder.build();
     }
+ **/
 }
