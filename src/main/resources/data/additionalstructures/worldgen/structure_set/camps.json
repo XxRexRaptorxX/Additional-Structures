@@ -3,6 +3,14 @@
     {
       "structure": "additionalstructures:camp_1",
       "weight": 1
+    },
+    {
+      "structure": "additionalstructures:camp_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:camp_3",
+      "weight": 1
     }
   ],
   "placement": {

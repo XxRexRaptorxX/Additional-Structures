@@ -23,6 +23,10 @@
     {
       "structure": "additionalstructures:farm_1",
       "weight": 1
+    },
+    {
+      "structure": "additionalstructures:farm_2",
+      "weight": 1
     }
   ],
   "placement": {
