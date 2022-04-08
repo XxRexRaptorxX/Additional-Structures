@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:spider_nest_3",
     "size": 1
   },
-  "biomes": "#minecraft:has_structure/mineshaft",
-  "adapt_noise": true,
+  "biomes": "#minecraft:is_forest",
+  "adapt_noise": false,
   "spawn_overrides": {}
 }

@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:tomb_3",
     "size": 1
   },
-  "biomes": "#minecraft:has_structure/mineshaft",
+  "biomes": "#minecraft:is_forest",
   "adapt_noise": false,
   "spawn_overrides": {}
 }
