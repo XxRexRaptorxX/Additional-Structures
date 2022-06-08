@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:fallen_dead_tree_2",
     "size": 1
   },
-  "biomes": "minecraft:desert",
+  "biomes": "#forge:is_sandy",
   "adapt_noise": true,
   "spawn_overrides": {}
 }

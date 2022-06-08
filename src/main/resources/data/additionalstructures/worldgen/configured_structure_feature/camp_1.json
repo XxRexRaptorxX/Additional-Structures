@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:camp_1",
     "size": 1
   },
-  "biomes": "minecraft:plains",
+  "biomes": "#forge:is_plains",
   "adapt_noise": true,
   "spawn_overrides": {}
 }

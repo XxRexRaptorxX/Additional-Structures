@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:scarecrow",
     "size": 1
   },
-  "biomes": "minecraft:plains",
+  "biomes": "#forge:is_plateau",
   "adapt_noise": true,
   "spawn_overrides": {}
 }

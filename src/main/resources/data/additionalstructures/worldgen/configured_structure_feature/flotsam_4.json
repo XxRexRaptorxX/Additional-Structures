@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:flotsam_4",
     "size": 1
   },
-  "biomes": "#minecraft:is_ocean",
+  "biomes": "#forge:is_water",
   "adapt_noise": false,
   "spawn_overrides": {}
 }
