@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[41,)"
 license="All rights reserved"
 issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures/issues"
 
@@ -20,14 +20,14 @@ Adds over 150 new structures to the game to enhance your world!
 [[dependencies.additionalstructures]]
     modId="forge"
     mandatory=true
-    versionRange="[40.1.48,)"
+    versionRange="[41,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.additionalstructures]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"
 
