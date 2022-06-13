@@ -5,7 +5,7 @@ issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structu
 
 [[mods]]
 modId="additionalstructures"
-version="3.1.0"
+version="3.2.0"
 displayName="Additional Structures"
 itemIcon="minecraft:structure_block"
 updateJSONURL="https://raw.githubusercontent.com/XxRexRaptorxX/Update-Checker/main/AdditionalStructures.json"
@@ -20,7 +20,7 @@ Adds over 150 new structures to the game to enhance your world!
 [[dependencies.additionalstructures]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[41.0.22,)"
     ordering="NONE"
     side="BOTH"
 
