@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:grove",                        // <= single biome
+    "#minecraft:is_forest",                   // <= other biome tag (vanilla tag)
+    "#forge:is_forest",                       // <= forge biome tag
+    {
+      "id": "twilightforest:firefly_forest",  // <= optional biome (should be used with external mods)
+      "required": false
+    }
+  ]
+}
