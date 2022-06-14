@@ -6,7 +6,7 @@
   "project_start_to_heightmap": "WORLD_SURFACE_WG",              <= optional heightmap type. Possible values: WORLD_SURFACE_WG, WORLD_SURFACE, OCEAN_FLOOR_WG, OCEAN_FLOOR, MOTION_BLOCKING, and MOTION_BLOCKING_NO_LEAVES
   "spawn_overrides": {},                                         <= override mob spawning inside the structure bounding boxes
   "terrain_adaptation": "beard_thin",                            <= ?
-  "size": 1,                                                     <= This is a number between 1 and 7 (max jigsaw structure pieces)
+  "size": 1,                                                     <= This is a number between 1 and 7 (max jigsaw structure pieces). Always 1 for single-structures.
   "start_height": {
     "absolute": 0                                                <= if not 0, will move the start relative to the heightmap
   },
