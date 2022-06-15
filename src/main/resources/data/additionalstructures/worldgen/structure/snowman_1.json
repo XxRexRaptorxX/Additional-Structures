@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:snowman_1",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:snowman_1",
   "biomes": "minecraft:snowy_plains",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:obsidian_spike_3",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:obsidian_spike_3",
   "biomes": "minecraft:end_midlands",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

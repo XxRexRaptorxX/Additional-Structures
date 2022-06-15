@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:bastion_remnant",
-  "config": {
-    "start_pool": "additionalstructures:tomb_2",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:tomb_2",
   "biomes": "#minecraft:is_forest",
-  "adapt_noise": false,
-  "spawn_overrides": {}
 }

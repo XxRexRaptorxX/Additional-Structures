@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:pyramid_dungeon",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:pyramid_dungeon",
   "biomes": "minecraft:desert",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

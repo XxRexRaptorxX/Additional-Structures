@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:standing_oak_log",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:standing_oak_log",
   "biomes": "minecraft:forest",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

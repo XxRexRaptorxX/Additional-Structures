@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:bastion_remnant",
-  "config": {
-    "start_pool": "additionalstructures:underground_nether_portal",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:underground_nether_portal",
   "biomes": "#minecraft:is_hill",
-  "adapt_noise": false,
-  "spawn_overrides": {}
 }

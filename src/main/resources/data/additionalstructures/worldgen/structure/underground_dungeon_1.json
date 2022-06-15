@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:bastion_remnant",
-  "config": {
-    "start_pool": "additionalstructures:underground_dungeon_1",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:underground_dungeon_1",
   "biomes": "#minecraft:is_forest",
-  "adapt_noise": false,
-  "spawn_overrides": {}
 }

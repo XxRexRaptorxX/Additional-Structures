@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:cobblestone_rock_3",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:cobblestone_rock_3",
   "biomes": "#minecraft:is_forest",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

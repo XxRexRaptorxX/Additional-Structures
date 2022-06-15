@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:fallen_oak_tree_2",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:fallen_oak_tree_2",
   "biomes": "minecraft:forest",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

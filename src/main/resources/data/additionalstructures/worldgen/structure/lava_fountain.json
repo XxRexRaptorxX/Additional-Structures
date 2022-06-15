@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:lava_fountain",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:lava_fountain",
   "biomes": "#minecraft:is_badlands",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

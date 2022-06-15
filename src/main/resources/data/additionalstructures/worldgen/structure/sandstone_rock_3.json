@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:sandstone_rock_3",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:sandstone_rock_3",
   "biomes": "minecraft:desert",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

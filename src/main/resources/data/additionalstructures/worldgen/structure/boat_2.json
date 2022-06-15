@@ -1,10 +1,5 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:boat_2",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:boat_2",
   "biomes": "#minecraft:is_ocean",
   "adapt_noise": false,
-  "spawn_overrides": {}
 }

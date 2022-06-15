@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:red_sandstone_totem_2",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:red_sandstone_totem_2",
   "biomes": "#minecraft:is_badlands",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

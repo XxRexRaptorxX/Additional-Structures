@@ -1,10 +1,5 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:flotsam_1",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:flotsam_1",
   "biomes": "#forge:is_water",
-  "adapt_noise": false,
-  "spawn_overrides": {}
+  //noise
 }

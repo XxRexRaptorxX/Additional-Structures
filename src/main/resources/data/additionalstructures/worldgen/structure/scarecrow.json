@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:scarecrow",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:scarecrow",
   "biomes": "#forge:is_plateau",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }

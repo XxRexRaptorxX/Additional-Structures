@@ -1,10 +1,4 @@
 {
-  "type": "minecraft:village",
-  "config": {
-    "start_pool": "additionalstructures:damaged_mushroom_2",
-    "size": 1
-  },
+  "start_pool": "additionalstructures:damaged_mushroom_2",
   "biomes": "minecraft:dark_forest",
-  "adapt_noise": true,
-  "spawn_overrides": {}
 }
