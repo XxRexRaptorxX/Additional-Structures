@@ -1,0 +1,50 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:stone_rock_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:stone_rock_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:stone_rock_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:stone_rock_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sandstone_rock_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sandstone_rock_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sandstone_rock_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:cobblestone_rock_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:cobblestone_rock_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:cobblestone_rock_3",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 4,
+    "salt": 13024094
+  }
+}

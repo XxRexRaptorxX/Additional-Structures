@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "additionalstructures:ice_floes_1",
+    "size": 1
+  },
+  "biomes": "minecraft:deep_cold_ocean",
+  "adapt_noise": false,
+  "spawn_overrides": {}
+}

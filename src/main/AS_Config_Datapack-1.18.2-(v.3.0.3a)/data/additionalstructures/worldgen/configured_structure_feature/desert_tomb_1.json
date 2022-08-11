@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:bastion_remnant",
+  "config": {
+    "start_pool": "additionalstructures:desert_tomb_1",
+    "size": 1
+  },
+  "biomes": "minecraft:desert",
+  "adapt_noise": false,
+  "spawn_overrides": {}
+}

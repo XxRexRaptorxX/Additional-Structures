@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:meteor",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:lava_fountain",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 40,
+    "salt": 12902012
+  }
+}

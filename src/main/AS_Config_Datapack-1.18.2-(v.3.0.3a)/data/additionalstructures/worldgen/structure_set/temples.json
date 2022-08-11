@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:temple_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:temple_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 20,
+    "salt": 30440203
+  }
+}

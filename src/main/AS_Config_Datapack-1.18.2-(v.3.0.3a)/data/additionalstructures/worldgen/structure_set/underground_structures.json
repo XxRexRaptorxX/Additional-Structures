@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:underground_stollen_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sewage_system_1",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 10,
+    "salt": 95138942
+  }
+}
