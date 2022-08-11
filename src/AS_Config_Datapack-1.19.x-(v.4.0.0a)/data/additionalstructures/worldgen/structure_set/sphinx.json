@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:sphinx",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 20,
+    "salt": 8742471
+  }
+}

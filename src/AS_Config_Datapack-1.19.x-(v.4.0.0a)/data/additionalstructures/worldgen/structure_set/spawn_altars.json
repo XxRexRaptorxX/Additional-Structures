@@ -1,0 +1,58 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:spawn_altar_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_5",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_6",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spawn_altar_7",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_spawn_altar_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_spawn_altar_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_spawn_altar_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:end_spawn_altar_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:end_spawn_altar_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 15,
+    "salt": 24732490
+  }
+}

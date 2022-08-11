@@ -1,0 +1,18 @@
+{
+  "start_pool": "additionalstructures:example",                  <= template_pool
+  "biomes": "minecraft:savanna",                                 <= biome or biome tag
+  "type": "minecraft:jigsaw",                                    <= the structure type (almost always "jigsaw")
+  "step": "surface_structures",                                  <= the generation step. possible values: raw_generation, lakes, local_modifications, underground_structures, surface_structures, strongholds, underground_ores, underground_decoration, fluid_springs, vegetal_decoration, and top_layer_modification
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",              <= optional heightmap type. Possible values: WORLD_SURFACE_WG, WORLD_SURFACE, OCEAN_FLOOR_WG, OCEAN_FLOOR, MOTION_BLOCKING, and MOTION_BLOCKING_NO_LEAVES
+  "spawn_overrides": {},                                         <= override mob spawning inside the structure bounding boxes
+  "terrain_adaptation": "beard_thin",                            <= possible values: none, beard_thin, beard_box, bury
+  "size": 1,                                                     <= This is a number between 1 and 7 (max jigsaw structure pieces). Always 1 for single-structures.
+  "start_height": {
+    "absolute": 0                                                <= if not 0, will move the start relative to the heightmap
+  },
+  "max_distance_from_center": 30,                                <= Value between 1 and 128. The maximum distance that a jigsaw can branch out.
+  "use_expansion_hack": false                                    <= You should always set this to false
+}
+
+//              https://misode.github.io/guides/adding-custom-structures/?version=1.19#
+//              https://misode.github.io/

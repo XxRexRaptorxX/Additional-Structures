@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:dragon_fossil_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:dragon_fossil_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 40,
+    "salt": 90283812
+  }
+}

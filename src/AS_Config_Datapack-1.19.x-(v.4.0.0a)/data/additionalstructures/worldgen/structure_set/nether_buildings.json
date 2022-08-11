@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:nether_building_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_building_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_building_3",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 15,
+    "salt": 2033100
+  }
+}
