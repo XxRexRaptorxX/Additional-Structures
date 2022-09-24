@@ -4,7 +4,7 @@
     "start_pool": "additionalstructures:dead_tree_1",
     "size": 1
   },
-  "biomes": "#forge:is_sandy",
+  "biomes": "#forge:is_dry/overworld",
   "adapt_noise": true,
   "spawn_overrides": {}
 }
