@@ -1,0 +1,1 @@
+You can place new structures (.nbt files) in this folder. You then have to integrate them in the worldgen folder.
