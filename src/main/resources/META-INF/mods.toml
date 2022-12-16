@@ -5,7 +5,7 @@ issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structu
 
 [[mods]]
 modId="additionalstructures"
-version="4.0.2"
+version="4.0.3"
 displayName="Additional Structures"
 itemIcon="minecraft:structure_block"
 updateJSONURL="https://raw.githubusercontent.com/XxRexRaptorxX/Update-Checker/main/AdditionalStructures.json"
