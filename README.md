@@ -1,5 +1,10 @@
-[![CurseForge Downloads](https://cf.way2muchnoise.eu/311546.svg?badge_style=for_the_badge)][cf_mod] [![CurseForge Game Versions](https://cf.way2muchnoise.eu/versions/311546.svg?badge_style=for_the_badge)][cf_mod]
+## Forge
+<a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures" target="_blank"><img src="http://cf.way2muchnoise.eu/short_297680.svg?badge_style=flat" /><a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures" target="_blank"><img src="http://cf.way2muchnoise.eu/versions/297680.svg?badge_style=flat" /></a>
 
+## Fabric
+<a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures-fabric" target="_blank"><img src="http://cf.way2muchnoise.eu/short_585782.svg?badge_style=flat" /><a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures-fabric" target="_blank"><img src="http://cf.way2muchnoise.eu/versions/585782.svg?badge_style=flat" /></a>
+
+## Forge & Fabric
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/TWsbC6jW?label=Modrinth&logo=modrinth&style=for-the-badge)][mr_mod] [![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/TWsbC6jW?label=Available%20for&logo=modrinth&style=for-the-badge)][mr_mod]
 
 # AdditionalStructures for Minecraft
