@@ -7,12 +7,11 @@
 ## Forge & Fabric
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/TWsbC6jW?label=Modrinth&logo=modrinth&style=for-the-badge)][mr_mod] [![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/TWsbC6jW?label=Available%20for&logo=modrinth&style=for-the-badge)][mr_mod]
 
-# AdditionalStructures for Minecraft
+# Additional Structures for Minecraft
 
 ![Logo](https://i.imgur.com/KKalUYR.png)
 
 ## 📖 Description
-
 
 ### This mod adds ~155 new small and medium sized structures into the game to expand your world!
 
