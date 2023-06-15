@@ -1,9 +1,8 @@
 {
     "pack": {
-        "description": "Additional Structures resources",
-        "pack_format": 12,
-        "forge:resource_pack_format": 12,
-        "forge:data_pack_format": 10,
-        "_comment": "by XxRexRaptorxX"
+        "description": {
+            "text": "${mod_name} resources. By XxRexRaptorxX"
+        },
+        "pack_format": "${pack_format}"
     }
 }

@@ -1,33 +1,33 @@
 modLoader="javafml"
-loaderVersion="[41,)"
-license="All rights reserved"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures/issues"
 
 [[mods]]
-modId="additionalstructures"
-version="4.0.3"
-displayName="Additional Structures"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 itemIcon="minecraft:structure_block"
 updateJSONURL="https://raw.githubusercontent.com/XxRexRaptorxX/Update-Checker/main/AdditionalStructures.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures"
 logoFile="logo.png"
 #credits=""
-authors="XxRexRaptorxX (RexRaptor)"
+authors="${mod_authors}"
 description='''
 Adds over 150 new structures to the game to enhance your world!
 '''
 
-[[dependencies.additionalstructures]]
+[[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0.96,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.additionalstructures]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="${mc_version_range}"
     ordering="NONE"
     side="BOTH"
 
