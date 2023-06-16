@@ -185,7 +185,7 @@ def replaceProperties = [
         forge_version: forge_version, forge_version_range: forge_version_range,
         loader_version_range: loader_version_range,
         mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-        mod_authors: mod_authors, pack_format: pack_format
+        mod_authors: mod_authors
 
 ]
 processResources {

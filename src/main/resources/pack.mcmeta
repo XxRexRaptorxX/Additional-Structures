@@ -3,6 +3,6 @@
         "description": {
             "text": "${mod_name} resources. By XxRexRaptorxX"
         },
-        "pack_format": "${pack_format}"
+        "pack_format": 15
     }
 }
