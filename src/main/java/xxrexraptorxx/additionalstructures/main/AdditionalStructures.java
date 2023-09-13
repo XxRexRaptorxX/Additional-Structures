@@ -16,7 +16,6 @@ public class AdditionalStructures {
 
     public AdditionalStructures() {
         Config.init();
-
     }
 
 }
