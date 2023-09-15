@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:mushroom_house_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:mushroom_house_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 40,
+    "salt": 34298311
+  }
+}
