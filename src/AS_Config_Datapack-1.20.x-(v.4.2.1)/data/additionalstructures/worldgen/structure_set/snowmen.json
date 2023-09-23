@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:snowman_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:snowman_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 80,
+    "separation": 30,
+    "salt": 3952840
+  }
+}

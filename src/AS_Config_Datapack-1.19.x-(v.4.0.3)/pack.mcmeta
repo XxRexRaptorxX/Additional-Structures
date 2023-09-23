@@ -1,9 +1,0 @@
-{
-    "pack": {
-        "description": "AdditionalStructures - Config Datapack",
-        "pack_format": 12,
-        "forge:resource_pack_format": 12,
-        "forge:data_pack_format": 10,
-        "_comment": "by XxRexRaptorxX"
-    }
-}
