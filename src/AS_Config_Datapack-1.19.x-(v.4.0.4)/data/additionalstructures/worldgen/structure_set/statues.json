@@ -1,0 +1,30 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:villager_statue_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_statue_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_statue_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_statue_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_statue_5",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 90,
+    "separation": 60,
+    "salt": 290120110
+  }
+}
