@@ -1,6 +1,6 @@
 {
-  "start_pool": "additionalstructures:standing_acacia_log",
-  "biomes": "#minecraft:is_savanna",
+  "start_pool": "additionalstructures:villager_statue_4",
+  "biomes": "#additionalstructures:as_custom",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

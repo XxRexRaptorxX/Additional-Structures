@@ -1,6 +1,6 @@
 {
-  "start_pool": "additionalstructures:standing_acacia_log",
-  "biomes": "#minecraft:is_savanna",
+  "start_pool": "additionalstructures:mushroom_house_1",
+  "biomes": "minecraft:mushroom_fields",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

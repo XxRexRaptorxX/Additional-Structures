@@ -4,7 +4,19 @@
   "type": "minecraft:jigsaw",
   "step": "underground_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
-  "spawn_overrides": {},
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "minecraft:husk",
+          "weight": 1,
+          "minCount": 2,
+          "maxCount": 4
+        }
+      ]
+    }
+  },
   "terrain_adaptation": "none",
   "size": 1,
   "start_height": {
