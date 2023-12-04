@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:sandstone_totem_1",
+  "color": "0x808080",
+  "mapName": "Totems Map",
+  "villagerLevel": 1,
+  "minPrice": 1,
+  "maxPrice": 4,
+  "mapMarker": "additionalstructures:totem"
+}

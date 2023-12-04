@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:pyramid_2",
+  "color": "0x808080",
+  "mapName": "Pyramid Map",
+  "villagerLevel": 1,
+  "minPrice": 3,
+  "maxPrice": 5,
+  "mapMarker": "additionalstructures:pyramid"
+}

@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:tomb_2",
+  "color": "0x808080",
+  "mapName": "Tomb Map",
+  "villagerLevel": 1,
+  "minPrice": 6,
+  "maxPrice": 11,
+  "mapMarker": "additionalstructures:tomb"
+}
