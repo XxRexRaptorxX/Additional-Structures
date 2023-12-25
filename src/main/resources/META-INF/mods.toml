@@ -20,6 +20,7 @@ Adds over 150 new structures to the game to enhance your world!
 [[dependencies.${mod_id}]]
     modId="neoforge"
     mandatory=true
+    type="required"
     versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
@@ -27,6 +28,7 @@ Adds over 150 new structures to the game to enhance your world!
 [[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
+    type="required"
     versionRange="${mc_version_range}"
     ordering="NONE"
     side="BOTH"
