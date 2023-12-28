@@ -15,4 +15,5 @@
 }
 
 //              https://misode.github.io/guides/adding-custom-structures/?version=1.19#
+//              https://misode.github.io/worldgen/structure/
 //              https://misode.github.io/
