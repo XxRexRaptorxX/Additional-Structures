@@ -8,8 +8,6 @@ plugins {
     //id 'org.spongepowered.mixin' version '0.7.+' //Mixins
 }
 
-version = mod_version
-group = "xxrexraptorxx.${mod_id}.main"
 
 repositories {
     mavenLocal()
@@ -79,12 +77,12 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
 
     implementation "net.neoforged:neoforge:${mc_version}.${forge_version}"
-    //Mixin AP
-    //annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
     //JEI
-    //compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
-    //compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    //runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    //JADE
+    runtimeOnly("curse.maven:jade-324717:${jade_version}")
 }
 
 
@@ -101,6 +99,17 @@ tasks.withType(ProcessResources).configureEach {
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
+}
+
+
+group = "xxrexraptorxx.${mod_id}.main"
+archivesBaseName = "${mod_id}"
+version = "${mc_version}-${mod_version}"
+
+jar {
+    archiveClassifier = ''
+    archiveBaseName = "${mod_name}".replace(" ", "")
+    archiveVersion = "${mc_version}-(v.${mod_version})"
 }
 
 
