@@ -14,8 +14,7 @@ base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
@@ -140,6 +139,11 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 
     maven {
         // patchouli
@@ -159,14 +163,14 @@ dependencies {
 
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     //Mixin AP
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    //JEI
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    //annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    ////JEI
+    //compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    //compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
     //Supplementaries & dependency
-    runtimeOnly fg.deobf("curse.maven:moonlight-499980:${moonlight_version}")
-    runtimeOnly fg.deobf("curse.maven:supplementaries-412082:${supplementaries_version}")
+    //runtimeOnly fg.deobf("curse.maven:moonlight-499980:${moonlight_version}")
+    //runtimeOnly fg.deobf("curse.maven:supplementaries-412082:${supplementaries_version}")
 }
 
 // MixinGradle Settings
@@ -210,7 +214,7 @@ jar {
         attributes([
                 "Specification-Title"     : mod_id,
                 "Specification-Vendor"    : mod_authors,
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Version"   : project.version,
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : mod_authors,
@@ -240,4 +244,9 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+
+//Dummy task to fix post sync error caused by NeoGradle
+tasks.register("idePostSync") {
 }
