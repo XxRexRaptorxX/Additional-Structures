@@ -6,20 +6,6 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.0.145'
 }
 
-version = mod_version
-group = "xxrexraptorxx.${mod_id}.main"
-
-repositories {
-    //JEI
-    maven { url "https://maven.blamejared.com/" }
-    maven { url "https://modmaven.dev" }
-    //CURSEFORGE
-    maven { url "https://cursemaven.com" }
-
-    flatDir {
-        dir 'libs'
-    }
-}
 
 base {
     archivesName = mod_id
@@ -106,6 +92,18 @@ runs {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
+repositories {
+    //JEI
+    maven { url "https://maven.blamejared.com/" }
+    maven { url "https://modmaven.dev" }
+    //CURSEFORGE
+    maven { url "https://cursemaven.com" }
+
+    flatDir {
+        dir 'libs'
+    }
+}
+
 dependencies {
 
     implementation "net.neoforged:neoforge:${forge_version}"
@@ -133,6 +131,9 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
+group = "xxrexraptorxx.${mod_id}.main"
+archivesBaseName = "${mod_id}"
+version = "${mc_version}-${mod_version}"
 
 jar {
     manifest {
@@ -146,6 +147,10 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+
+    archiveClassifier = ''
+    archiveBaseName = "${mod_name}".replace(" ", "")
+    archiveVersion = "${mc_version}-(v.${mod_version})"
 }
 
 
