@@ -150,7 +150,7 @@ jar {
 
     archiveClassifier = ''
     archiveBaseName = "${mod_name}".replace(" ", "")
-    archiveVersion = "${mc_version}-(v.${mod_version})"
+    archiveVersion = "${mc_version}-(v.${mod_version}-NEO)"
 }
 
 
