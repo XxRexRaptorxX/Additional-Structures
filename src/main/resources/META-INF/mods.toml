@@ -13,9 +13,8 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures"
 logoFile="logo.png"
 #credits=""
 authors="${mod_authors}"
-description='''
-Adds over 150 new structures to the game to enhance your world!
-'''
+description='''Adds over 150 new structures to the game to enhance your world!'''
+
 
 [[dependencies.${mod_id}]]
     modId="forge"
