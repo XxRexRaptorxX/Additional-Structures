@@ -1,0 +1,38 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:villager_house_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_house_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_house_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:villager_house_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_villager_house_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:farm_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:farm_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 10,
+    "salt": 53095453
+  }
+}

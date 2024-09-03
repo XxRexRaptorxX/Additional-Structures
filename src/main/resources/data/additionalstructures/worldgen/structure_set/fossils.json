@@ -1,0 +1,26 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:fossil_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fossil_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:bone_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:bone_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 87160023
+  }
+}

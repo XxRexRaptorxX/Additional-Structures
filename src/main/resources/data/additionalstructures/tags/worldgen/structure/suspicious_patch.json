@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "additionalstructures:suspicious_sand_patch_1",
+    "additionalstructures:suspicious_sand_patch_2",
+    "additionalstructures:suspicious_sand_patch_3",
+    "additionalstructures:suspicious_sand_patch_4",
+    "additionalstructures:suspicious_gravel_patch_1",
+    "additionalstructures:suspicious_gravel_patch_2"
+  ]
+}

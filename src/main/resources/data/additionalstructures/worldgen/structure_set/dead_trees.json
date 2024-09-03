@@ -1,0 +1,118 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:standing_spruce_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:standing_oak_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:standing_dark_oak_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:standing_jungle_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:standing_acacia_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spruce_log_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:spruce_log_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:oak_log_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:oak_log_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:log_bundle",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:jungle_tree_hole",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:jungle_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_spruce_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_spruce_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_palm_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_palm_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_oak_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_oak_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_jungle_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_dead_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_dead_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:fallen_dead_tree_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:birch_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:big_jungle_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:acacia_log",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:damaged_mushroom_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:damaged_mushroom_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 10,
+    "salt": 2342394
+  }
+}

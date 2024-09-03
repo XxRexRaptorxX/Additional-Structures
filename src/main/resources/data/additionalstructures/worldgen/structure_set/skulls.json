@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:wither_skull",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:skeleton_skull",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 36542042
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:tomb_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:tomb_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:tomb_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:desert_tomb_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:desert_tomb_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 2131290
+  }
+}

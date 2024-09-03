@@ -1,0 +1,42 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:palm_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:palm_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:palm_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:palm_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:dead_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:dead_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:cactus_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:cactus_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 5,
+    "salt": 1230122
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:pyramid_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:pyramid_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 53049200
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "additionalstructures:example",                       <= pool name
+  "fallback": "minecraft:empty",                                <= almost always "minecraft:empty"
+  "elements": [
+    {
+      "weight": 1,                                              <= weight
+      "element": {
+        "element_type": "minecraft:single_pool_element",        <= empty_pool_element (placing nothing), feature_pool_element (placing a placed feature), legacy_single_pool_element, list_pool_element, and single_pool_element (placing a structure)
+        "location": "additionalstructures:example_structure",   <= path of the structure.nbt file
+        "projection": "rigid",                                  <= Either rigid or terrain_matching. Use the latter if you want the structure to match the terrain, just like village paths do
+        "processors": "minecraft:empty"                         <= ?
+      }
+    }
+  ]
+}

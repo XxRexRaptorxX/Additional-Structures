@@ -1,0 +1,30 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:sandstone_totem_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sandstone_totem_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:sandstone_totem_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:red_sandstone_totem_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:red_sandstone_totem_2",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 90902321
+  }
+}

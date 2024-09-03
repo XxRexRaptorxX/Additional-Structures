@@ -1,0 +1,58 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:obsidian_tree_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_tree_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_tree_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_tree_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_pillar_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_pillar_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_pillar_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_pillar_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_pillar_5",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_spike_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_spike_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:obsidian_spike_3",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 5,
+    "salt": 72730023
+  }
+}
