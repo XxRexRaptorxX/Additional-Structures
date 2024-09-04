@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "additionalstructures:spawn_altar_1",
+    "additionalstructures:spawn_altar_2",
+    "additionalstructures:spawn_altar_3",
+    "additionalstructures:spawn_altar_4",
+    "additionalstructures:spawn_altar_5",
+    "additionalstructures:spawn_altar_6",
+    "additionalstructures:spawn_altar_7"
+  ]
+}
