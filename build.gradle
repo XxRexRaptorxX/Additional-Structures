@@ -159,6 +159,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     from "src/main/templates"
     into "build/generated/sources/modMetadata"
 }
+
 // Include the output of "generateModMetadata" as an input directory for the build
 // this works with both building through Gradle and the IDE.
 sourceSets.main.resources.srcDir generateModMetadata
@@ -177,6 +178,12 @@ publishing {
             url "file://${project.projectDir}/repo"
         }
     }
+}
+
+//Naming of the built mod jar file
+tasks.named('jar').configure {
+    archiveBaseName.set(mod_name.replace(" " , ""))
+    archiveVersion.set("${minecraft_version}-(v.${mod_version}-NEO)")
 }
 
 tasks.withType(JavaCompile).configureEach {
