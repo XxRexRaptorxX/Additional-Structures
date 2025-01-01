@@ -17,10 +17,6 @@ tasks.named('wrapper', Wrapper).configure {
 version = mod_version
 group = mod_group_id
 
-repositories {
-    mavenLocal()
-}
-
 base {
     archivesName = mod_id
 }
@@ -64,7 +60,7 @@ neoForge {
         }
 
         data {
-            data()
+            clientData()
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')
@@ -110,8 +106,37 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
-dependencies {
+repositories {
+    mavenLocal()
 
+    maven { // JEI
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven { // JEI fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven { // Curseforge
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven { url "https://maven.shedaniel.me/" } // REI
+}
+
+dependencies {
+    //JEI
+    //compileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    //compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    //REI
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+    //JADE
+    runtimeOnly("curse.maven:jade-324717:${jade_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
