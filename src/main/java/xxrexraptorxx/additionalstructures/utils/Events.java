@@ -3,12 +3,9 @@ package xxrexraptorxx.additionalstructures.utils;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -34,7 +31,11 @@ import xxrexraptorxx.additionalstructures.main.AdditionalStructures;
 import xxrexraptorxx.additionalstructures.main.References;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,28 +47,36 @@ public class Events {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Pre event) {
-        if (Config.UPDATE_CHECKER.get()) {
+        if (Config.UPDATE_CHECKER != null && Config.UPDATE_CHECKER.get()) {
+
             if (!hasShownUp && Minecraft.getInstance().screen == null) {
-                if (VersionChecker.getResult(ModList.get().getModContainerById(References.MODID).get().getModInfo()).status() == VersionChecker.Status.OUTDATED ||
-                        VersionChecker.getResult(ModList.get().getModContainerById(References.MODID).get().getModInfo()).status() == VersionChecker.Status.BETA_OUTDATED ) {
+                var modContainer = ModList.get().getModContainerById(References.MODID).orElse(null);
 
-                    MutableComponent url = Component.literal(ChatFormatting.GREEN + "Click here to update!");
-                    url.withStyle(url.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, References.URL)));
+                if (modContainer != null) {
+                    var versionCheckResult = VersionChecker.getResult(modContainer.getModInfo());
 
-                    Minecraft.getInstance().player.displayClientMessage(Component.literal(ChatFormatting.BLUE + "A newer version of " + ChatFormatting.YELLOW + References.NAME + ChatFormatting.BLUE + " is available!"), false);
-                    Minecraft.getInstance().player.displayClientMessage(url, false);
+                    if (versionCheckResult.status() == VersionChecker.Status.OUTDATED || versionCheckResult.status() == VersionChecker.Status.BETA_OUTDATED) {
 
-                    hasShownUp = true;
+                        MutableComponent url = Component.literal(ChatFormatting.GREEN + "Click here to update!");
+                        url.withStyle(url.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, References.URL)));
 
-                } else if (VersionChecker.getResult(ModList.get().getModContainerById(References.MODID).get().getModInfo()).status() == VersionChecker.Status.FAILED) {
-                    AdditionalStructures.LOGGER.error(References.NAME + "'s version checker failed!");
-                    hasShownUp = true;
+                        Minecraft.getInstance().player.displayClientMessage(Component.literal(ChatFormatting.BLUE + "A newer version of " + ChatFormatting.YELLOW + References.NAME + ChatFormatting.BLUE + " is available!"), false);
+                        Minecraft.getInstance().player.displayClientMessage(url, false);
 
+                        hasShownUp = true;
+
+                    } else if (versionCheckResult.status() == VersionChecker.Status.FAILED) {
+                        AdditionalStructures.LOGGER.error(References.NAME + "'s version checker failed!");
+                        hasShownUp = true;
+                    }
                 }
             }
         }
     }
 
+
+
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     /**
      * Distributes the supporter rewards on first join.
@@ -78,61 +87,84 @@ public class Events {
         Level level = player.level();
 
         if (Config.PATREON_REWARDS.get()) {
-
             try {
-                URL SUPPORTER_URL = new URL("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Supporter");
-                URL PREMIUM_SUPPORTER_URL = new URL("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Premium%20Supporter");
-                URL ELITE_URL = new URL("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Elite");
+                URI SUPPORTER_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Supporter");
+                URI PREMIUM_SUPPORTER_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Premium%20Supporter");
+                URI ELITE_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Elite");
 
-                //test if a player already has rewards
+                // Test if a player already has rewards
                 if (!player.getInventory().contains(new ItemStack(Items.PAPER))) {
 
                     ServerPlayer serverPlayer = (ServerPlayer) player;
-                    //test if player joins the first time
+                    // Test if player joins the first time
                     if (serverPlayer.getStats().getValue(Stats.CUSTOM, Stats.PLAY_TIME) < 5) {
 
-                        //test if player is supporter
-                        if (SupporterCheck(SUPPORTER_URL, player)) {
-
-                            ItemStack certificate = new ItemStack(Items.PAPER);
-                            certificate.set(DataComponents.CUSTOM_NAME, Component.literal("Thank you for supporting me in my work!").withStyle(ChatFormatting.GOLD).append(Component.literal(" - XxRexRaptorxX").withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GREEN)));
-
-                            ItemStack reward = new ItemStack(Items.PLAYER_HEAD);
-                            var profile = new GameProfile(player.getUUID(), player.getName().getString());
-                            reward.set(DataComponents.PROFILE, new ResolvableProfile(profile));
-
-                            level.playSound((Player) null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.15F + 0.8F);
-                            player.addItem(reward);
-                            player.addItem(certificate);
+                        // Test if player is supporter
+                        if (SupporterCheck(SUPPORTER_URI, player)) {
+                            giveSupporterReward(player, level);
                         }
 
-                        //test if player is premium supporter
-                        if (SupporterCheck(PREMIUM_SUPPORTER_URL, player)) {
-                            ItemStack reward = new ItemStack(Items.DIAMOND_SWORD, 1);
-                            Registry<Enchantment> enchantmentsRegistry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-
-                            reward.enchant(enchantmentsRegistry.getHolderOrThrow(Enchantments.MENDING), 1);
-                            reward.enchant(enchantmentsRegistry.getHolderOrThrow(Enchantments.SHARPNESS), 3);
-                            reward.set(DataComponents.ENCHANTMENTS, reward.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY));
-
-                            reward.set(DataComponents.CUSTOM_NAME, Component.literal("Rex's Night Sword").withStyle(ChatFormatting.DARK_GRAY));
-
-                            player.addItem(reward);
+                        // Test if player is premium supporter
+                        if (SupporterCheck(PREMIUM_SUPPORTER_URI, player)) {
+                            givePremiumSupporterReward(player, level);
                         }
 
-                        //test if player is elite
-                        if (SupporterCheck(ELITE_URL, player)) {
-                            ItemStack star = new ItemStack(Items.NETHER_STAR);
-                            star.set(DataComponents.CUSTOM_NAME, Component.literal("Elite Star"));
-
-                            player.addItem(star);
+                        // Test if player is elite
+                        if (SupporterCheck(ELITE_URI, player)) {
+                            giveEliteReward(player);
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                AdditionalStructures.LOGGER.error("An unexpected error occurred while getting the Supporter URI lists", e);
             }
         }
+    }
+
+    private static boolean SupporterCheck(URI uri, Player player) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
+            HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+
+            //analyze supporter list
+            List<String> supporterList = List.of(response.body().split("\\R")); //split lines
+            return supporterList.contains(player.getName().getString());
+
+        } catch (Exception e) {
+            AdditionalStructures.LOGGER.error("Failed to fetch or process supporter list from URI: {}", uri, e);
+            return false;
+        }
+    }
+
+    private static void giveSupporterReward(Player player, Level level) {
+        ItemStack certificate = new ItemStack(Items.PAPER);
+        certificate.set(DataComponents.CUSTOM_NAME, Component.literal("Thank you for supporting me in my work!").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(" - XxRexRaptorxX").withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GREEN)));
+
+        ItemStack reward = new ItemStack(Items.PLAYER_HEAD);
+        var profile = new GameProfile(player.getUUID(), player.getName().getString());
+        reward.set(DataComponents.PROFILE, new ResolvableProfile(profile));
+
+        level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.15F + 0.8F);
+        player.getInventory().add(reward);
+        player.getInventory().add(certificate);
+    }
+
+    private static void givePremiumSupporterReward(Player player, Level level) {
+        ItemStack reward = new ItemStack(Items.DIAMOND_SWORD, 1);
+        Registry<Enchantment> enchantmentsRegistry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+
+        reward.enchant(enchantmentsRegistry.getOrThrow(Enchantments.MENDING), 1);
+        reward.enchant(enchantmentsRegistry.getOrThrow(Enchantments.SHARPNESS), 3);
+        reward.set(DataComponents.ENCHANTMENTS, reward.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY));
+        player.getInventory().add(reward);
+    }
+
+    private static void giveEliteReward(Player player) {
+        ItemStack star = new ItemStack(Items.NETHER_STAR);
+
+        star.set(DataComponents.CUSTOM_NAME, Component.literal("Elite Star"));
+        player.getInventory().add(star);
     }
 
 
@@ -158,10 +190,10 @@ public class Events {
             scanner.close();
 
         } catch (MalformedURLException e) {
-            AdditionalStructures.LOGGER.error("Supporter list URL not found! >>" + url);
+            AdditionalStructures.LOGGER.error("Supporter list URL not found! >>{}", url);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AdditionalStructures.LOGGER.error("An unexpected error occurred while checking supporter list", e);
         }
 
         return false;

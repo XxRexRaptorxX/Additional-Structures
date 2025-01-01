@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:flotsam_3",
-  "biomes": "#forge:is_water",
+  "biomes": "#c:is_ocean",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

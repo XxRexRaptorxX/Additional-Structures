@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:camp_1",
-  "biomes": "#forge:is_plains",
+  "biomes": "#c:is_plains",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

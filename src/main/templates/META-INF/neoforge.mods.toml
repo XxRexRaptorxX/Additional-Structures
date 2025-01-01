@@ -4,7 +4,7 @@ license="${mod_license}"
 issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures/issues"
 
 [[mods]]
-modId="${mod_id}"
+modId="additionalstructures"
 version="${mod_version}"
 displayName="${mod_name}"
 itemIcon="minecraft:structure_block"
@@ -19,7 +19,7 @@ description='''Adds over 150 new structures to the game to enhance your world!''
     modId="neoforge"
     mandatory=true
     type="required"
-    versionRange="${forge_version_range}"
+    versionRange="${neo_version_range}"
     ordering="NONE"
     side="BOTH"
 
@@ -27,7 +27,7 @@ description='''Adds over 150 new structures to the game to enhance your world!''
     modId="minecraft"
     mandatory=true
     type="required"
-    versionRange="${mc_version_range}"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:scarecrow",
-  "biomes": "#forge:is_plateau",
+  "biomes": "#c:is_plateau",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:fallen_dead_tree_1",
-  "biomes": "#forge:is_sandy",
+  "biomes": "#c:is_sandy",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
