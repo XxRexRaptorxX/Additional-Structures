@@ -1,0 +1,15 @@
+{
+  "name": "additionalstructures:underground_dungeon_2",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "additionalstructures:underground_dungeon_2",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

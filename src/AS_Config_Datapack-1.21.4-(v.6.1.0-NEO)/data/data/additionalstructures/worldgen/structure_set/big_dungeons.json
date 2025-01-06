@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:pyramid_dungeon",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:maya_temple",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 80,
+    "separation": 50,
+    "salt": 70943020
+  }
+}

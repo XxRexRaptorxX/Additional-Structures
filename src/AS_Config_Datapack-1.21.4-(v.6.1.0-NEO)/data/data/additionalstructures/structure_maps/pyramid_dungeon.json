@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:pyramid_dungeon",
+  "color": "0x808080",
+  "mapName": "Pyramid Dungeon Map",
+  "villagerLevel": 3,
+  "minPrice": 10,
+  "maxPrice": 15,
+  "mapMarker": "additionalstructures:pyramid_dungeon"
+}

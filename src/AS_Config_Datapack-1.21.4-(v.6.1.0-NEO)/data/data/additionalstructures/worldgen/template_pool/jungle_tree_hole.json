@@ -1,0 +1,15 @@
+{
+  "name": "additionalstructures:jungle_tree_hole",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "additionalstructures:jungle_tree_hole",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

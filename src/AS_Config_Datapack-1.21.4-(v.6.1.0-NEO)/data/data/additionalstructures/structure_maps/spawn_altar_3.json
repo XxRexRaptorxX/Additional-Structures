@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:spawn_altar_3",
+  "color": "0x808080",
+  "mapName": "Spawn Altar Map",
+  "villagerLevel": 1,
+  "minPrice": 5,
+  "maxPrice": 10,
+  "mapMarker": "additionalstructures:spawn_altar"
+}

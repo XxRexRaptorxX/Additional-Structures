@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:suspicious_sand_patch_1",
+  "color": "0x808080",
+  "mapName": "Ancient Remains Map",
+  "villagerLevel": 1,
+  "minPrice": 3,
+  "maxPrice": 8,
+  "mapMarker": "additionalstructures:suspicious_patch"
+}

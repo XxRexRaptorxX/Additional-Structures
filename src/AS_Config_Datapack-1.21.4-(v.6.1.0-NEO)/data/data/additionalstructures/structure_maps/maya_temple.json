@@ -1,0 +1,9 @@
+{
+  "structure": "additionalstructures:maya_temple",
+  "color": "0x808080",
+  "mapName": "Maya Temple Map",
+  "villagerLevel": 3,
+  "minPrice": 10,
+  "maxPrice": 15,
+  "mapMarker": "additionalstructures:maya_temple"
+}

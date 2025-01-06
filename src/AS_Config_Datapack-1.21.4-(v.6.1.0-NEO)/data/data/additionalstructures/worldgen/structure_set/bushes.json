@@ -1,0 +1,26 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:bush_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:bush_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:bush_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:bush_4",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 1,
+    "salt": 1209130
+  }
+}

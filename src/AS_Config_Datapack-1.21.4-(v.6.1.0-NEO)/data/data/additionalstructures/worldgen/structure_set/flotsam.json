@@ -1,0 +1,30 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:flotsam_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:flotsam_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:flotsam_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:flotsam_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:flotsam_5",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 15,
+    "salt": 89401322
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "additionalstructures:desert_tomb_1",
+    "additionalstructures:desert_tomb_2",
+    "additionalstructures:tomb_1",
+    "additionalstructures:tomb_2",
+    "additionalstructures:tomb_3",
+    "additionalstructures:tomb_4"
+  ]
+}

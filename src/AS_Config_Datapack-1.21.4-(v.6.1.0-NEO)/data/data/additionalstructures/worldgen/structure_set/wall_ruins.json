@@ -1,0 +1,46 @@
+{
+  "structures": [
+    {
+      "structure": "additionalstructures:wall_ruin_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:wall_ruin_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_wall_ruin_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_wall_ruin_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_wall_ruin_3",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:nether_wall_ruin_4",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:end_wall_ruin_1",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:end_wall_ruin_2",
+      "weight": 1
+    },
+    {
+      "structure": "additionalstructures:end_wall_ruin_3",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 39424893
+  }
+}

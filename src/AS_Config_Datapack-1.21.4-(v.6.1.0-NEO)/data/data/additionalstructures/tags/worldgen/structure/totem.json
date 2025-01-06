@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "additionalstructures:sandstone_totem_1",
+    "additionalstructures:sandstone_totem_2",
+    "additionalstructures:sandstone_totem_3",
+    "additionalstructures:red_sandstone_totem_1",
+    "additionalstructures:red_sandstone_totem_2"
+  ]
+}
