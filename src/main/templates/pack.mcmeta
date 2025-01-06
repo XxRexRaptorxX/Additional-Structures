@@ -1,0 +1,8 @@
+{
+    "pack": {
+        "description": {
+            "text": "${mod_name} resources. By XxRexRaptorxX"
+        },
+        "pack_format": ${pack_format_number}
+    }
+}
