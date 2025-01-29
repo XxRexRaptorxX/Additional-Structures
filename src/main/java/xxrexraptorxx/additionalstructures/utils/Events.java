@@ -38,11 +38,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = References.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class Events {
 
-    /** Update-Checker **/
+    /** Update Checker **/
     private static boolean hasShownUp = false;
 
     @SubscribeEvent
@@ -50,18 +51,20 @@ public class Events {
         if (Config.UPDATE_CHECKER != null && Config.UPDATE_CHECKER.get()) {
 
             if (!hasShownUp && Minecraft.getInstance().screen == null) {
+                var player = Minecraft.getInstance().player;
+                if (player == null) return; // Added null check
+
                 var modContainer = ModList.get().getModContainerById(References.MODID).orElse(null);
 
                 if (modContainer != null) {
                     var versionCheckResult = VersionChecker.getResult(modContainer.getModInfo());
 
                     if (versionCheckResult.status() == VersionChecker.Status.OUTDATED || versionCheckResult.status() == VersionChecker.Status.BETA_OUTDATED) {
+                        MutableComponent url = Component.literal(ChatFormatting.GREEN + "Click here to update!")
+                                .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, References.URL)));
 
-                        MutableComponent url = Component.literal(ChatFormatting.GREEN + "Click here to update!");
-                        url.withStyle(url.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, References.URL)));
-
-                        Minecraft.getInstance().player.displayClientMessage(Component.literal(ChatFormatting.BLUE + "A newer version of " + ChatFormatting.YELLOW + References.NAME + ChatFormatting.BLUE + " is available!"), false);
-                        Minecraft.getInstance().player.displayClientMessage(url, false);
+                        player.displayClientMessage(Component.literal(ChatFormatting.BLUE + "A newer version of " + ChatFormatting.YELLOW + References.NAME + ChatFormatting.BLUE + " is available!"), false);
+                        player.displayClientMessage(url, false);
 
                         hasShownUp = true;
 
@@ -75,11 +78,10 @@ public class Events {
     }
 
 
-
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     /**
-     * Distributes the supporter rewards on first join.
+     * Distributes supporter rewards on first login.
      */
     @SubscribeEvent
     public static void SupporterRewards(PlayerEvent.PlayerLoggedInEvent event) {
@@ -87,47 +89,45 @@ public class Events {
         Level level = player.level();
 
         if (Config.PATREON_REWARDS.get()) {
-            try {
-                URI SUPPORTER_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Supporter");
-                URI PREMIUM_SUPPORTER_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Premium%20Supporter");
-                URI ELITE_URI = URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Elite");
-
-                // Test if a player already has rewards
-                if (!player.getInventory().contains(new ItemStack(Items.PAPER))) {
-
-                    ServerPlayer serverPlayer = (ServerPlayer) player;
-                    // Test if player joins the first time
+            // Check if the player already has rewards
+            if (!player.getInventory().contains(new ItemStack(Items.PAPER))) {
+                if (player instanceof ServerPlayer serverPlayer) { // Ensure the player is a ServerPlayer
+                    // Check if the player is logging in for the first time
                     if (serverPlayer.getStats().getValue(Stats.CUSTOM, Stats.PLAY_TIME) < 5) {
 
-                        // Test if player is supporter
-                        if (SupporterCheck(SUPPORTER_URI, player)) {
-                            giveSupporterReward(player, level);
-                        }
-
-                        // Test if player is premium supporter
-                        if (SupporterCheck(PREMIUM_SUPPORTER_URI, player)) {
-                            givePremiumSupporterReward(player, level);
-                        }
-
-                        // Test if player is elite
-                        if (SupporterCheck(ELITE_URI, player)) {
-                            giveEliteReward(player);
-                        }
+                        // Perform supporter checks asynchronously
+                        CompletableFuture.runAsync(() -> {
+                            if (SupporterCheck(URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Supporter"), player)) {
+                                giveSupporterReward(player, level);
+                            }
+                            if (SupporterCheck(URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Premium%20Supporter"), player)) {
+                                givePremiumSupporterReward(player, level);
+                            }
+                            if (SupporterCheck(URI.create("https://raw.githubusercontent.com/XxRexRaptorxX/Patreons/main/Elite"), player)) {
+                                giveEliteReward(player);
+                            }
+                        });
                     }
                 }
-            } catch (Exception e) {
-                AdditionalStructures.LOGGER.error("An unexpected error occurred while getting the Supporter URI lists", e);
             }
         }
     }
 
+
+    /**
+     * Checks if the player is in the supporter list from the given URI.
+     *
+     * @param uri URI to a file containing supporter names
+     * @param player The in-game player
+     * @return true if the player is a supporter, otherwise false
+     */
     private static boolean SupporterCheck(URI uri, Player player) {
         try {
             HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
             HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
-            //analyze supporter list
-            List<String> supporterList = List.of(response.body().split("\\R")); //split lines
+            // Parse supporter list
+            List<String> supporterList = List.of(response.body().split("\\R")); // Split lines
             return supporterList.contains(player.getName().getString());
 
         } catch (Exception e) {
@@ -135,6 +135,7 @@ public class Events {
             return false;
         }
     }
+
 
     private static void giveSupporterReward(Player player, Level level) {
         ItemStack certificate = new ItemStack(Items.PAPER);
