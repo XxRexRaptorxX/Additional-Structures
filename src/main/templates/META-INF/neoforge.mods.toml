@@ -4,7 +4,7 @@ license="${mod_license}"
 issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/additional-structures/issues"
 
 [[mods]]
-modId="additionalstructures"
+modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 itemIcon="minecraft:structure_block"
