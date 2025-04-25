@@ -2,8 +2,8 @@
   "values": [
     "minecraft:grove",                                <= single biome
     "#minecraft:is_forest",                           <= biome tag (vanilla MC tag) [biome tags are a list of similar biomes]
-    "#c:is_forest",                                   <= neoforge & fabric biome tag
-    "#forge:is_forest",                               <= forge biome tag (outdated in most cases)
+    "#c:is_forest",                                   <= Neoforge & Fabric biome tag [enables the best compatibility with other mods]
+    "#additional_structures:has_structure/camp",      <= mod specific biome tag
     {
       "id": "twilightforest:firefly_forest",          <= optional biome (should be used with external mods)
       "required": false
