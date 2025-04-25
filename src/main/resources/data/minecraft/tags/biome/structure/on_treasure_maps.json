@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#additional_structures:has_structure/suspicious_gravel_patch",
+    "#additional_structures:has_structure/suspicious_sand_patch"
+  ]
+}
