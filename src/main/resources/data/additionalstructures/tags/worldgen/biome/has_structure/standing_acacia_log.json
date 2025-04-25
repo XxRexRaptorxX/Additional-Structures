@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "#c:is_savanna"
+    "#c:is_tree/savanna"
   ]
 }
