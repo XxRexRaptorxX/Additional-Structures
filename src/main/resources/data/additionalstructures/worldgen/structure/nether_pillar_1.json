@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:nether_pillar_1",
-  "biomes": "#additional_structures:hast_structure/nether_pillar",
+  "biomes": "#additional_structures:has_structure/nether_pillar",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "spawn_overrides": {},

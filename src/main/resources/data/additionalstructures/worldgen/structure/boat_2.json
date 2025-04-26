@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:boat_2",
-  "biomes": "#additional_structures:hast_structure/boat",
+  "biomes": "#additional_structures:has_structure/boat",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

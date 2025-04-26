@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:nether_villager_house_1",
-  "biomes": "#additional_structures:hast_structure/nether_villager_house",
+  "biomes": "#additional_structures:has_structure/nether_villager_house",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "spawn_overrides": {},

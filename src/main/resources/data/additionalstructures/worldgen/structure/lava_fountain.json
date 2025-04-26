@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:lava_fountain",
-  "biomes": "#additional_structures:hast_structure/lava_fountain",
+  "biomes": "#additional_structures:has_structure/lava_fountain",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

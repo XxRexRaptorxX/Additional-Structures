@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:suspicious_gravel_patch_2",
-  "biomes": "#additional_structures:hast_structure/suspicious_gravel_patch",
+  "biomes": "#additional_structures:has_structure/suspicious_gravel_patch",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

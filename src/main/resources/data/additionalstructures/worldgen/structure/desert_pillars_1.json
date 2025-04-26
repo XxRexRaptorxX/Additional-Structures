@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:desert_pillars_1",
-  "biomes": "#additional_structures:hast_structure/desert_pillars",
+  "biomes": "#additional_structures:has_structure/desert_pillars",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

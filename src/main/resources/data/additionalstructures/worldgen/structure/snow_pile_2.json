@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:snow_pile_2",
-  "biomes": "#additional_structures:hast_structure/snow_pile",
+  "biomes": "#additional_structures:has_structure/snow_pile",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

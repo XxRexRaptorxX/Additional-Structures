@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:farm_2",
-  "biomes": "#additional_structures:hast_structure/farm",
+  "biomes": "#additional_structures:has_structure/farm",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

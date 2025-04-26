@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:underground_base_1",
-  "biomes": "#additional_structures:hast_structure/underground_base",
+  "biomes": "#additional_structures:has_structure/underground_base",
   "type": "minecraft:jigsaw",
   "step": "underground_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
