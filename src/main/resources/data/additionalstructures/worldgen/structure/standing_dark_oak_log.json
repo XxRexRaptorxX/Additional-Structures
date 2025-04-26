@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:standing_dark_oak_log",
-  "biomes": "minecraft:dark_forest",
+  "biomes": "#additional_structures:hast_structure/standing_dark_oak_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:log_bundle",
-  "biomes": "#minecraft:is_forest",
+  "biomes": "#additional_structures:hast_structure/log_bundle",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

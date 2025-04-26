@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:standing_spruce_log",
-  "biomes": "#minecraft:is_taiga",
+  "biomes": "#additional_structures:hast_structure/standing_spruce_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

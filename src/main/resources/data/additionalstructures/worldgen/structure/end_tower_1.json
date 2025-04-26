@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:end_tower_1",
-  "biomes": "minecraft:end_highlands",
+  "biomes": "#additional_structures:hast_structure/end_tower",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

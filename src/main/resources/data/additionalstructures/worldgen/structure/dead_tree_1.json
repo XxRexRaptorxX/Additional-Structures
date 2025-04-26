@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:dead_tree_1",
-  "biomes": "#c:is_dry/overworld",
+  "biomes": "#additional_structures:hast_structure/dead_tree",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

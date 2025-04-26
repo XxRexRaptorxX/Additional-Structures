@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:wither_skull",
-  "biomes": "#minecraft:has_structure/end_city",
+  "biomes": "#additional_structures:hast_structure/wither_skull",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

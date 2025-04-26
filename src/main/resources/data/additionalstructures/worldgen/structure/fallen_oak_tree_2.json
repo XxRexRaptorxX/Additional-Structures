@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:fallen_oak_tree_2",
-  "biomes": "minecraft:forest",
+  "biomes": "#additional_structures:hast_structure/fallen_oak_tree",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:obsidian_tree_4",
-  "biomes": "minecraft:end_highlands",
+  "biomes": "#additional_structures:hast_structure/obsidian_tree",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:big_jungle_log",
-  "biomes": "#minecraft:is_jungle",
+  "biomes": "#additional_structures:hast_structure/big_jungle_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
