@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:sphinx",
-  "biomes": "#additional_structures:has_structure/sphinx",
+  "biomes": "#additionalstructures:has_structure/sphinx",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

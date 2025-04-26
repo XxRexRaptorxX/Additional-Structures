@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:spruce_log_1",
-  "biomes": "#additional_structures:has_structure/spruce_log",
+  "biomes": "#additionalstructures:has_structure/spruce_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

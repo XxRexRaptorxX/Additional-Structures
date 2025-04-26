@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:nether_spawn_altar_1",
-  "biomes": "#additional_structures:has_structure/nether_spawn_altar",
+  "biomes": "#additionalstructures:has_structure/nether_spawn_altar",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "spawn_overrides": {},

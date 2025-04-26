@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:cobblestone_rock_3",
-  "biomes": "#additional_structures:has_structure/cobblestone_rock",
+  "biomes": "#additionalstructures:has_structure/cobblestone_rock",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

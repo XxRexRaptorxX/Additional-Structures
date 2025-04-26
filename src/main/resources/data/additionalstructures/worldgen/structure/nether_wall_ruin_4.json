@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:nether_wall_ruin_4",
-  "biomes": "#additional_structures:has_structure/nether_wall_ruin",
+  "biomes": "#additionalstructures:has_structure/nether_wall_ruin",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "spawn_overrides": {},

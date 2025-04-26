@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:underground_dungeon_1",
-  "biomes": "#additional_structures:has_structure/underground_dungeon",
+  "biomes": "#additionalstructures:has_structure/underground_dungeon",
   "type": "minecraft:jigsaw",
   "step": "underground_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

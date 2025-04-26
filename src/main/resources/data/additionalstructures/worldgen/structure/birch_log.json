@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:birch_log",
-  "biomes": "#additional_structures:has_structure/birch_log",
+  "biomes": "#additionalstructures:has_structure/birch_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

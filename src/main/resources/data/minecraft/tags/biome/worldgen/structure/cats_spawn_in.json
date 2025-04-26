@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "additional_structures:villager_house_1",
-    "additional_structures:villager_house_2",
-    "additional_structures:villager_house_3",
-    "additional_structures:villager_house_4"
+    "additionalstructures:villager_house_1",
+    "additionalstructures:villager_house_2",
+    "additionalstructures:villager_house_3",
+    "additionalstructures:villager_house_4"
   ]
 }

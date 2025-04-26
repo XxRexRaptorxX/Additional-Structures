@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:damaged_mushroom_1",
-  "biomes": "#additional_structures:has_structure/damaged_mushroom",
+  "biomes": "#additionalstructures:has_structure/damaged_mushroom",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

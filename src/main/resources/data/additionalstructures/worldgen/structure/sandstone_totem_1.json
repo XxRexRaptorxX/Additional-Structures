@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:sandstone_totem_1",
-  "biomes": "#additional_structures:has_structure/sandstone_totem",
+  "biomes": "#additionalstructures:has_structure/sandstone_totem",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

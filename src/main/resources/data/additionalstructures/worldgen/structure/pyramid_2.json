@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:pyramid_2",
-  "biomes": "#additional_structures:has_structure/pyramid",
+  "biomes": "#additionalstructures:has_structure/pyramid",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

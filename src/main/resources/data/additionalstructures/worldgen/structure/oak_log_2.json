@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:oak_log_2",
-  "biomes": "#additional_structures:has_structure/oak_log",
+  "biomes": "#additionalstructures:has_structure/oak_log",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

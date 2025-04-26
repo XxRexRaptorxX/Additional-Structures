@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:spawn_altar_2",
-  "biomes": "#additional_structures:has_structure/spawn_altar",
+  "biomes": "#additionalstructures:has_structure/spawn_altar",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

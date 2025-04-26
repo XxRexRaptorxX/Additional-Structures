@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:dragon_fossil_1",
-  "biomes": "#additional_structures:has_structure/dragon_fossil",
+  "biomes": "#additionalstructures:has_structure/dragon_fossil",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

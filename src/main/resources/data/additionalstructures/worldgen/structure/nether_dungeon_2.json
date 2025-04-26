@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:nether_dungeon_2",
-  "biomes": "#additional_structures:has_structure/nether_dungeon",
+  "biomes": "#additionalstructures:has_structure/nether_dungeon",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "spawn_overrides": {},

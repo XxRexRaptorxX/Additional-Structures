@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:shulker_cluster_1",
-  "biomes": "#additional_structures:has_structure/shulker_cluster",
+  "biomes": "#additionalstructures:has_structure/shulker_cluster",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

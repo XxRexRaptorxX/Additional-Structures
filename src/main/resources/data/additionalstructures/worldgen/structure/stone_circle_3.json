@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:stone_circle_3",
-  "biomes": "#additional_structures:has_structure/stone_circle",
+  "biomes": "#additionalstructures:has_structure/stone_circle",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

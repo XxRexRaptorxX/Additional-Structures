@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:skeleton_skull",
-  "biomes": "#additional_structures:has_structure/skeleton_skull",
+  "biomes": "#additionalstructures:has_structure/skeleton_skull",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

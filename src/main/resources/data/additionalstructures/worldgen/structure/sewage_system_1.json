@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:sewage_system_1",
-  "biomes": "#additional_structures:has_structure/sewage_system",
+  "biomes": "#additionalstructures:has_structure/sewage_system",
   "type": "minecraft:jigsaw",
   "step": "underground_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

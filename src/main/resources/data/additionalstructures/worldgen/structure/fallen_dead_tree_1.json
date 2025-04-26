@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:fallen_dead_tree_1",
-  "biomes": "#additional_structures:has_structure/fallen_dead_tree",
+  "biomes": "#additionalstructures:has_structure/fallen_dead_tree",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:obsidian_pillar_4",
-  "biomes": "#additional_structures:has_structure/obsidian_pillar",
+  "biomes": "#additionalstructures:has_structure/obsidian_pillar",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

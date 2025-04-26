@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:ice_floes_2",
-  "biomes": "#additional_structures:has_structure/ice_floes",
+  "biomes": "#additionalstructures:has_structure/ice_floes",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:fossil_2",
-  "biomes": "#additional_structures:has_structure/fossil",
+  "biomes": "#additionalstructures:has_structure/fossil",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",

@@ -1,6 +1,6 @@
 {
   "start_pool": "additionalstructures:well_2",
-  "biomes": "#additional_structures:has_structure/well",
+  "biomes": "#additionalstructures:has_structure/well",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
