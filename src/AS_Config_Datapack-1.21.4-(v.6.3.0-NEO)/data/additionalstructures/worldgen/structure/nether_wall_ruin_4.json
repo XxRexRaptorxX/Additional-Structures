@@ -1,0 +1,14 @@
+{
+  "start_pool": "additionalstructures:nether_wall_ruin_4",
+  "biomes": "#additionalstructures:has_structure/nether_wall_ruin",
+  "type": "minecraft:jigsaw",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "size": 1,
+  "start_height": {
+    "absolute": 33
+  },
+  "max_distance_from_center": 30,
+  "use_expansion_hack": false
+}

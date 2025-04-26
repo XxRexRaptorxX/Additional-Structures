@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "additionalstructures:villager_house_1",
+    "additionalstructures:villager_house_2",
+    "additionalstructures:villager_house_3",
+    "additionalstructures:villager_house_4"
+  ]
+}

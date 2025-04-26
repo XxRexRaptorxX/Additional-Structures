@@ -1,0 +1,27 @@
+{
+  "start_pool": "additionalstructures:spider_nest_1",
+  "biomes": "#additionalstructures:has_structure/spider_nest",
+  "type": "minecraft:jigsaw",
+  "step": "underground_structures",
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "minecraft:cave_spider",
+          "weight": 1,
+          "minCount": 2,
+          "maxCount": 4
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "none",
+  "size": 1,
+  "start_height": {
+    "absolute": -40
+  },
+  "max_distance_from_center": 30,
+  "use_expansion_hack": false
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#c:is_forest",
+    "#c:is_hill",
+    "#c:is_cave",
+    "#c:is_mountain",
+    "#c:is_stony_shores"
+  ]
+}
