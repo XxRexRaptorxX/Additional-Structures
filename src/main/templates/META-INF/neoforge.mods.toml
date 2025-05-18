@@ -31,3 +31,11 @@ description='''Adds over 150 new structures to the game to enhance your world!''
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="magmacore"
+    mandatory=true
+    type="required"
+    versionRange="${magmacore_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
