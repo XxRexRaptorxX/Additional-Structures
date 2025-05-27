@@ -7,7 +7,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class Config {
 
     public static final String CATEGORY_GENERAL = "general";
-    public static final String CATEGORY_STRUCTURES = "structures";
 
     public static ModConfigSpec SERVER_CONFIG;
     public static ModConfigSpec CLIENT_CONFIG;
