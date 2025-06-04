@@ -1,8 +1,12 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.78'
     id 'idea'
+    id "com.modrinth.minotaur" version "2.+" //Modrinth
+    id 'net.darkhax.curseforgegradle' version '1.1.26' //Curseforge
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -130,17 +134,20 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+    maven { // Curios
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
     //JEI
-    //compileOnly ("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly("mezz.jei:jei-1.21.1-common-api:${jei_version}")
-    compileOnly("mezz.jei:jei-1.21.1-neoforge-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     //REI
-    //runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     //EMI
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
     //runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
@@ -148,6 +155,11 @@ dependencies {
     implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
     //JADE
     runtimeOnly "curse.maven:jade-324717:${jade_version}"
+    //BlockDetective
+    runtimeOnly "curse.maven:blockdetective-662628:${blockdetective_version}"
+    //Curios
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -158,8 +170,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
             neo_version_range      : neo_version_range,
-            loader_version_range   : loader_version_range,
             magmacore_version_range: magmacore_version_range,
+            loader_version_range   : loader_version_range,
             pack_format_number     : pack_format_number,
             mod_id                 : mod_id,
             mod_name               : mod_name,
@@ -209,4 +221,50 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+//MODRINTH
+def rawGameVersions = project.findProperty("game_versions")?.toString() ?: "" //Game version transformator for Modrinth
+def parsedGameVersions = rawGameVersions.split(",").collect { it.trim() }
+def modrinthToken = project.findProperty("modrinthToken")?.toString() //token getter
+if (modrinthToken == null) {
+    throw new GradleException("Missing token in ~/.gradle/gradle.properties => 'modrinthToken'")
+}
+modrinth {
+    token = modrinthToken
+    projectId = "additional-structures"
+    versionType = release_type //can be `release`, `beta` or `alpha`
+    uploadFile = jar
+    gameVersions = parsedGameVersions
+    changelog = change_log
+    failSilently = true
+    syncBodyFrom = rootProject.file("README.md").text
+    dependencies {
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can either be `project` or `version`
+        required.project "magma-core"
+    }
+}
+//tasks.modrinth.dependsOn(tasks.modrinthSyncBody) //auto readme sync
+tasks.modrinth.wasUploadSuccessful()
+tasks.modrinth.uploadInfo
+
+
+//CURSEFORGE
+def cfToken = project.findProperty("curseforgeToken")?.toString()
+if (cfToken == null) {
+    throw new GradleException("Missing token in ~/.gradle/gradle.properties => 'curseforgeToken'")
+}
+def cfId = project.findProperty("cf_id")?.toString()
+
+task publishCurseForge(type: TaskPublishCurseForge) {
+    apiToken = cfToken
+
+    // Tells CurseForgeGradle to publish the output of the jar task. This will
+    // return a UploadArtifact object that can be used to further configure the
+    // file.
+    def mainFile = upload(cfId as Integer, jar)
+    mainFile.releaseType   = release_type
+    mainFile.changelog     = change_log
+    mainFile.changelogType = 'markdown'
 }
