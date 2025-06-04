@@ -15,6 +15,9 @@ logoFile="logo.png"
 authors="${mod_authors}"
 description='''Adds over 150 new structures to the game to enhance your world!'''
 
+[modproperties.${mod_id}]
+configuredBackground="minecraft:textures/block/structure_block_data.png"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     mandatory=true
@@ -33,9 +36,9 @@ description='''Adds over 150 new structures to the game to enhance your world!''
 
 [[dependencies.${mod_id}]]
     modId="magmacore"
-    mandatory=true
+    referralUrl="https://www.curseforge.com/minecraft/mc-mods/magma-core"
+    reason="Provides basic code and features such as update-checker"
     type="required"
     versionRange="${magmacore_version_range}"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"
-
