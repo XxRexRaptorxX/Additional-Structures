@@ -1,5 +1,6 @@
 <p align="center">
-  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="http://cf.way2muchnoise.eu/short_297680.svg?badge_style=flat" alt="Curseforge"></a> 
+  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="http://cf.way2muchnoise.eu/short_297680_(Neo-)Forge.svg?badge_style=flat" alt="Curseforge"></a> 
+  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures-fabric"><img src="http://cf.way2muchnoise.eu/short_585782_Fabric.svg?badge_style=flat" alt="Curseforge"></a> 
   <a href="https://modrinth.com/mod/additional-structures"><img src="https://img.shields.io/modrinth/dt/additional-structures?logo=modrinth&label=&suffix=%20&style=flat&color=242629&labelColor=5ca424&logoColor=1c1c1c" alt="Modrinth"></a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="https://cf.way2muchnoise.eu/versions/297680(266fff).svg?badge_style=flat" alt="Supported Versions"></a>
   <a href="https://discord.gg/hmaD7Se"><img src="https://img.shields.io/discord/523112426913267713?color=282828&logo=discord&style=flat&label=&labelColor=B6BCEA" alt="Discord"></a>
