@@ -37,18 +37,31 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 ## 📷 Presentation
 
 ![](https://i.imgur.com/HJ3k534.png)
+
 ![](https://i.imgur.com/BcQcqeI.png)
+
 ![](https://i.imgur.com/mYWKb79.png)
+
 ![](https://i.imgur.com/U20qUIY.png)
+
 ![](https://i.imgur.com/kqG38d8.png)
+
 ![](https://i.imgur.com/wDwNNl4.png)
+
 ![](https://i.imgur.com/ZuLeZyF.png)
+
 ![](https://i.imgur.com/Eevyyo9.png)
+
 ![](https://i.imgur.com/aIJVHLA.png)
+
 ![](https://i.imgur.com/7KLxZrl.png)
+
 ![](https://i.imgur.com/8YVKUi0.png)
+
 ![](https://i.imgur.com/bbZ7yxe.png)
+
 ![](https://i.imgur.com/sGMDPw4.png)
+
 ![](https://i.imgur.com/Ta7WuIM.png)
 
 <p align="center">
@@ -58,40 +71,39 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 
 ## 🗃️ Dependencies
 
+### Required:
 - **Magma Core**
-    - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
+  - Provides basic code and features such as update-checker
+  - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
 
 <p align="center">
-<br><br>
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
 </p>
 
-
-# 🎮 My other mods!
+## 🎮 My other mods!
 
 <p align="center">
-  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="https://github.com/XxRexRaptorxX/Additional-Structures/blob/master/src/main/resources/logo.png?raw=true" alt="Additional Structures" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/bedrock-miner"><img src="https://github.com/XxRexRaptorxX/Bedrock-Miner/blob/main/src/main/resources/logo.png?raw=true" alt="Bedrock Miner" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/tool-upgrades"><img src="https://github.com/XxRexRaptorxX/ToolUpgrades/blob/main/src/main/resources/logo.png?raw=true" alt="Tool Upgrades" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/all-the-compatibility"><img src="https://github.com/XxRexRaptorxX/AllTheCompatibility/blob/main/src/main/resources/logo.png?raw=true" alt="All The Compatibility" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/customized-dungeon-loot"><img src="https://camo.githubusercontent.com/2291f5f13114f09294ce5e079f8a61b8a2617a8692e68ca453674e93f1982b62/687474703a2f2f692e696d6775722e636f6d2f427065525748442e706e67" alt="Customized Dungeon Loot" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/advanced-sticks"><img src="https://github.com/XxRexRaptorxX/AdvancedSticks/blob/master/src/main/resources/logo.png?raw=true" alt="Advanced Tools" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/age-of-weapons"><img src="https://camo.githubusercontent.com/e8e1315b08a3bd1fb144ccd47488b1df4033418ad3aee01e61cc9d6e83fa55a5/68747470733a2f2f692e696d6775722e636f6d2f586d324332576a2e706e67" alt="Age of Weapons" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/rune-craft"><img src="https://github.com/XxRexRaptorxX/RuneCraft/blob/main/src/main/resources/logo.png?raw=true" alt="Rune Craft" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/collectibles"><img src="https://github.com/XxRexRaptorxX/Collectibles/blob/main/src/main/resources/logo.png?raw=true" alt="Collectibles" width="90"/></a> <br> 
-  <a href="https://www.curseforge.com/minecraft/mc-mods/extra-gems"><img src="https://github.com/XxRexRaptorxX/ExtraGems/blob/main/src/main/resources/logo.png?raw=true" alt="Extra Gems" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/minetraps"><img src="https://github.com/XxRexRaptorxX/MineTraps/blob/main/src/main/resources/logo.png?raw=true" alt="Mine Traps" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/exo-craft"><img src="https://github.com/XxRexRaptorxX/ExoCraft/blob/main/src/main/resources/logo.png?raw=true" alt="ExoCraft" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/city-craft"><img src="https://github.com/XxRexRaptorxX/CityCraft/blob/master/src/main/resources/logo.png?raw=true" alt="City Craft" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/upcycle"><img src="https://github.com/XxRexRaptorxX/Upcycle/blob/main/src/main/resources/logo.png?raw=true" alt="Upcycle" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/lexicon"><img src="https://github.com/XxRexRaptorxX/Lexicon/blob/main/src/main/resources/logo.png?raw=true" alt="Lexicon" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/nexus-battle-mode"><img src="https://github.com/XxRexRaptorxX/Nexus/blob/master/src/main/resources/logo.png?raw=true" alt="Nexus" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/block-detective"><img src="https://github.com/XxRexRaptorxX/BlockDetective/blob/main/src/main/resources/logo.png?raw=true" alt="Block Detective" width="90"/></a>
-  <a href="https://www.curseforge.com/minecraft/mc-mods/suspicious-pots"><img src="https://github.com/XxRexRaptorxX/Suspicious-Pots/blob/main/src/main/resources/logo.png?raw=true" alt="Suspicious Pots" width="90"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="https://github.com/XxRexRaptorxX/Additional-Structures/blob/master/src/main/resources/logo.png?raw=true" alt="Additional Structures" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/bedrock-miner"><img src="https://github.com/XxRexRaptorxX/Bedrock-Miner/blob/main/src/main/resources/logo.png?raw=true" alt="Bedrock Miner" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/tool-upgrades"><img src="https://github.com/XxRexRaptorxX/ToolUpgrades/blob/main/src/main/resources/logo.png?raw=true" alt="Tool Upgrades" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/all-the-compatibility"><img src="https://github.com/XxRexRaptorxX/AllTheCompatibility/blob/main/src/main/resources/logo.png?raw=true" alt="All The Compatibility" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/customized-dungeon-loot"><img src="https://camo.githubusercontent.com/2291f5f13114f09294ce5e079f8a61b8a2617a8692e68ca453674e93f1982b62/687474703a2f2f692e696d6775722e636f6d2f427065525748442e706e67" alt="Customized Dungeon Loot" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/advanced-sticks"><img src="https://github.com/XxRexRaptorxX/AdvancedSticks/blob/master/src/main/resources/logo.png?raw=true" alt="Advanced Tools" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/age-of-weapons"><img src="https://camo.githubusercontent.com/e8e1315b08a3bd1fb144ccd47488b1df4033418ad3aee01e61cc9d6e83fa55a5/68747470733a2f2f692e696d6775722e636f6d2f586d324332576a2e706e67" alt="Age of Weapons" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/rune-craft"><img src="https://github.com/XxRexRaptorxX/RuneCraft/blob/main/src/main/resources/logo.png?raw=true" alt="Rune Craft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/collectibles"><img src="https://github.com/XxRexRaptorxX/Collectibles/blob/main/src/main/resources/logo.png?raw=true" alt="Collectibles" width="85"/></a> <br> 
+  <a href="https://www.curseforge.com/minecraft/mc-mods/extra-gems"><img src="https://github.com/XxRexRaptorxX/ExtraGems/blob/main/src/main/resources/logo.png?raw=true" alt="Extra Gems" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/minetraps"><img src="https://github.com/XxRexRaptorxX/MineTraps/blob/main/src/main/resources/logo.png?raw=true" alt="Mine Traps" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/exo-craft"><img src="https://github.com/XxRexRaptorxX/ExoCraft/blob/main/src/main/resources/logo.png?raw=true" alt="ExoCraft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/city-craft"><img src="https://github.com/XxRexRaptorxX/CityCraft/blob/master/src/main/resources/logo.png?raw=true" alt="City Craft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/upcycle"><img src="https://github.com/XxRexRaptorxX/Upcycle/blob/main/src/main/resources/logo.png?raw=true" alt="Upcycle" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/lexicon"><img src="https://github.com/XxRexRaptorxX/Lexicon/blob/main/src/main/resources/logo.png?raw=true" alt="Lexicon" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/nexus-battle-mode"><img src="https://github.com/XxRexRaptorxX/Nexus/blob/master/src/main/resources/logo.png?raw=true" alt="Nexus" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/block-detective"><img src="https://github.com/XxRexRaptorxX/BlockDetective/blob/main/src/main/resources/logo.png?raw=true" alt="Block Detective" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/suspicious-pots"><img src="https://github.com/XxRexRaptorxX/Suspicious-Pots/blob/main/src/main/resources/logo.png?raw=true" alt="Suspicious Pots" width="85"/></a>
 </p>
 
 <p align="center">
-<br><br>
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
 </p>
 
