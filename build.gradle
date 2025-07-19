@@ -232,7 +232,7 @@ if (modrinthToken == null) {
 }
 modrinth {
     token = modrinthToken
-    projectId = "additional-structures"
+    projectId = mr_id
     versionType = release_type //can be `release`, `beta` or `alpha`
     uploadFile = jar
     gameVersions = parsedGameVersions
