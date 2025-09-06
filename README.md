@@ -75,6 +75,11 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 - **Magma Core**
   - Provides basic code and features such as update-checker
   - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
+  
+### Supported:
+- **Mystcraft** [only 1.12]
+  - Feature symbols of AS structures added
+  - [CurseForge][cf_mc] | [Modrinth][mr_mc]
 
 <p align="center">
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
@@ -127,3 +132,6 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 
 [cf_magmacore]: https://www.curseforge.com/minecraft/mc-mods/magma-core
 [mr_magmacore]: https://modrinth.com/mod/magma-core
+
+[cf_mc]: https://www.curseforge.com/minecraft/mc-mods/mystcraft
+[mr_mc]: https://modrinth.com/mod/mystcraft
