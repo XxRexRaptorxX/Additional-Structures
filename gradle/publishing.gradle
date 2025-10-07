@@ -9,7 +9,7 @@ tasks.register("#publishNewVersion") {
     group = "publishing"
     description = "Publish to both Modrinth and CurseForge"
 
-    dependsOn "build", "modrinth", "publishCurseForge", "archiveChangelog", "updateVersionsJson"
+    dependsOn "build", "modrinth", "publishCurseForge", "archiveChangelog", "updateVersionsJson" //,"publishToMavenLocal"
 
     doLast {
         println "=== Publish Completed ==="
@@ -190,45 +190,5 @@ tasks.register('updateVersionsJson') {
         }
 
         println "Committed and pushed updates to all branches."
-    }
-}
-
-
-
-// ========================================
-// MAVEN PUBLISHING
-// ========================================
-
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-
-            groupId = project.group
-            artifactId = project.base.archivesName.get()
-            version = project.version
-
-            pom {
-                name = mod_name
-                description = "${mod_name} - Minecraft mod"
-
-                licenses {
-                    license {
-                        name = mod_license
-                    }
-                }
-
-                developers {
-                    developer {
-                        name = mod_authors
-                    }
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
-        }
     }
 }

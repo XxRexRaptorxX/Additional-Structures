@@ -39,8 +39,8 @@ repositories {
 
 dependencies {
     // MagamCore
-    //implementation "xxrexraptorxx:magmacore:2.0.0"
-    implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
+    implementation "xxrexraptorxx:magmacore:2.0.0"
+    //implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
     // JEI
     compileOnly("mezz.jei:jei-1.21.9-neoforge-api:${jei_version}")
     // REI
