@@ -1,8 +1,9 @@
 {
     "pack": {
-        "description": {
-            "text": "${mod_name} resources. By XxRexRaptorxX"
-        },
-        "pack_format": ${pack_format_number}
-    }
+        "description": "${mod_name} resources. By XxRexRaptorxX",
+        "max_format": [
+            ${pack_format_number}
+        ],
+        "min_format": ${pack_format_number}
+}
 }

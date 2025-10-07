@@ -3,7 +3,7 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.78'
+    id 'net.neoforged.moddev' version '2.0.113'
     id 'idea'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.1.26'
@@ -21,11 +21,11 @@ apply from: "$rootDir/gradle/debugging.gradle"
 // PROJECT CONFIGURATION
 // ========================================
 
-version = mod_version
-group = mod_group_id
+version = "${mod_version}"
+group = "${mod_group_id}"
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
