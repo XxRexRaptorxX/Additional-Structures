@@ -5,18 +5,21 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.78'
     id 'idea'
-    id "com.modrinth.minotaur" version "2.+" //Modrinth
-    id 'net.darkhax.curseforgegradle' version '1.1.26' //Curseforge
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
-tasks.named('wrapper', Wrapper).configure {
-    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
-    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
-    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
-    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
-    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
-    distributionType = Wrapper.DistributionType.BIN
-}
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/changelogs.gradle"
+apply from: "$rootDir/gradle/publishing.gradle"
+apply from: "$rootDir/gradle/building.gradle"
+apply from: "$rootDir/gradle/initialization.gradle"
+apply from: "$rootDir/gradle/debugging.gradle"
+
+// ========================================
+// PROJECT CONFIGURATION
+// ========================================
 
 version = mod_version
 group = mod_group_id
@@ -25,10 +28,21 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+
+// ========================================
+// GRADLE WRAPPER CONFIGURATION
+// ========================================
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+// ========================================
+// NEOFORGE CONFIGURATION
+// ========================================
 
 neoForge {
-    // Specify the version of NeoForge to use.
     version = project.neo_version
 
     parchment {
@@ -39,12 +53,9 @@ neoForge {
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             client()
-
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
@@ -55,22 +66,23 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
+            // This run config launches GameTestServer and runs all registered gametests, then exits.
+            // By default, the server will crash when no gametests are provided.
+            // The gametest system is also enabled by default for other run configs under the /test command.
             type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
             clientData()
-
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         // applies to all the run configs above
@@ -81,10 +93,6 @@ neoForge {
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
             systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
@@ -99,8 +107,14 @@ neoForge {
     }
 }
 
+// ========================================
+// SOURCE SETS & DEPENDENCIES
+// ========================================
+
 // Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
 
 // Sets up a dependency configuration called 'localRuntime'.
 // This configuration should be used instead of 'runtimeOnly' to declare
@@ -110,60 +124,10 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
-repositories {
-    mavenLocal()
 
-    maven { // JEI
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
-    maven { // JEI fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-    maven { // Curseforge
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    maven { // REI
-        url "https://maven.shedaniel.me/"
-    }
-    maven { // EMI
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-    }
-    maven { // Curios
-        name = "Illusive Soulworks maven"
-        url = "https://maven.theillusivec4.top/"
-    }
-}
-
-dependencies {
-    //JEI
-    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-    //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
-    //REI
-    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    //EMI
-    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-    //runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
-    //MagmaCore
-    implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
-    //JADE
-    runtimeOnly "curse.maven:jade-324717:${jade_version}"
-    //BlockDetective
-    runtimeOnly "curse.maven:blockdetective-662628:${blockdetective_version}"
-    //Curios
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
-}
-
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// ========================================
+// MOD METADATA GENERATION
+// ========================================
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
@@ -185,37 +149,21 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     into "build/generated/sources/modMetadata"
 }
 
-// Include the output of "generateModMetadata" as an input directory for the build
-// this works with both building through Gradle and the IDE.
 sourceSets.main.resources.srcDir generateModMetadata
-// To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
 
-// Example configuration to allow publishing using the maven-publish plugin
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
-        }
-    }
-}
-
-//Naming of the built mod jar file
-tasks.named('jar').configure {
-    archiveBaseName.set(mod_name.replace(" " , ""))
-    archiveVersion.set("${minecraft_version}-(v.${mod_version}-NEO)")
-}
+// ========================================
+// BUILD & FORMATTING
+// ========================================
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+// ========================================
+// IDE CONFIGURATION
+// ========================================
+
 idea {
     module {
         downloadSources = true
@@ -223,48 +171,108 @@ idea {
     }
 }
 
-//MODRINTH
-def rawGameVersions = project.findProperty("game_versions")?.toString() ?: "" //Game version transformator for Modrinth
+
+// ========================================
+// PLATFORM PUBLISHING
+// ========================================
+
+// Modrinth Configuration
+def rawGameVersions = project.findProperty("game_versions")?.toString() ?: ""
 def parsedGameVersions = rawGameVersions.split(",").collect { it.trim() }
-def modrinthToken = project.findProperty("modrinthToken")?.toString() //token getter
-if (modrinthToken == null) {
-    throw new GradleException("Missing token in ~/.gradle/gradle.properties => 'modrinthToken'")
-}
-modrinth {
-    token = modrinthToken
-    projectId = mr_id
-    versionType = release_type //can be `release`, `beta` or `alpha`
-    uploadFile = jar
-    gameVersions = parsedGameVersions
-    changelog = change_log
-    failSilently = true
-    syncBodyFrom = rootProject.file("README.md").text
-    dependencies {
-        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
-        // The type can either be `project` or `version`
-        required.project "magma-core"
+
+afterEvaluate {
+    modrinth {
+        token = System.getenv("MODRINTH_TOKEN") ?: project.findProperty("modrinthToken")?.toString()
+        projectId = mr_id
+        versionName = "v.${mod_version}-${mod_loader}"
+        versionNumber = "v.${mod_version}"
+        versionType = release_type
+        uploadFile = jar
+        loaders = ["neoforge"]
+        gameVersions = parsedGameVersions
+        changelog = readLatestChangelog()
+        failSilently = true
+        syncBodyFrom = rootProject.file("README.md").text
+        dependencies {
+            // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+            // The type can either be `project` or `version`
+            required.project "magma-core"
+        }
     }
 }
-//tasks.modrinth.dependsOn(tasks.modrinthSyncBody) //auto readme sync
-tasks.modrinth.wasUploadSuccessful()
-tasks.modrinth.uploadInfo
 
 
-//CURSEFORGE
-def cfToken = project.findProperty("curseforgeToken")?.toString()
-if (cfToken == null) {
-    throw new GradleException("Missing token in ~/.gradle/gradle.properties => 'curseforgeToken'")
-}
-def cfId = project.findProperty("cf_id")?.toString()
+// CurseForge Configuration
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    def tokens = validateTokens()
+    apiToken = tokens[1] // CurseForge token
 
-task publishCurseForge(type: TaskPublishCurseForge) {
-    apiToken = cfToken
-
-    // Tells CurseForgeGradle to publish the output of the jar task. This will
-    // return a UploadArtifact object that can be used to further configure the
-    // file.
-    def mainFile = upload(cfId as Integer, jar)
-    mainFile.releaseType   = release_type
-    mainFile.changelog     = change_log
+    def mainFile = upload(project.findProperty("cf_id") as Integer, jar)
+    mainFile.displayName = "${mod_name.replace(' ', '')} v.${mod_version}-${mod_loader}"
+    mainFile.releaseType = release_type
+    mainFile.changelog = readLatestChangelog()
     mainFile.changelogType = 'markdown'
+    mainFile.addModLoader('NeoForge')
+    mainFile.addJavaVersion("Java ${java_version}")
+    parsedGameVersions.each { version ->
+        mainFile.addGameVersion(version)
+    }
+    mainFile.addEnvironment()
+    environment_type.split(',').each { env ->
+        mainFile.addEnvironment(env.trim())
+    }
 }
+
+
+// Changelog reading
+    String readLatestChangelog() {
+        //1. from workspace
+        def file = rootProject.file("LATEST_CHANGELOG.md")
+        if (file.exists()) {
+            try {
+                def text = file.getText('UTF-8').trim()
+                if (text) {
+                    logger.lifecycle("Using changelog from file: ${file}")
+                    return text
+                } else {
+                    logger.lifecycle("LATEST_CHANGELOG.md exists but is empty.")
+                }
+            } catch (Exception e) {
+                logger.warn("Error from reading LATEST_CHANGELOG.md: ${e.message}")
+            }
+        } else {
+            logger.lifecycle("LATEST_CHANGELOG.md not found in project root.")
+        }
+
+        //2. from Git-HEAD
+        try {
+            ByteArrayOutputStream stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'show', 'HEAD:LATEST_CHANGELOG.md'
+                standardOutput = stdout
+                // don't fail build if git command fails
+                ignoreExitValue = true
+            }
+            def gitText = stdout.toString('UTF-8').trim()
+            if (gitText) {
+                logger.lifecycle("Using changelog from git HEAD:LATEST_CHANGELOG.md")
+                return gitText
+            } else {
+                logger.lifecycle("No LATEST_CHANGELOG.md content found at git HEAD.")
+            }
+        } catch (Exception e) {
+            logger.warn("Error from executing 'git show': ${e.message}")
+        }
+
+        // 3. fallback
+        try {
+            def generated = generateLatestChangelog()
+            logger.lifecycle("Using generated changelog (fallback).")
+            return generated
+        } catch (Exception e) {
+            logger.warn("generateLatestChangelog() failed: ${e.message}")
+        }
+
+        logger.lifecycle("No changelog found — returning empty string.")
+        return ""
+    }

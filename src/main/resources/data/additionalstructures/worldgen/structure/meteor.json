@@ -1,5 +1,5 @@
 {
-   "start_pool": "additionalstructures:meteor",
+  "start_pool": "additionalstructures:meteor",
   "biomes": "#additionalstructures:has_structure/meteor",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",

@@ -18,9 +18,9 @@ build
 .gradle
 
 # other
-eclipse
 run
 runs
-run-data
-
-repo
+eclipse
+# Auto-RC Git Hooks
+# Uncomment next line if you don't want to commit hooks
+# .githooks/

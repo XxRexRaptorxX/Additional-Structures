@@ -1,0 +1,57 @@
+// ========================================
+// PROJECT REPOSITORIES AND DEPENDENCIES
+// ========================================
+
+repositories {
+    mavenLocal()
+
+    maven { // JEI
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+
+    maven { // JEI fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+
+    maven { // Curseforge
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
+    maven { // REI
+        url "https://maven.shedaniel.me/"
+    }
+
+    maven { // EMI
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+
+    maven { // Curios
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+}
+
+dependencies {
+    // MagamCore
+    //implementation "xxrexraptorxx:magmacore:2.0.0"
+    implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
+    // JEI
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    // REI
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+    //runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    // EMI
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    // JADE
+    runtimeOnly "curse.maven:jade-324717:${jade_version}"
+    // Curios
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
+}

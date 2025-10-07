@@ -1,0 +1,1063 @@
+// ========================================
+// AUTOMATIC dev TAGGING AND CHANGELOG MANAGEMENT
+// ========================================
+
+import java.text.SimpleDateFormat
+
+// Make commit type map available as a project property and as a local var
+ext.COMMIT_TYPES = [
+        feat    : "Features",
+        fix     : "Bug Fixes",
+        perf    : "Performance Improvements",
+        docs    : "Documentation",
+        style   : "Style",
+        refactor: "Refactoring",
+        test    : "Tests",
+        build   : "Build System",
+        ci      : "Continuous Integration",
+        chore   : "Chores",
+        revert  : "Reverts"
+]
+ext.EXCLUDED_TYPES = ['chore', 'style', 'ci', 'build', 'test', 'docs']
+
+// keep a local convenience variable for backwards compatibility with code that expects COMMIT_TYPES directly
+def COMMIT_TYPES = ext.COMMIT_TYPES
+def EXCLUDED_TYPE = ext.EXCLUDED_TYPES
+
+// Breaking change keywords
+ext.BREAKING_CHANGE_KEYWORDS = ['BREAKING CHANGE', 'BREAKING-CHANGE', 'BREAKING_CHANGE']
+def BREAKING_CHANGE_KEYWORDS = ext.BREAKING_CHANGE_KEYWORDS
+
+// -----------------------------
+// Helper: only write file when content actually changed
+// -----------------------------
+
+def writeIfChanged(File file, String content) {
+    try {
+        def existing = file.exists() ? file.getText('UTF-8') : null
+        if (existing == content) {
+            println "ℹ️ ${file.name} unchanged — skipping write."
+            return false
+        }
+        file.withWriter('UTF-8') { it.write(content) }
+        println "✅ Wrote ${file.name} (content changed)"
+        return true
+    } catch (Exception e) {
+        println "⚠️ Failed writing ${file}: ${e.message}"
+        throw e
+    }
+}
+
+// ==================================
+// Tasks
+// ==================================
+
+tasks.register("generateChangelog") {
+    group = "changelog"
+    description = "Generate LATEST_CHANGELOG.md from all dev commits of current version"
+
+    doLast {
+        generateLatestChangelogFile()
+    }
+}
+
+tasks.register("updateChangelog") {
+    group = "changelog"
+    description = "Update existing LATEST_CHANGELOG.md with all commits from current version dev tags"
+
+    doLast {
+        updateChangelogFile()
+    }
+}
+
+tasks.register("previewChangelog") {
+    group = "changelog"
+    description = "Preview what the changelog would look like without writing to file"
+
+    doLast {
+        def changelog = buildChangelogContent()
+        println "=== CHANGELOG PREVIEW ==="
+        println changelog
+        println "========================="
+    }
+}
+
+tasks.register("tagCurrentCommit") {
+    group = "changelog"
+    description = "Manually tag the current commit with next dev number and push"
+
+    doLast {
+        def devTag = tagCurrentCommitWithDev()
+        println "Tagged current commit with: ${devTag}"
+    }
+}
+
+tasks.register("createGitHubRelease") {
+    group = "changelog"
+    description = "Create a GitHub release for the specified version with all dev tags"
+
+    doLast {
+        def releaseVersion = project.findProperty("releaseVersion") ?: project.mod_version
+        createGitHubReleaseForVersion(releaseVersion)
+    }
+}
+
+tasks.register("createReleaseTag") {
+    group = "changelog"
+    description = "Create the final release tag (without Dev) and push it"
+
+    doLast {
+        def releaseTag = createAndPushReleaseTag()
+        println "Created and pushed release tag: ${releaseTag}"
+    }
+}
+
+tasks.register("archiveChangelog") {
+    group = "changelog"
+    description = "Archive LATEST_CHANGELOG.md to CHANGELOG.md"
+
+    doLast {
+        archiveLatestChangelogIfPresent(project.mod_version)
+    }
+}
+
+// Automatically update changelog when building
+tasks.named("jar") {
+    dependsOn("updateChangelog")
+}
+
+
+// ==================================
+// Functions (using writeIfChanged to avoid unnecessary rewrites)
+// ==================================
+
+def generateLatestChangelogFile() {
+    def changelogFile = rootProject.file("LATEST_CHANGELOG.md")
+    def content = buildChangelogContent()
+
+    def changed = writeIfChanged(changelogFile, content)
+    if (changed) {
+        println "Generated LATEST_CHANGELOG.md with ${content.split('\n').size()} lines"
+    } else {
+        println "LATEST_CHANGELOG.md already up-to-date"
+    }
+}
+
+
+def updateChangelogFile() {
+    def changelogFile = rootProject.file("LATEST_CHANGELOG.md")
+    def content = buildChangelogContent()
+
+    def changed = writeIfChanged(changelogFile, content)
+    if (changed) {
+        println "Updated LATEST_CHANGELOG.md with all dev commits for current version"
+    } else {
+        println "LATEST_CHANGELOG.md already up-to-date"
+    }
+}
+
+
+def buildChangelogContent() {
+    // Get all commits from dev tags of current version
+    def commits = getAllDevCommitsForCurrentVersion()
+
+    // Build changelog from these commits
+    return buildChangelogFromCommits(commits)
+}
+
+
+def getAllDevCommitsForCurrentVersion() {
+    def currentVersion = project.mod_version
+
+    try {
+        // Get all dev tags for current version
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'tag', '--list', "v.${currentVersion}-dev*", '--sort=-version:refname'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        def devTags = stdout.toString().trim().split('\n').findAll { it.trim() }
+
+        if (devTags.isEmpty()) {
+            println "No dev tags found for version ${currentVersion}"
+            return []
+        }
+
+        println "Found ${devTags.size()} dev tags for version ${currentVersion}"
+
+        // Get commits for each dev tag
+        def allCommits = []
+        def seenHashes = [] as Set
+
+        devTags.each { tag ->
+            try {
+                def commitOut = new ByteArrayOutputStream()
+                exec {
+                    commandLine 'git', 'rev-list', '-n', '1', tag
+                    standardOutput = commitOut
+                    ignoreExitValue = true
+                }
+
+                def commitHash = commitOut.toString().trim()
+                if (commitHash && !seenHashes.contains(commitHash)) {
+                    seenHashes.add(commitHash)
+
+                    // Get commit details
+                    def detailOut = new ByteArrayOutputStream()
+                    exec {
+                        commandLine 'git', 'show', '--no-patch', '--format=%H|%s|%b', commitHash
+                        standardOutput = detailOut
+                        ignoreExitValue = true
+                    }
+
+                    def details = detailOut.toString().trim()
+                    if (details) {
+                        def parts = details.split('\\|', 3)
+                        if (parts.length >= 2) {
+                            allCommits.add([
+                                    hash: parts[0],
+                                    message: parts[1],
+                                    body: parts.length > 2 ? parts[2] : "",
+                                    devTag: tag
+                            ])
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                println "Error processing dev tag ${tag}: ${e.message}"
+            }
+        }
+
+        // Sort commits by dev number (newest first)
+        allCommits.sort { a, b ->
+            def aNum = extractDevNumber(a.devTag)
+            def bNum = extractDevNumber(b.devTag)
+            return bNum <=> aNum
+        }
+
+        println "Collected ${allCommits.size()} unique commits from dev tags"
+        return allCommits
+
+    } catch (Exception e) {
+        println "Error getting dev commits: ${e.message}"
+        return []
+    }
+}
+
+
+def extractDevNumber(String devTag) {
+    def matcher = devTag =~ /dev(\d+)$/
+    if (matcher) {
+        return Integer.parseInt(matcher[0][1])
+    }
+    return 0
+}
+
+
+def tagCurrentCommitWithDev() {
+    def currentVersion = project.mod_version
+    def devNumber = getNextDevNumber(currentVersion)
+    def devTag = "v.${currentVersion}-dev${devNumber}"
+
+    try {
+        // Create the dev tag on HEAD
+        println "Creating dev tag ${devTag} on current commit..."
+        exec {
+            commandLine 'git', 'tag', '-a', devTag, '-m', "dev ${devNumber} for version ${currentVersion}"
+        }
+
+        // Push the tag
+        println "Pushing dev tag ${devTag} to remote..."
+        exec {
+            commandLine 'git', 'push', 'origin', devTag
+        }
+
+        println "Successfully created and pushed dev tag: ${devTag}"
+        return devTag
+    } catch (Exception e) {
+        throw new GradleException("Failed to create or push dev tag: ${e.message}")
+    }
+}
+
+
+def getNextDevNumber(String baseVersion) {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'tag', '--list', "v.${baseVersion}-dev*"
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        def existingDevTags = stdout.toString().trim().split('\n').findAll { it.trim() }
+        def maxDev = 0
+
+        existingDevTags.each { tag ->
+            def devMatch = tag =~ /v\.${baseVersion.replaceAll(/[.*+?^${}()|[\\]\\]/, '\\\\$0')}-dev(\d+)/
+            if (devMatch) {
+                def devNum = Integer.parseInt(devMatch[0][1])
+                if (devNum > maxDev) {
+                    maxDev = devNum
+                }
+            }
+        }
+
+        return maxDev + 1
+    } catch (Exception e) {
+        println "Error getting next dev number, defaulting to 1: ${e.message}"
+        return 1
+    }
+}
+
+
+def archiveLatestChangelogIfPresent(String releaseVersion) {
+    try {
+        def latestFile = rootProject.file("LATEST_CHANGELOG.md")
+        if (!latestFile.exists()) {
+            println "ℹ️ LATEST_CHANGELOG.md not found — nothing to archive."
+            return
+        }
+
+        def latestText = latestFile.getText('UTF-8').trim()
+        if (!latestText) {
+            println "ℹ️ LATEST_CHANGELOG.md is empty — nothing to archive."
+            return
+        }
+
+        println "📦 Archiving LATEST_CHANGELOG.md for release ${releaseVersion} -> inserting into CHANGELOG.md"
+
+        def changelogFile = rootProject.file("CHANGELOG.md")
+        if (!changelogFile.exists()) {
+            writeIfChanged(changelogFile, "# Changelog\n\n")
+            println "🆕 Created CHANGELOG.md"
+        }
+
+        def existing = changelogFile.getText('UTF-8')
+
+        // check for duplicated "# Changelog" header
+        if (!existing.startsWith("# Changelog")) {
+            existing = "# Changelog\n\n" + existing
+        }
+
+        // split: header + patch notes
+        def header = "# Changelog"
+        def parts = existing.split("(?m)^# Changelog\\s*")
+        def body = parts.size() > 1 ? parts[1].trim() : ""
+
+        // Create separator line
+        def separator = "\n---\n"
+
+        // append patch notes with separator
+        def combined
+        if (body.isEmpty()) {
+            // First entry, no separator needed
+            combined = header + "\n\n" + latestText
+        } else {
+            // Add separator between new version and existing content
+            combined = header + "\n\n" + latestText + separator + "\n" + body
+        }
+
+        writeIfChanged(changelogFile, combined.trim() + "\n")
+
+        println "✅ Inserted LATEST_CHANGELOG.md content"
+
+        // reset LATEST_CHANGELOG.md
+        def gameVersions = getFormattedGameVersions()
+        def newHeader = "# v.${project.mod_version} for MC ${gameVersions}\n\n## 📝 Changes\n\n"
+        def currentLatest = latestFile.exists() ? latestFile.getText('UTF-8') : ""
+
+        if (!currentLatest.startsWith(newHeader)) {
+            writeIfChanged(latestFile, newHeader)
+            println "♻️ Reset LATEST_CHANGELOG.md for new version header: v.${project.mod_version}"
+        } else {
+            println "♻️ LATEST_CHANGELOG.md header already up-to-date"
+        }
+
+    } catch (Exception e) {
+        println "⚠️ Error while archiving LATEST_CHANGELOG.md: ${e.message}"
+        e.printStackTrace()
+    }
+}
+
+
+def createGitHubReleaseForVersion(String version) {
+    archiveLatestChangelogIfPresent(version)
+
+    if (!GITHUB_REPO) {
+        println "❌ No GitHub repository URL found. Cannot create release."
+        return
+    }
+
+    try {
+        // Get all dev tags for the specified version
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'tag', '--list', "v.${version}-dev*", '--sort=version:refname'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        def devTags = stdout.toString().trim().split('\n').findAll { it.trim() }
+
+        if (devTags.isEmpty()) {
+            println "⚠️ No dev tags found for version ${version}. Skipping release creation."
+            return
+        }
+
+        println "📋 Found ${devTags.size()} dev tags for version ${version}: ${devTags.join(', ')}"
+
+        // Generate changelog content for this version
+        def changelogContent = buildChangelogForVersion(version, devTags)
+
+        // Create release tag if it doesn't exist
+        def releaseTag = "v.${version}"
+        def releaseTagExists = false
+
+        try {
+            def tagCheck = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--verify', releaseTag
+                standardOutput = tagCheck
+                ignoreExitValue = true
+            }
+            releaseTagExists = tagCheck.toString().trim()
+        } catch (Exception e) {
+            // Tag doesn't exist
+        }
+
+        if (!releaseTagExists) {
+            // Create release tag on the last dev commit
+            def lastDevTag = devTags.last()
+            println "🔖 Creating release tag ${releaseTag} from ${lastDevTag}"
+
+            exec {
+                commandLine 'git', 'tag', '-a', releaseTag, lastDevTag, '-m', "Release version ${version}"
+            }
+
+            exec {
+                commandLine 'git', 'push', 'origin', releaseTag
+            }
+
+            println "✅ Created and pushed release tag: ${releaseTag}"
+        }
+
+        // Skipping GitHub CLI; release will be created by GitHub Actions.
+        println "🔗 Release would be created at: ${GITHUB_REPO}/releases/new?tag=${releaseTag}"
+
+        // Save changelog to a file for manual use
+        def releaseFile = file("RELEASE_${version}.md")
+        writeIfChanged(releaseFile, changelogContent)
+        println "📄 Release notes saved to: ${releaseFile.absolutePath}"
+
+    } catch (Exception e) {
+        println "❌ Failed to create GitHub release for version ${version}: ${e.message}"
+        e.printStackTrace()
+    }
+}
+
+def formatGameVersions(gameVersions) {
+    if (!gameVersions) return ""
+    return gameVersions.toString().replaceAll(/,\s*/, ', ')
+}
+
+ext.getFormattedGameVersions = {
+    def rawVersions = project.findProperty("game_versions") ?: project.minecraft_version
+    return formatGameVersions(rawVersions)
+}
+
+def buildChangelogForVersion(String version, List<String> devTags) {
+    // Get commits for all dev tags of this version
+    def commits = []
+    def seenHashes = [] as Set
+
+    devTags.each { tag ->
+        try {
+            def commitOut = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-list', '-n', '1', tag
+                standardOutput = commitOut
+                ignoreExitValue = true
+            }
+
+            def commitHash = commitOut.toString().trim()
+            if (commitHash && !seenHashes.contains(commitHash)) {
+                seenHashes.add(commitHash)
+
+                // Get commit details
+                def detailOut = new ByteArrayOutputStream()
+                exec {
+                    commandLine 'git', 'show', '--no-patch', '--format=%H|%s|%b', commitHash
+                    standardOutput = detailOut
+                    ignoreExitValue = true
+                }
+
+                def details = detailOut.toString().trim()
+                if (details) {
+                    def parts = details.split('\\|', 3)
+                    if (parts.length >= 2) {
+                        commits.add([
+                                hash: parts[0],
+                                message: parts[1],
+                                body: parts.length > 2 ? parts[2] : "",
+                                devTag: tag
+                        ])
+                    }
+                }
+            }
+        } catch (Exception e) {
+            println "Error processing dev tag ${tag}: ${e.message}"
+        }
+    }
+
+    // Build changelog content
+    def gameVersions = getFormattedGameVersions()
+    def content = new StringBuilder()
+
+    content.append("# Release v.${version} for MC ${gameVersions}\n\n")
+
+    if (commits.isEmpty()) {
+        content.append("No commits found for this version.\n")
+        return content.toString()
+    }
+
+    // Group commits by type
+    def groupedCommits = [:]
+    def breakingChanges = []
+
+    commits.each { commit ->
+        def parsed = parseConventionalCommit(commit.message)
+        def type = parsed.type ?: 'other'
+
+        // Skip if commit type is excluded
+        if (EXCLUDED_TYPES.contains(type)) {
+            return
+        }
+
+        if (!groupedCommits.containsKey(type)) {
+            groupedCommits[type] = []
+        }
+
+        groupedCommits[type].add([
+                hash: commit.hash,
+                subject: parsed.subject,
+                scope: parsed.scope,
+                body: parsed.body,
+                breaking: parsed.breaking,
+                originalMessage: commit.message
+        ])
+
+        if (parsed.breaking) {
+            breakingChanges.add([
+                    subject: parsed.subject,
+                    body: parsed.body,
+                    scope: parsed.scope
+            ])
+        }
+    }
+
+    // Add breaking changes section first
+    if (!breakingChanges.isEmpty()) {
+        content.append("## ⚠️ Breaking Changes\n\n")
+        breakingChanges.each { change ->
+            def scopeText = change.scope ? "(${change.scope}) " : ""
+            content.append("- ${scopeText}${change.subject}\n")
+            if (change.body) {
+                content.append("  ${change.body}\n")
+            }
+        }
+        content.append("\n")
+    }
+
+    // Add sections for each commit type
+    def orderedTypes = ['feat', 'refactor', 'fix', 'perf', 'docs', 'style', 'test', 'build', 'ci', 'chore', 'revert', 'other']
+
+    orderedTypes.each { type ->
+        if (groupedCommits.containsKey(type)) {
+            def displayName = COMMIT_TYPES[type] ?: type.capitalize()
+            def emoji = getEmojiForType(type)
+
+            content.append("## ${emoji} ${displayName}\n\n")
+
+            groupedCommits[type].each { commit ->
+                def scopeText = commit.scope ? "(${commit.scope}) " : ""
+                def breakingIcon = commit.breaking ? " ⚠️" : ""
+                def shortHash = commit.hash.substring(0,7)
+                content.append("- ${scopeText}${commit.subject} ([${shortHash}](${GITHUB_REPO}/commit/${commit.hash}))${breakingIcon}\n")
+            }
+
+            content.append("\n")
+        }
+    }
+
+    return content.toString()
+}
+
+
+def createAndPushReleaseTag() {
+    def currentVersion = project.mod_version
+    def releaseTag = "v.${currentVersion}"
+
+    try {
+        // Check if release tag already exists
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--verify', releaseTag
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        if (stdout.toString().trim()) {
+            println "Release tag ${releaseTag} already exists, skipping creation"
+            return releaseTag
+        }
+
+        // Create the release tag
+        println "Creating release tag ${releaseTag}..."
+        exec {
+            commandLine 'git', 'tag', '-a', releaseTag, '-m', "Release version ${currentVersion}"
+        }
+
+        // Push the tag
+        println "Pushing release tag ${releaseTag} to remote..."
+        exec {
+            commandLine 'git', 'push', 'origin', releaseTag
+        }
+
+        println "Successfully created and pushed release tag: ${releaseTag}"
+        return releaseTag
+    } catch (Exception e) {
+        throw new GradleException("Failed to create or push release tag: ${e.message}")
+    }
+}
+
+
+def buildChangelogFromCommits(List commits) {
+    def currentVersion = project.mod_version
+    def gameVersions = getFormattedGameVersions()
+    def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    def currentDate = dateFormat.format(new Date())
+
+    def content = new StringBuilder()
+    def versionLink = getVersionLink(currentVersion)
+    if (versionLink) {
+        def (label, url) = versionLink
+        content.append("# [v.${currentVersion} for MC ${gameVersions}](${url})\n\n")
+    } else {
+        content.append("# v.${currentVersion} for MC ${gameVersions}\n\n")
+    }
+
+    if (commits.isEmpty()) {
+        content.append("No changes found for this version.\n")
+        return content.toString()
+    }
+
+    // Group commits by type
+    def groupedCommits = [:]
+    def breakingChanges = []
+
+    commits.each { commit ->
+        def parsed = parseConventionalCommit(commit.message)
+        def type = parsed.type ?: 'other'
+
+        // Skip if commit type is excluded
+        if (EXCLUDED_TYPES.contains(type)) {
+            return
+        }
+
+        if (!groupedCommits.containsKey(type)) {
+            groupedCommits[type] = []
+        }
+
+        groupedCommits[type].add([
+                hash: commit.hash,
+                subject: parsed.subject,
+                scope: parsed.scope,
+                body: parsed.body,
+                breaking: parsed.breaking,
+                originalMessage: commit.message,
+                devTag: commit.devTag
+        ])
+
+        if (parsed.breaking) {
+            breakingChanges.add([
+                    subject: parsed.subject,
+                    body: parsed.body,
+                    scope: parsed.scope,
+                    devTag: commit.devTag
+            ])
+        }
+    }
+
+    // Add breaking changes section first
+    if (!breakingChanges.isEmpty()) {
+        content.append("## ⚠️ Breaking Changes\n\n")
+        breakingChanges.each { change ->
+            def scopeText = change.scope ? "(${change.scope}) " : ""
+            content.append("- ${scopeText}${change.subject}\n")
+            if (change.body) {
+                content.append("  ${change.body}\n")
+            }
+        }
+        content.append("\n")
+    }
+
+    // Add sections for each commit type (in order of importance)
+    def orderedTypes = ['feat', 'fix', 'perf', 'refactor', 'docs', 'style', 'test', 'build', 'ci', 'chore', 'revert', 'other']
+
+    orderedTypes.each { type ->
+        if (groupedCommits.containsKey(type)) {
+            def displayName = COMMIT_TYPES[type] ?: type.capitalize()
+            def emoji = getEmojiForType(type)
+
+            content.append("## ${emoji} ${displayName}\n\n")
+
+            groupedCommits[type].each { commit ->
+                def scopeText = commit.scope ? "(${commit.scope}) " : ""
+                def breakingIcon = commit.breaking ? " ⚠️" : ""
+                def shortHash = commit.hash.substring(0,7)
+                content.append("- ${scopeText}${commit.subject} ([${shortHash}](${GITHUB_REPO}/commit/${commit.hash}))${breakingIcon}\n")
+            }
+
+            content.append("\n")
+        }
+    }
+
+    return content.toString()
+}
+
+
+def getGithubRepoUrl() {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'remote', 'get-url', 'origin'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+        def url = stdout.toString().trim()
+        if (!url) return null
+
+        // HTTPS format
+        if (url.startsWith('git@')) {
+            // git@github.com:USER/REPO.git -> https://github.com/USER/REPO
+            url = url.replaceFirst(/^git@([^:]+):/, 'https://$1/')
+        }
+        url = url.replaceAll(/\.git$/, '')
+        return url
+    } catch (Exception e) {
+        println "Could not detect GitHub repo URL: ${e.message}"
+        return null
+    }
+}
+ext.GITHUB_REPO = getGithubRepoUrl()
+def GITHUB_REPO = ext.GITHUB_REPO
+
+
+def getVersionLink(String currentVersion) {
+    if (!GITHUB_REPO) return null
+
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'tag', '--list', "v.${currentVersion}-dev*", '--sort=version:refname'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        def devTags = stdout.toString().trim().split('\n').findAll { it.trim() }
+
+        if (devTags.size() >= 2) {
+            def firstTag = devTags.first()
+            def lastTag = devTags.last()
+
+            // GitHub compare-link: https://github.com/USER/REPO/compare/v.x-dev1...v.x-devN
+            def url = "${GITHUB_REPO}/compare/${firstTag}...${lastTag}"
+            return [ "diff", url ]
+        } else if (devTags.size() == 1) {
+            // only 1 dev-tag -> link current commit
+            def url = "${GITHUB_REPO}/tree/${devTags.first()}"
+            return [ "tag", url ]
+        } else {
+            // no dev-tags -> fallback to release tag
+            def currentTag = "v.${currentVersion}"
+            return [ "tag", "${GITHUB_REPO}/releases/tag/${currentTag}" ]
+        }
+    } catch (Exception e) {
+        println "⚠️ Error while creating the Versionslinks: ${e.message}"
+        return null
+    }
+}
+
+
+
+def parseConventionalCommit(String message) {
+    if (!message) {
+        return [type: null, scope: null, subject: "", body: "", breaking: false]
+    }
+    def msgLines = message.split('\n')
+    def header = msgLines[0].trim()
+    def body = (msgLines.size() > 1) ? msgLines[1..-1].join('\n').trim() : ""
+    def type = null
+    def scope = null
+    def subject = header
+    def breaking = false
+
+    // Matching header: Type(range)!: Subject or Type!: Subject or Type(range): Subject or Type: Subject
+    def matcher = header =~ /^([A-Za-z0-9_-]+)(?:\(([^)]+)\))?(!)?:\s*(.+)$/
+    if (matcher) {
+        type = matcher[0][1]
+        scope = matcher[0][2]
+        def excl = matcher[0][3]
+        subject = matcher[0][4]
+        if (excl == '!') {
+            breaking = true
+        }
+    } else {
+        // fallback: try to split by colon
+        def idx = header.indexOf(':')
+        if (idx > 0) {
+            type = header.substring(0, idx).trim()
+            subject = header.substring(idx+1).trim()
+        } else {
+            subject = header
+        }
+    }
+
+    // detect breaking change keywords in body (case-insensitive)
+    def bk = project.findProperty('BREAKING_CHANGE_KEYWORDS') ?: ['BREAKING CHANGE', 'BREAKING-CHANGE', 'BREAKING_CHANGE']
+    bk.each { kw ->
+        if (body?.toLowerCase()?.contains(kw.toLowerCase())) {
+            breaking = true
+        }
+    }
+
+    return [type: type, scope: scope, subject: subject, body: body, breaking: breaking]
+}
+
+
+def getEmojiForType(String type) {
+    def emojis = [
+            'feat': '✨',
+            'fix': '🔧',
+            'docs': '📚',
+            'style': '💎',
+            'refactor': '🔨',
+            'perf': '🚀',
+            'test': '🧪',
+            'build': '🛠️',
+            'ci': '⚙️',
+            'chore': '🧹',
+            'revert': '⏪',
+            'other': '📝'
+    ]
+    return emojis[type] ?: '📝'
+}
+
+// Make sure changelog is updated before any publishing task
+tasks.matching { it.name.contains("publish") || it.name == "modrinth" }.all {
+    dependsOn "updateChangelog"
+}
+
+// Also update changelog when building
+tasks.named("build") {
+    dependsOn("updateChangelog")
+}
+
+// Helper task to clean and regenerate changelog
+tasks.register("cleanChangelog") {
+    group = "changelog"
+    description = "Delete LATEST_CHANGELOG.md and regenerate it from dev tags"
+
+    doLast {
+        def changelogFile = rootProject.file("LATEST_CHANGELOG.md")
+        if (changelogFile.exists()) {
+            changelogFile.delete()
+            println "Deleted existing LATEST_CHANGELOG.md"
+        }
+        generateLatestChangelogFile()
+        println "Generated fresh LATEST_CHANGELOG.md from dev tags"
+    }
+}
+
+// Task to validate changelog format
+tasks.register("validateChangelog") {
+    group = "changelog"
+    description = "Validate that LATEST_CHANGELOG.md follows the expected format"
+
+    doLast {
+        def changelogFile = rootProject.file("LATEST_CHANGELOG.md")
+        if (!changelogFile.exists()) {
+            throw new GradleException("LATEST_CHANGELOG.md not found. Run 'gradle generateChangelog' first.")
+        }
+
+        def content = changelogFile.text
+        def currentVersion = project.mod_version
+
+        // Check version header
+        if (!content.contains("v.${currentVersion}")) {
+            throw new GradleException("Changelog doesn't contain current version ${currentVersion}")
+        }
+
+        // Check basic structure
+        if (!content.contains("# v.")) {
+            throw new GradleException("Changelog missing version header")
+        }
+
+        println "✅ LATEST_CHANGELOG.md validation passed"
+        println "📋 Version: ${currentVersion}"
+        println "📄 Lines: ${content.split('\n').size()}"
+    }
+}
+
+// Task to show changelog statistics
+tasks.register("changelogStats") {
+    group = "changelog"
+    description = "Show statistics about the current changelog"
+
+    doLast {
+        def changelogFile = rootProject.file("LATEST_CHANGELOG.md")
+        if (!changelogFile.exists()) {
+            println "LATEST_CHANGELOG.md not found"
+            return
+        }
+
+        def content = changelogFile.text
+        def lines = content.split('\n')
+
+        def stats = [
+                totalLines: lines.size(),
+                sections: 0,
+                features: 0,
+                bugFixes: 0,
+                breakingChanges: 0,
+                devCommits: 0
+        ]
+
+        lines.each { line ->
+            if (line.startsWith('## ')) stats.sections++
+            if (line.contains('Features') || line.contains('✨')) stats.features++
+            if (line.contains('Bug Fixes') || line.contains('🔧')) stats.bugFixes++
+            if (line.contains('Breaking Changes') || line.contains('⚠️')) stats.breakingChanges++
+            if (line.contains('-dev')) stats.devCommits++
+        }
+
+        println "=== CHANGELOG STATISTICS ==="
+        println "Total lines: ${stats.totalLines}"
+        println "Sections: ${stats.sections}"
+        println "Features: ${stats.features}"
+        println "Bug fixes: ${stats.bugFixes}"
+        println "Breaking changes: ${stats.breakingChanges}"
+        println "dev commits: ${stats.devCommits}"
+        println "=========================="
+    }
+}
+
+// Task to list all dev tags for current version
+tasks.register("listDevTags") {
+    group = "changelog"
+    description = "List all dev tags for the current version"
+
+    doLast {
+        def currentVersion = project.mod_version
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'tag', '--list', "v.${currentVersion}-dev*", '--sort=version:refname'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+
+        def devTags = stdout.toString().trim().split('\n').findAll { it.trim() }
+
+        println "=== dev TAGS FOR VERSION ${currentVersion} ==="
+        if (devTags.isEmpty()) {
+            println "No dev tags found for version ${currentVersion}"
+        } else {
+            devTags.each { tag ->
+                // Get commit info for each tag
+                def commitOut = new ByteArrayOutputStream()
+                exec {
+                    commandLine 'git', 'log', '-1', '--format=%h %s', tag
+                    standardOutput = commitOut
+                    ignoreExitValue = true
+                }
+                def commitInfo = commitOut.toString().trim()
+                println "- ${tag} -> ${commitInfo}"
+            }
+        }
+
+        def nextDev = getNextDevNumber(currentVersion)
+        println "Next dev would be: v.${currentVersion}-dev${nextDev}"
+        println "============================================"
+    }
+}
+
+// Integration with existing functions - enhanced readLatestChangelog
+ext.readLatestChangelog = {
+    // 1. Try reading from file first
+    def file = rootProject.file("LATEST_CHANGELOG.md")
+    if (file.exists()) {
+        try {
+            def text = file.getText('UTF-8').trim()
+            if (text) {
+                logger.lifecycle("Using changelog from file: ${file}")
+                return text
+            } else {
+                logger.lifecycle("LATEST_CHANGELOG.md exists but is empty.")
+            }
+        } catch (Exception e) {
+            logger.warn("Error reading LATEST_CHANGELOG.md: ${e.message}")
+        }
+    } else {
+        logger.lifecycle("LATEST_CHANGELOG.md not found in project root.")
+    }
+
+    // 2. Try from Git HEAD
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'show', 'HEAD:LATEST_CHANGELOG.md'
+            standardOutput = stdout
+            ignoreExitValue = true
+        }
+        def gitText = stdout.toString('UTF-8').trim()
+        if (gitText) {
+            logger.lifecycle("Using changelog from git HEAD:LATEST_CHANGELOG.md")
+            return gitText
+        } else {
+            logger.lifecycle("No LATEST_CHANGELOG.md content found at git HEAD.")
+        }
+    } catch (Exception e) {
+        logger.warn("Error executing 'git show': ${e.message}")
+    }
+
+    // 3. Generate from dev commits as fallback
+    try {
+        def generated = buildChangelogContent()
+        if (generated) {
+            logger.lifecycle("Using generated changelog from dev commits.")
+            // Save it for next time
+            try {
+                writeIfChanged(file, generated)
+                logger.lifecycle("Saved generated changelog to LATEST_CHANGELOG.md")
+            } catch (Exception saveError) {
+                logger.warn("Could not save generated changelog: ${saveError.message}")
+            }
+            return generated
+        }
+    } catch (Exception e) {
+        logger.warn("Failed to generate changelog from dev commits: ${e.message}")
+    }
+
+    // 4. Final fallback
+    logger.lifecycle("No changelog found - returning minimal changelog.")
+    def gameVersions = getFormattedGameVersions()
+    return """# v.${project.mod_version} for MC ${gameVersions}
+## 📝 Changes
+
+- Initial release or changes not documented
+
+Please refer to commit history for detailed changes.
+"""
+}
