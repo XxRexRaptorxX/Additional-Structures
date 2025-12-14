@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:small_end_islands"
+    "#additionalstructures:end_safe_placement"
   ]
 }
