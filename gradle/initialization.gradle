@@ -1,0 +1,970 @@
+// ========================================
+// PROJECT INITIALIZATION TASKS
+// ========================================
+
+import groovy.json.JsonOutput
+
+tasks.register('initProjectFromScript', Exec) {
+    group = "initialization"
+    description = "Initializes the project (runs init script)"
+    if (file("init-project.sh").exists()) {
+        println "✅ Initialization script found"
+        commandLine "bash", "./init-project.sh"
+    }
+}
+
+tasks.register('checkGit') {
+    group = "initialization"
+    description = "Checks if the project is a Git repository"
+    doLast {
+        if (!file(".git").exists()) {
+            throw new GradleException("❌ Not in a git repository. Please run from your mod's root directory.")
+        } else {
+            println "✅ Git repository found"
+        }
+    }
+}
+
+// Task to remove dev hook
+tasks.register("removeAutoDevHook") {
+    group = "initialization"
+    description = "Remove the automatic dev tagging hooks and reset Git config"
+
+    doLast {
+        def preCommitHook = file(".githooks/pre-commit")
+        def postCommitHook = file(".githooks/post-commit")
+        def hooksDir = file(".githooks")
+
+        if (preCommitHook.exists()) {
+            preCommitHook.delete()
+            println "🗑️ Removed pre-commit hook"
+        }
+
+        if (postCommitHook.exists()) {
+            postCommitHook.delete()
+            println "🗑️ Removed post-commit hook"
+        }
+
+        // Remove the hooks directory if it's empty
+        if (hooksDir.exists() && hooksDir.list().length == 0) {
+            hooksDir.delete()
+            println "🗑️ Removed empty .githooks directory"
+        }
+
+        // Reset Git hooks path to default
+        try {
+            exec {
+                commandLine 'git', 'config', '--unset', 'core.hooksPath'
+                ignoreExitValue = true
+            }
+            println "🔄 Reset Git hooks path to default"
+        } catch (Exception e) {
+            println "ℹ️ Git hooks path was already at default"
+        }
+
+        println "✅ Automatic dev tagging hooks removed"
+    }
+}
+
+ext.requiredProps = [
+        mod_id: "MOD",
+        mod_name: "MOD",
+        mod_version: "1.0.0",
+        game_versions: "1.21.5",
+        minecraft_version_range: "[1.21.5,1.22)",
+        neo_version_range: "[21.5,)",
+        loader_version_range: "[3,)",
+        pack_format_number: "71",
+        mod_group_id: "xxrexraptorxx",
+        mod_authors: "XxRexRaptorxX (RexRaptor)",
+        environment_type: "client,server",
+        mod_loader: "NEO",
+        release_type: "release",
+        cf_id: "ID",
+        mr_id: "ID",
+        minecraft_version: "1.21.5",
+        neo_version: "21.5.74",
+        parchment_minecraft_version: "1.21.5",
+        parchment_mappings_version: "2025.06.15",
+        java_version: "21",
+        jei_version: "21.3.0.17",
+        rei_version: "19.0.806",
+        emi_version: "1.1.20+1.21.1",
+        jade_version: "6524708",
+]
+
+tasks.register('checkGradleProperties') {
+    group = 'initialization'
+    description = 'Check gradle.properties for required keys and optionally add missing ones.'
+
+    doLast {
+        def propsFile = rootProject.file('gradle.properties')
+        def props = new Properties()
+        if (propsFile.exists()) {
+            propsFile.withInputStream { stream -> props.load(stream) }
+        } else {
+            println "⚠️ No gradle.properties found — a new one will be created if you choose to add properties."
+        }
+
+        def missing = requiredProps.keySet().findAll { !props.containsKey(it) }
+        if (missing.isEmpty()) {
+            println "✅ All required properties are present."
+            return
+        }
+
+        println "⚠️ Missing properties: ${missing.join(', ')}"
+
+        missing.each { key ->
+            def defaultVal = requiredProps[key]
+            def value = defaultVal
+
+            props.setProperty(key, value)
+            println "-> set: ${key}=${value}"
+        }
+
+        propsFile.withOutputStream { out -> props.store(out, "Automatically updated by task checkGradleProperties") }
+        println "✅ gradle.properties updated: ${propsFile.absolutePath}"
+    }
+}
+
+tasks.register('setupGitattributes') {
+    group = "initialization"
+    description = "Creates or updates .gitattributes for the project to fix some Spotless-Git problems"
+    doLast {
+        def gitattributes = file(".gitattributes")
+        def requiredLines = [
+                '*.java text eol=lf',
+                '*.gradle text eol=lf',
+                '*.md text eol=lf',
+                '*.yml text eol=lf',
+                '*.yaml text eol=lf',
+                '*.githooks text eol=lf'
+        ]
+
+        if (!gitattributes.exists()) {
+            gitattributes.text = requiredLines.join("\n") + "\n"
+            println "✅ Created .gitattributes"
+        } else {
+            // check lines
+            def existingLines = gitattributes.readLines().collect { it.trim() }
+            def linesToAdd = requiredLines.findAll { !existingLines.contains(it) }
+
+            if (linesToAdd) {
+                gitattributes.append("\n" + linesToAdd.join("\n") + "\n")
+                println "✅ Added missing lines to .gitattributes"
+            } else {
+                println "✅ .gitattributes already contains all required lines"
+            }
+        }
+    }
+}
+
+
+//create or restore CHANGELOG.md / LATEST_CHANGELOG.md
+def restoreOrCreateFile = { fileName, envVar ->
+    def f = file(fileName)
+    if (!f.exists()) {
+        try {
+            exec {
+                commandLine 'git', 'show', "HEAD:./$fileName"
+                standardOutput = new FileOutputStream(f)
+                isIgnoreExitValue = true
+            }
+            println "✅ Restored $fileName from git HEAD"
+            exec { commandLine 'git', 'add', fileName }
+        } catch (Exception e) {
+                f.text = ""
+                exec { commandLine 'git', 'add', fileName }
+                println "✅ Created $fileName"
+        }
+    }
+}
+
+tasks.register('setupChangelogs') {
+    group = "initialization"
+    description = "Creates or restores CHANGELOG.md and LATEST_CHANGELOG.md"
+    doLast {
+        // generate CHANGELOG.md with header
+        def changelogFile = file('CHANGELOG.md')
+        def changelogContent = '# Changelog\n\n'
+
+        if (!changelogFile.exists()) {
+            changelogFile.text = changelogContent
+            println "✅ Created CHANGELOG.md"
+        } else {
+            println "✅ CHANGELOG.md already exists"
+        }
+
+        // generate LATEST_CHANGELOG.md
+        def latestChangelogFile = file('LATEST_CHANGELOG.md')
+        def latestChangelogContent = """# v.${project.mod_version} for MC ${project.minecraft_version}
+
+## 📝 Changes
+
+- Initial release or changes not documented
+
+Please refer to commit history for detailed changes.
+"""
+        if (!latestChangelogFile.exists()) {
+            latestChangelogFile.text = latestChangelogContent
+            println "✅ Created LATEST_CHANGELOG.md with version ${project.mod_version} for MC ${project.minecraft_version}"
+        } else {
+            println "✅ LATEST_CHANGELOG.md already exists"
+        }
+    }
+}
+
+tasks.register('setupVersionsJson') {
+    group = "initialization"
+    description = "Creates versions.json if it does not exist"
+    doLast {
+        def versionsFile = file("versions.json")
+
+        if (!versionsFile.exists()) {
+            def modVersion = project.findProperty("mod_version") ?: "1.0.0"
+            def mcVersion = project.findProperty("minecraft_version") ?: "1.20.1"
+            def json = [
+                    homepage: "https://www.curseforge.com/members/xxrexraptorxx/projects",
+                    promos: [( "${mcVersion}-latest" ): mcVersion, ( "${mcVersion}" ): modVersion]
+            ]
+            versionsFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(json))
+            exec { commandLine 'git', 'add', 'versions.json' }
+            println "✅ Created versions.json"
+        } else {
+            println "✅ versions.json already exists"
+        }
+    }
+}
+
+tasks.register('createGitTag') {
+    group = "initialization"
+    description = "Creates and pushes a git tag based on mod_version"
+    doLast {
+        def modVersion = project.findProperty("mod_version") ?: "1.0.0"
+        def tagName = "v.${modVersion}-pre1"
+
+        def check = exec {
+            commandLine 'git', 'rev-parse', '--verify', '--quiet', "refs/tags/${tagName}"
+            ignoreExitValue = true
+        }
+
+        // check if tag already exists
+        if (check.exitValue != 0) {
+            // create tag
+            def created = exec {
+                commandLine 'git', 'tag', tagName
+                ignoreExitValue = true
+            }
+
+            // push tag
+            def pushed = exec {
+                commandLine 'git', 'push', 'origin', tagName
+                ignoreExitValue = true
+            }
+
+            if (pushed.exitValue == 0) {
+                println "✅️ Created and pushed git tag ${tagName}"
+            } else {
+                println "❌ Created tag ${tagName} but pushing failed (exit ${pushed.exitValue})."
+            }
+        } else {
+            println "✅ Git tag ${tagName} already exists"
+        }
+    }
+}
+
+
+tasks.register('createReadme') {
+    group = "initialization"
+    description = 'Checks if README.md exists, asks to create it with default template if missing, optionally deletes README.txt.'
+    doLast {
+        def readmeFile = file('README.md')
+
+        // check if readme file already exists
+        if (!readmeFile.exists()) {
+            def modID = project.hasProperty('mod_id') ? project.property('mod_id') : '#MOD_ID#'
+            def cfID = project.hasProperty('cf_id') ? project.property('cf_id') : '#CF_ID#'
+            def mrID = project.hasProperty('mr_id') ? project.property('mr_id') : '#MR_ID#'
+            def desc = project.hasProperty('description') ? project.property('description') : 'Helloworld!'
+            def readmeContent = """\
+        <p align="center">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/${mod_id}"><img src="http://cf.way2muchnoise.eu/short_${cf_id}.svg?badge_style=flat" alt="Curseforge"></a>
+  <a href="https://modrinth.com/mod/${mod_id}"><img src="https://img.shields.io/modrinth/dt/${mr_id}?logo=modrinth&label=&suffix=%20&style=flat&color=242629&labelColor=5ca424&logoColor=1c1c1c" alt="Modrinth"></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/${mod_id}"><img src="https://cf.way2muchnoise.eu/versions/${cf_id}(266fff).svg?badge_style=flat" alt="Supported Versions"></a>
+  <a href="https://discord.gg/hmaD7Se"><img src="https://img.shields.io/discord/523112426913267713?color=282828&logo=discord&style=flat&label=&labelColor=B6BCEA" alt="Discord"></a>
+</p>
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/${mod_id}/blob/main/src/main/resources/logo.png?raw=true" alt="logo" width="400"/><br>
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line_curved.png?raw=true" alt="line" width="2000"/>
+</p>
+
+
+## 📖 Description
+
+#DESC#
+
+ -----
+#### Features:
+- cool feature 1
+- cool feature 2
+
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
+</p>
+
+## 📷 Presentation
+
+![altar](https://github.com/XxRexRaptorxX/General/blob/main/2023-09-12_19.43.57.png?raw=true)
+
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
+</p>
+
+## 🗃️ Dependencies
+
+### Required:
+- **Magma Core**
+  - Provides basic code and features such as update-checker
+  - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
+
+### Supported:
+- **Just Enough Items (JEI)**
+  - Provides some additional info pages and shows all recipes
+  - [CurseForge][cf_jei] | [Modrinth][mr_jei]
+
+
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
+</p>
+
+## 🎮 My other mods!
+
+<p align="center">
+  <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="https://github.com/XxRexRaptorxX/Additional-Structures/blob/master/src/main/resources/logo.png?raw=true" alt="Additional Structures" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/bedrock-miner"><img src="https://github.com/XxRexRaptorxX/Bedrock-Miner/blob/main/src/main/resources/logo.png?raw=true" alt="Bedrock Miner" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/tool-upgrades"><img src="https://github.com/XxRexRaptorxX/ToolUpgrades/blob/main/src/main/resources/logo.png?raw=true" alt="Tool Upgrades" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/all-the-compatibility"><img src="https://github.com/XxRexRaptorxX/AllTheCompatibility/blob/main/src/main/resources/logo.png?raw=true" alt="All The Compatibility" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/customized-dungeon-loot"><img src="https://camo.githubusercontent.com/2291f5f13114f09294ce5e079f8a61b8a2617a8692e68ca453674e93f1982b62/687474703a2f2f692e696d6775722e636f6d2f427065525748442e706e67" alt="Customized Dungeon Loot" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/advanced-sticks"><img src="https://github.com/XxRexRaptorxX/AdvancedSticks/blob/master/src/main/resources/logo.png?raw=true" alt="Advanced Tools" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/age-of-weapons"><img src="https://camo.githubusercontent.com/e8e1315b08a3bd1fb144ccd47488b1df4033418ad3aee01e61cc9d6e83fa55a5/68747470733a2f2f692e696d6775722e636f6d2f586d324332576a2e706e67" alt="Age of Weapons" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/rune-craft"><img src="https://github.com/XxRexRaptorxX/RuneCraft/blob/main/src/main/resources/logo.png?raw=true" alt="Rune Craft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/collectibles"><img src="https://github.com/XxRexRaptorxX/Collectibles/blob/main/src/main/resources/logo.png?raw=true" alt="Collectibles" width="85"/></a> <br>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/extra-gems"><img src="https://github.com/XxRexRaptorxX/ExtraGems/blob/main/src/main/resources/logo.png?raw=true" alt="Extra Gems" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/minetraps"><img src="https://github.com/XxRexRaptorxX/MineTraps/blob/main/src/main/resources/logo.png?raw=true" alt="Mine Traps" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/exo-craft"><img src="https://github.com/XxRexRaptorxX/ExoCraft/blob/main/src/main/resources/logo.png?raw=true" alt="ExoCraft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/city-craft"><img src="https://github.com/XxRexRaptorxX/CityCraft/blob/master/src/main/resources/logo.png?raw=true" alt="City Craft" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/upcycle"><img src="https://github.com/XxRexRaptorxX/Upcycle/blob/main/src/main/resources/logo.png?raw=true" alt="Upcycle" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/lexicon"><img src="https://github.com/XxRexRaptorxX/Lexicon/blob/main/src/main/resources/logo.png?raw=true" alt="Lexicon" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/nexus-battle-mode"><img src="https://github.com/XxRexRaptorxX/Nexus/blob/master/src/main/resources/logo.png?raw=true" alt="Nexus" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/block-detective"><img src="https://github.com/XxRexRaptorxX/BlockDetective/blob/main/src/main/resources/logo.png?raw=true" alt="Block Detective" width="85"/></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/suspicious-pots"><img src="https://github.com/XxRexRaptorxX/Suspicious-Pots/blob/main/src/main/resources/logo.png?raw=true" alt="Suspicious Pots" width="85"/></a>
+</p>
+
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
+</p>
+
+<p align="center">
+<br>
+  <a href="https://discord.com/invite/ycRJJk8EXV"><img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/message.png?raw=true" alt="message"/></a>
+</p>
+
+
+<p align="center">
+  <a href="https://github.com/XxRexRaptorxX"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/github_icon_bg.png?raw=true" alt="Github" width="70"/></a>
+  <a href="https://ko-fi.com/xxrexraptorxx"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/kofi_icon_bg.png?raw=true" alt="Ko-Fi" width="70"/></a>
+  <a href="https://www.patreon.com/bePatron?u=75131568"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/patreon_icon_bg.png?raw=true" alt="Patreon" width="70"/></a>
+  <a href="https://discord.com/invite/ycRJJk8EXV"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/discord_icon_bg.png?raw=true" alt="Discord" width="70"/></a>
+  <a href="https://x.com/XxRexRaptorxX"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/xtwitter_icon_bg.png?raw=true" alt="X" width="70"/></a>
+  <a href="https://github.com/XxRexRaptorxX/General/blob/main/FAQ.md"><img src="https://github.com/XxRexRaptorxX/General/blob/main/icons/wikipedia_icon_bg.png?raw=true" alt="FAQ" width="70"/></a>
+<br> <br>
+  <a href="https://bisecthosting.com/REXRAPTOR"><img src="https://github.com/XxRexRaptorxX/General/blob/main/BH_REX_Bisect.png?raw=true" alt="Bisect Hosting - 25% off with code: REXRAPTOR"/></a>
+</p>
+
+[cf_magmacore]: https://www.curseforge.com/minecraft/mc-mods/magma-core
+[mr_magmacore]: https://modrinth.com/mod/magma-core
+[cf_jei]: https://www.curseforge.com/minecraft/mc-mods/jei
+[mr_jei]: https://modrinth.com/mod/jei
+"""
+
+            readmeFile.text = readmeContent
+            println '✅ Created README.md'
+        } else {
+            println '✅ README.md already exists'
+        }
+    }
+}
+
+
+tasks.register("setupGitHooks") {
+    group = "initialization"
+    description = "Generates .githooks/pre-commit and .githooks/post-commit, sets core.hooksPath and tries to make hooks executable."
+
+    doLast {
+        def force = project.hasProperty('forceHooks') && project.property('forceHooks').toString().toLowerCase() in ['1','true','yes']
+        def srcDir = file('.githooks')
+        if (!srcDir.exists()) srcDir.mkdirs()
+
+        def pre = '''#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\\n\\t\'
+
+# Get project directory
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/../.." && pwd))
+cd "$PROJECT_DIR" || exit 1
+
+# Check for skip hooks flag
+MSG=$(git log -1 --pretty=%B 2>/dev/null || true)
+if echo "$MSG" | grep -qi "\\[skip hooks\\]"; then
+  echo "ℹ️  Skipping hooks due to [skip hooks] flag"
+  exit 0
+fi
+
+# Check gradle.properties for mod_version
+if ! grep -q '^mod_version=' gradle.properties; then
+  echo "WARN: gradle.properties does not contain 'mod_version'" >&2
+fi
+
+# Get staged files
+staged_files=$(git diff --staged --name-only)
+
+if [ -n "$staged_files" ]; then
+  echo "🧹 Checking code formatting…"
+
+  # Check if spotless would make changes (without applying them)
+  if ./gradlew spotlessCheck --quiet; then
+    echo "✅ Code formatting is already correct"
+  else
+    echo "❌ Code formatting issues found!"
+    echo "   Running spotless to fix formatting..."
+    ./gradlew spotlessApply --quiet
+
+    # Re-add all originally staged files
+    for file in $staged_files; do
+      if test -f "$file"; then
+        git add "$file"
+      fi
+    done
+
+    echo "✅ Code has been formatted and re-staged"
+    echo "   The commit will now proceed with properly formatted code"
+  fi
+else
+  echo "ℹ️  No staged files to format"
+fi
+
+exit 0
+'''
+
+        def post = '''#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\\n\\t'
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/../.." && pwd))
+cd "$PROJECT_DIR" || exit 1
+MSG=$(git log -1 --pretty=%B 2>/dev/null || true)
+if echo "$MSG" | grep -qi "\\[skip hooks\\]"; then
+  echo "post-commit: commit contains [skip hooks] -> skipping hook actions"
+  exit 0
+fi
+MOD_VERSION=$(grep '^mod_version=' gradle.properties | cut -d'=' -f2 || true)
+if [ -z "$MOD_VERSION" ]; then
+  echo "post-commit: mod_version not found, aborting" >&2
+  exit 1
+fi
+LAST_TAG=$(git tag --list "v.${MOD_VERSION}-dev*" --sort=-version:refname | head -n1 || true)
+if [ -z "$LAST_TAG" ]; then
+  NEXT=1
+else
+  N=$(echo "$LAST_TAG" | sed -E 's/.*-dev([0-9]+)$/\\1/' || true)
+  if [[ "$N" =~ ^[0-9]+$ ]]; then
+    NEXT=$((N+1))
+  else
+    NEXT=1
+  fi
+fi
+DEV_TAG="v.${MOD_VERSION}-dev${NEXT}"
+git tag -a "$DEV_TAG" -m "dev ${NEXT} for version ${MOD_VERSION}" || true
+if git remote get-url origin >/dev/null 2>&1; then
+  echo "post-commit: pushing tag $DEV_TAG to origin"
+  git push origin "$DEV_TAG" || echo "post-commit: git push tag failed (check auth/remote)"
+else
+  echo "post-commit: no origin remote configured -> skipping push"
+fi
+if [ -x ./gradlew ]; then
+  ./gradlew updateChangelog --no-daemon --quiet || echo "post-commit: updateChangelog failed"
+elif [ -x ./gradlew.bat ]; then
+  ./gradlew.bat updateChangelog --no-daemon --quiet || echo "post-commit: updateChangelog failed"
+else
+  echo "post-commit: gradlew not found" >&2
+fi
+if git status --porcelain | grep -q "LATEST_CHANGELOG.md"; then
+  git add LATEST_CHANGELOG.md
+  git commit -m "chore: update LATEST_CHANGELOG.md [skip hooks]" || true
+  if git remote get-url origin >/dev/null 2>&1; then
+    git push origin HEAD || echo "post-commit: push of changelog commit failed"
+  fi
+fi
+exit 0
+'''
+
+        def hooks = [
+                ['name':'pre-commit','content':pre],
+                ['name':'post-commit','content':post]
+        ]
+
+        hooks.each { h ->
+            def target = new File(srcDir, h.name)
+            if (target.exists() && !force) {
+                logger.lifecycle("⚠️ ${h.name} already exists (use -PforceHooks=true to overwrite).")
+            } else {
+                target.withWriter('UTF-8') { w -> w << h.content }
+                logger.lifecycle("Generated: ${target}")
+            }
+        }
+
+        // set core.hooksPath
+        try {
+            exec { commandLine 'git','config','core.hooksPath','.githooks' }
+            logger.lifecycle("git core.hooksPath set to .githooks")
+        } catch (Exception e) {
+            logger.warn("❌ git not found or git config failed: ${e.message}")
+        }
+
+        // OS detection via JVM property (stable across Gradle versions)
+        def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+
+        // Remove CRLF (if bash available) and set executable bit per file
+        if (isWindows) {
+            try {
+                exec { commandLine 'bash','-lc',"for f in .githooks/*; do sed -i 's/\\r\$//' \"\$f\" || true; done" }
+                logger.lifecycle("Removed CRLF from hooks (via bash/sed)")
+            } catch (Exception e) {
+                logger.warn("❌ No bash/sed available: skipped CRLF conversion")
+            }
+            srcDir.eachFile { f ->
+                try {
+                    // First check if file is already tracked
+                    def isTracked = false
+                    try {
+                        exec {
+                            commandLine 'git','ls-files','--error-unmatch', f.path
+                            standardOutput = new ByteArrayOutputStream()
+                            errorOutput = new ByteArrayOutputStream()
+                        }
+                        isTracked = true
+                    } catch (Exception ignore) {
+                        isTracked = false
+                    }
+
+                    if (isTracked) {
+                        exec { commandLine 'git','update-index','--chmod=+x', f.path }
+                        logger.lifecycle("Set executable via git update-index --chmod=+x on ${f.name}")
+                    } else {
+                        exec { commandLine 'git','add','--chmod=+x', f.path }
+                        logger.lifecycle("Added and set executable via git add --chmod=+x on ${f.name}")
+                    }
+                } catch (Exception e) {
+                    logger.warn("❌ Failed to set executable permission for ${f.name}: ${e.message}")
+                }
+            }
+        } else {
+            srcDir.eachFile { f ->
+                try {
+                    exec { commandLine 'chmod','+x', f.path }
+                    logger.lifecycle("chmod +x ${f.name}")
+                } catch (Exception e) {
+                    logger.warn("❌ chmod failed for ${f.name}: ${e.message}")
+                }
+            }
+        }
+
+        logger.lifecycle("setupGitHooks: ✅ Done. Test with 'git commit --allow-empty -m \"test: hooks\"' and check 'git tag --list'.")
+    }
+}
+
+
+tasks.register("setupGithubWorkflow") {
+    group = "initialization"
+    description = "Generates the GitHub Actions workflow create_releases.yml"
+
+    doLast {
+        def workflowDir = file(".github/workflows")
+        if (!workflowDir.exists()) {
+            workflowDir.mkdirs()
+        }
+
+        def workflowFile = new File(workflowDir, "create_releases.yml")
+
+        if (workflowFile.exists()) {
+            println("✅ The workflow file '.github/workflows/create_releases.yml' already exists. No action taken.")
+            return
+        }
+
+        println("⚠️ The workflow file '.github/workflows/create_releases.yml' does not exist.")
+
+        workflowFile.text = '''\
+name: Create previous-version Dev release
+
+on:
+  push:
+    # listens to any tag push
+    tags:
+      - '**'
+
+jobs:
+  create-dev-release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (fetch all tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read mod name from gradle.properties
+        id: get_mod_name
+        run: |
+          MOD_NAME=$(grep "^mod_name=" gradle.properties | cut -d'=' -f2)
+          echo "mod_name=$MOD_NAME" >> $GITHUB_OUTPUT
+
+      - name: Build image and page URL from repo with fallbacks
+        id: get_repository_content
+        run: |
+          REPO="${{ github.repository }}"
+          PATH="src/main/resources/logo.png"
+          FALLBACK_PAGE="https://github.com/XxRexRaptorxX?tab=repositories"
+          FALLBACK_IMAGE="https://raw.githubusercontent.com/XxRexRaptorxX/General/refs/heads/main/icons/profile_pic.png"
+
+          if [ -f "${GITHUB_WORKSPACE}/${PATH}" ]; then
+            RAW_URL="https://raw.githubusercontent.com/${REPO}/${{ github.sha }}/${PATH}"
+            echo "image_url=${RAW_URL}" >> $GITHUB_OUTPUT
+            echo "page_url=https://github.com/${REPO}" >> $GITHUB_OUTPUT
+          else
+            echo "image_url=${FALLBACK_IMAGE}" >> $GITHUB_OUTPUT
+            echo "page_url=${FALLBACK_PAGE}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Discord message
+        uses: sarisia/actions-status-discord@v1
+        if: >
+          github.event.head_commit &&
+          (startsWith(github.event.head_commit.message, 'feat') ||
+            startsWith(github.event.head_commit.message, 'fix') ||
+            startsWith(github.event.head_commit.message, 'refactor'))
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "New ${{ steps.get_mod_name.outputs.mod_name }} stuff is coming soon!"
+          url: ${{ steps.get_repository_content.outputs.page_url }}
+          image: ${{ steps.get_repository_content.image_url }}
+          username: Villager News
+          avatar_url: "https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/villager_news.png?raw=true"
+          noprefix: true
+
+      - name: Create release containing previous version's Dev tags
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get the pushed tag, strip refs/tags/
+            const pushedRef = process.env.GITHUB_REF;
+            const pushedTag = pushedRef.replace('refs/tags/', '');
+
+            function stripV(s) { return s.startsWith('v') ? s.slice(1) : s; }
+            function parseBaseVersion(s) { return s.split('.').map(p => Number(p || 0)); }
+            function semverCompare(a, b) {
+              const pa = parseBaseVersion(a), pb = parseBaseVersion(b);
+              for (let i = 0; i < 3; i++) {
+                const da = pa[i] || 0, db = pb[i] || 0;
+                if (da < db) return -1;
+                if (da > db) return 1;
+              }
+              return 0;
+            }
+            function baseFromTag(tag) {
+              const m = tag.match(/^v?(\\d+\\.\\d+\\.\\d+)(?:-dev\\d+)?$/);
+              return m ? m[1] : null;
+            }
+            function devNumberFromTag(tag) {
+              const m = tag.match(/-dev(\\d+)$/);
+              return m ? Number(m[1]) : null;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const currentTag = stripV(pushedTag);
+            const currentBase = currentTag.replace(/-dev\\d+$/, '');
+
+            const allTags = await github.paginate(github.rest.repos.listTags, { owner, repo, per_page: 100 });
+            const devTags = allTags.map(t => t.name)
+                                   .filter(n => /^v?\\d+\\.\\d+\\.\\d+-dev\\d+$/.test(n))
+                                   .map(n => stripV(n));
+
+            const groups = {};
+            for (const t of devTags) {
+              const base = baseFromTag(t);
+              const devNum = devNumberFromTag(t);
+              if (!base || devNum === null) continue;
+              if (!groups[base]) groups[base] = [];
+              groups[base].push({ tag: t, dev: devNum });
+            }
+
+            let prevBase = null;
+            for (const b of Object.keys(groups)) {
+              if (semverCompare(b, currentBase) < 0) {
+                if (!prevBase || semverCompare(b, prevBase) > 0) prevBase = b;
+              }
+            }
+
+            if (!prevBase) {
+              core.info(`No previous base version found before ${currentBase}. Nothing to do.`);
+              return;
+            }
+
+            groups[prevBase].sort((a,b) => a.dev - b.dev);
+            const devList = groups[prevBase].map(x => x.tag);
+
+            const bodyLines = [
+              `This release collects the Dev tags for version **${prevBase}**.`,
+              '',
+              'Included Dev tags:',
+              ''
+            ];
+            for (const t of devList) {
+              bodyLines.push(`- ${t} — https://github.com/${owner}/${repo}/releases/tag/${t}`);
+            }
+            const body = bodyLines.join('\\n');
+
+            const latestDev = groups[prevBase].slice().sort((a,b)=>b.dev-a.dev)[0];
+            const tagObj = allTags.find(x => stripV(x.name) === latestDev.tag);
+            const targetCommitish = tagObj ? tagObj.commit.sha : context.sha;
+
+            const tagNameToUse = prevBase;
+            let existingRelease = null;
+            try {
+              const got = await github.rest.repos.getReleaseByTag({ owner, repo, tag: tagNameToUse });
+              existingRelease = got.data;
+            } catch (e) { }
+
+            if (existingRelease) {
+              const existingBody = existingRelease.body || '';
+              let newBody = existingBody;
+              for (const t of devList) {
+                if (!existingBody.includes(t)) newBody += `\\n- ${t} — https://github.com/${owner}/${repo}/releases/tag/${t}`;
+              }
+              await github.rest.repos.updateRelease({
+                owner, repo, release_id: existingRelease.id,
+                body: newBody, target_commitish: targetCommitish,
+                name: `Devs for ${prevBase}`, draft: false, prerelease: false
+              });
+              core.info(`Updated existing release for tag ${tagNameToUse}`);
+            } else {
+              await github.rest.repos.createRelease({
+                owner, repo, tag_name: tagNameToUse,
+                name: `Devs for ${prevBase}`, body,
+                draft: false, prerelease: false,
+                target_commitish: targetCommitish
+              });
+              core.info(`Created release for ${tagNameToUse} including ${devList.length} Dev tags.`);
+            }
+'''
+
+        println("✅ GitHub workflow '.github/workflows/create_releases.yml' has been generated.")
+    }
+}
+
+
+tasks.register("setupFormatter") {
+    group = "initialization"
+    description = "Generates the eclipse-java-formatter.xml"
+
+    doLast {
+        def workflowFile = new File("eclipse-java-formatter.xml")
+
+        if (workflowFile.exists()) {
+            println("✅ The Formatter file 'eclipse-java-formatter.xml' already exists. No action taken.")
+            return
+        }
+
+        println("⚠️ The formatter file 'eclipse-java-formatter.xml' does not exist.")
+
+        workflowFile.text = '''\
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles version="13">
+    <profile kind="CodeFormatterProfile" name="PalantirLike" version="13">
+
+        <!-- ====================================================================================== -->
+        <!-- LINE LENGTH AND WRAPPING SETTINGS                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Maximum line length before wrapping -->
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="180"/>
+
+        <!-- Comment line length -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="180"/>
+
+        <!-- Continuation indentation for wrapped lines -->
+        <setting id="org.eclipse.jdt.core.formatter.continuation_indentation" value="2"/>
+        <setting id="org.eclipse.jdt.core.formatter.continuation_indentation_for_array_initializer" value="2"/>
+
+        <!-- ====================================================================================== -->
+        <!-- INDENTATION AND TABS                                                                  -->
+        <!-- ====================================================================================== -->
+
+        <!-- Use spaces instead of tabs -->
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
+
+        <!-- Tab size and indentation size (4 spaces) -->
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"/>
+        <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
+
+        <!-- ====================================================================================== -->
+        <!-- BRACE POSITIONING (K&R Style)                                                         -->
+        <!-- ====================================================================================== -->
+
+        <!-- Opening braces on same line (K&R style) -->
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="END_OF_LINE"/>
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration" value="END_OF_LINE"/>
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block" value="END_OF_LINE"/>
+
+        <!-- Space before opening brace in blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_block" value="true"/>
+
+        <!-- ====================================================================================== -->
+        <!-- LAMBDA EXPRESSIONS                                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Keep lambda body on one line if it's a single item -->
+        <setting id="org.eclipse.jdt.core.formatter.keep_lambda_body_block_on_one_line" value="one_line_if_single_item"/>
+
+        <!-- Spaces around lambda arrow -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_lambda_arrow" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_lambda_arrow" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- CONTROL STRUCTURES                                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Keep simple if/else statements compact -->
+        <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.keep_else_statement_on_same_line" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.keep_simple_if_on_one_line" value="true"/>
+
+        !-- Spaces before opening brace for control blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_if" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_else" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_for" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_while" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_switch" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_catch" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_try" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_synchronized" value="insert"/>
+
+        <!-- Methods / constructors / blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_method_declaration" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_constructor_declaration" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_block" value="insert"/>
+
+        <!-- Spaces between methods -->
+        <setting id="org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve" value="1"/>
+        <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_method" value="2"/>
+        <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_abstract_method" value="2"/>
+
+        <!-- ====================================================================================== -->
+        <!-- METHOD AND CONSTRUCTOR DECLARATIONS                                                    -->
+        <!-- ====================================================================================== -->
+
+        <!-- No space before parentheses in method/constructor declarations and invocations -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_invocation" value="do not insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_declaration" value="do not insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_constructor_declaration" value="do not insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- COMMA SPACING                                                                          -->
+        <!-- ====================================================================================== -->
+
+        <!-- Always insert space after commas -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_throws" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_constructor_declaration_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_allocation_expression" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_enum_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_local_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_field_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_arguments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_annotation" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_increments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_inits" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- ENUM FORMATTING                                                                        -->
+        <!-- ====================================================================================== -->
+
+        <!-- Force each enum constant on a separate line (alignment value 49) -->
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_enum_constants" value="49"/>
+
+        <!-- Wrap enum constant arguments only when necessary (alignment value 16) -->
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_enum_constant" value="16"/>
+
+        <!-- Insert new lines in empty enum declarations and constants -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_in_empty_enum_constant" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_in_empty_enum_declaration" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- JAVADOC AND COMMENT FORMATTING                                                        -->
+        <!-- ====================================================================================== -->
+
+        <!-- Enable formatting of Javadoc and block comments -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_javadoc_comments" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_block_comments" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_source_code" value="true"/>
+
+        <!-- Keep @param and description on same line -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.insert_new_line_for_parameter" value="do not insert"/>
+
+        <!-- Don't indent parameter descriptions (keep them aligned with @param) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.indent_parameter_description" value="false"/>
+
+        <!-- Don't align Javadoc tags in groups or columns (prevents strange spacing) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_descriptions_grouped" value="false"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_names_descriptions" value="false"/>
+
+        <!-- Don't indent root tags (@param, @return, etc.) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.indent_root_tags" value="false"/>
+
+        <!-- ====================================================================================== -->
+        <!-- MISCELLANEOUS SETTINGS                                                                -->
+        <!-- ====================================================================================== -->
+
+        <!-- Preserve up to 2 consecutive empty lines -->
+        <setting id="org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve" value="2"/>
+
+        <!-- Formatter disable tag for selective formatting control -->
+        <setting id="org.eclipse.jdt.core.formatter.disabling_tag" value="@formatter:off"/>
+
+    </profile>
+</profiles>
+'''
+
+        println("✅ Formatter file 'eclipse-java-formatter.xml' has been generated.")
+    }
+}
+
+tasks.register('#initProject') {
+    group = "initialization"
+    description = "Initializes the project (runs init script)"
+    dependsOn checkGit, checkGradleProperties, setupGitattributes, setupGitHooks, setupGithubWorkflow, setupChangelogs, setupVersionsJson, setupFormatter, createGitTag, createReadme
+    doLast {
+        println "\n🎉 Project successfully initialized!"
+        println "📋 Next steps:"
+        println "1. Ensure GitHub Actions have 'Read and write permissions'"
+        println "2. Repository Settings → Actions → General → Workflow permissions"
+        println "3. Select: 'Read and write permissions'"
+        println "4. Allow GitHub Actions to create/approve pull requests"
+        println "5. Verify the URL in versions.json"
+        println "6. Check the README.md file and fix missing stuff"
+        println ""
+        println "📌 By XxRexRaptorxX"
+        println "©️ All rights reserved. Especially for the README design!"
+    }
+}

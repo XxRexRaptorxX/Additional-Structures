@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# Get project directory
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/../.." && pwd))
+cd "$PROJECT_DIR" || exit 1
+
+# Check for skip hooks flag
+MSG=$(git log -1 --pretty=%B 2>/dev/null || true)
+if echo "$MSG" | grep -qi "\[skip hooks\]"; then
+  echo "ℹ️  Skipping hooks due to [skip hooks] flag"
+  exit 0
+fi
+
+# Check gradle.properties for mod_version
+if ! grep -q '^mod_version=' gradle.properties; then
+  echo "WARN: gradle.properties does not contain 'mod_version'" >&2
+fi
+
+# Get staged files
+staged_files=$(git diff --staged --name-only)
+
+if [ -n "$staged_files" ]; then
+  echo "🧹 Checking code formatting…"
+
+  # Check if spotless would make changes (without applying them)
+  if ./gradlew spotlessCheck --quiet; then
+    echo "✅ Code formatting is already correct"
+  else
+    echo "❌ Code formatting issues found!"
+    echo "   Running spotless to fix formatting..."
+    ./gradlew spotlessApply --quiet
+
+    # Re-add all originally staged files
+    for file in $staged_files; do
+      if test -f "$file"; then
+        git add "$file"
+      fi
+    done
+
+    echo "✅ Code has been formatted and re-staged"
+    echo "   The commit will now proceed with properly formatted code"
+  fi
+else
+  echo "ℹ️  No staged files to format"
+fi
+
+exit 0

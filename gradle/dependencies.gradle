@@ -1,0 +1,40 @@
+
+repositories {
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven {
+        // location of the cursemaven
+        url 'https://www.cursemaven.com'
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        // location of the modrinthmaven
+        url = "https://api.modrinth.com/maven"
+    }
+
+
+    flatDir {
+        dir 'libs'
+    }
+}
+
+
+dependencies {
+    //JEI
+    compileOnly ("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly ("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    runtimeOnly ("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
+    //JADE
+    //implementation "maven.modrinth:jade:${jade_version}+neoforge"
+}

@@ -1,0 +1,496 @@
+// ========================================
+// DEBUGGING & DIAGNOSTICS TASKS
+// ========================================
+
+tasks.register("debugProperties") {
+    group = "debugging"
+    description = "Shows all project properties and their values"
+    doLast {
+        println "=== PROJECT PROPERTIES ==="
+        println "Project Name: ${project.name}"
+        println "Project Version: ${project.version}"
+        println "Project Group: ${project.group}"
+        println "Project Directory: ${project.projectDir}"
+        println "Build Directory: ${project.buildDir}"
+        println ""
+
+        println "=== MOD PROPERTIES ==="
+        def modProperties = [
+                'mod_id', 'mod_name', 'mod_version', 'mod_authors',
+                'mod_license', 'mod_group_id', 'mod_loader'
+        ]
+        modProperties.each { prop ->
+            println "${prop}: ${project.findProperty(prop) ?: 'NOT SET'}"
+        }
+        println ""
+
+        println "=== MINECRAFT PROPERTIES ==="
+        def mcProperties = [
+                'minecraft_version', 'minecraft_version_range', 'neo_version',
+                'neo_version_range', 'loader_version_range', 'pack_format_number',
+                'parchment_mappings_version', 'parchment_minecraft_version'
+        ]
+        mcProperties.each { prop ->
+            println "${prop}: ${project.findProperty(prop) ?: 'NOT SET'}"
+        }
+        println ""
+
+        println "=== DEPENDENCY VERSIONS ==="
+        def depProperties = ['jei_version', 'rei_version', 'emi_version', 'jade_version']
+        depProperties.each { prop ->
+            println "${prop}: ${project.findProperty(prop) ?: 'NOT SET'}"
+        }
+        println ""
+
+        println "=== PUBLISHING PROPERTIES ==="
+        def pubProperties = [
+                'mr_id', 'cf_id', 'release_type', 'game_versions', 'environment_type'
+        ]
+        pubProperties.each { prop ->
+            println "${prop}: ${project.findProperty(prop) ?: 'NOT SET'}"
+        }
+    }
+}
+
+tasks.register("debugEnvironment") {
+    group = "debugging"
+    description = "Shows environment variables and system properties"
+    doLast {
+        println "=== ENVIRONMENT VARIABLES ==="
+        def envVars = ['MODRINTH_TOKEN', 'CURSEFORGE_TOKEN', 'JAVA_HOME', 'PATH']
+        envVars.each { var ->
+            def value = System.getenv(var)
+            if (var.contains('TOKEN')) {
+                println "${var}: ${value ? 'SET (***masked***)' : 'NOT SET'}"
+            } else {
+                println "${var}: ${value ?: 'NOT SET'}"
+            }
+        }
+        println ""
+
+        println "=== JAVA PROPERTIES ==="
+        def javaProps = [
+                'java.version', 'java.home', 'java.vendor', 'java.vm.name',
+                'java.vm.version', 'os.name', 'os.version', 'os.arch'
+        ]
+        javaProps.each { prop ->
+            println "${prop}: ${System.getProperty(prop)}"
+        }
+        println ""
+
+        println "=== GRADLE PROPERTIES ==="
+        println "Gradle Version: ${gradle.gradleVersion}"
+        println "Gradle Home: ${gradle.gradleHomeDir}"
+        println "Gradle User Home: ${gradle.gradleUserHomeDir}"
+    }
+}
+
+tasks.register("debugDependencies") {
+    group = "debugging"
+    description = "Shows all dependencies and their configurations"
+    doLast {
+        println "=== DEPENDENCY CONFIGURATIONS ==="
+        configurations.each { config ->
+            if (!config.name.contains('test') && config.canBeResolved) {
+                try {
+                    println "\n${config.name.toUpperCase()}:"
+                    config.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+                        println "  - ${artifact.moduleVersion.id} (${artifact.file.name})"
+                    }
+                } catch (Exception e) {
+                    println "  Could not resolve: ${e.message}"
+                }
+            }
+        }
+
+        println "\n=== REPOSITORY URLS ==="
+        repositories.each { repo ->
+            if (repo.hasProperty('url')) {
+                println "  - ${repo.name ?: 'unnamed'}: ${repo.url}"
+            }
+        }
+    }
+}
+
+tasks.register("debugSourceSets") {
+    group = "debugging"
+    description = "Shows source sets and their directories"
+    doLast {
+        println "=== SOURCE SETS ==="
+        sourceSets.each { sourceSet ->
+            println "\n${sourceSet.name.toUpperCase()}:"
+            println "  Java Dirs: ${sourceSet.java.srcDirs}"
+            println "  Resource Dirs: ${sourceSet.resources.srcDirs}"
+            println "  Output Dir: ${sourceSet.output.classesDirs.asPath}"
+            println "  Resources Output: ${sourceSet.output.resourcesDir}"
+
+            // Check if directories exist
+            def javaExists = sourceSet.java.srcDirs.any { it.exists() }
+            def resourceExists = sourceSet.resources.srcDirs.any { it.exists() }
+            println "  Java Sources Exist: ${javaExists}"
+            println "  Resources Exist: ${resourceExists}"
+        }
+    }
+}
+
+tasks.register("debugTasks") {
+    group = "debugging"
+    description = "Shows all available tasks grouped by category"
+    doLast {
+        println "=== AVAILABLE TASKS ==="
+        def tasksByGroup = tasks.groupBy { it.group ?: 'other' }
+
+        tasksByGroup.sort().each { group, groupTasks ->
+            println "\n${group.toUpperCase()}:"
+            groupTasks.sort { it.name }.each { task ->
+                def description = task.description ?: 'No description'
+                println "  ${task.name.padRight(30)} - ${description}"
+            }
+        }
+    }
+}
+
+tasks.register("debugFileStructure") {
+    group = "debugging"
+    description = "Shows project file structure"
+    doLast {
+        println "=== PROJECT FILE STRUCTURE ==="
+
+        def printDirectory
+        printDirectory = { File dir, String indent = "" ->
+            if (!dir.exists()) {
+                println "${indent}${dir.name} (MISSING)"
+                return
+            }
+
+            def files = dir.listFiles()?.sort { a, b ->
+                if (a.isDirectory() != b.isDirectory()) {
+                    return a.isDirectory() ? -1 : 1
+                }
+                return a.name.compareToIgnoreCase(b.name)
+            }
+
+            files?.each { file ->
+                if (file.isDirectory()) {
+                    println "${indent}📁 ${file.name}/"
+                    if (file.name in ['src', 'build', 'gradle']) {
+                        printDirectory(file, indent + "  ")
+                    }
+                } else {
+                    def size = file.length()
+                    def sizeStr = size > 1024 ? "${(size/1024).intValue()}KB" : "${size}B"
+                    println "${indent}📄 ${file.name} (${sizeStr})"
+                }
+            }
+        }
+
+        printDirectory(projectDir)
+    }
+}
+
+tasks.register("debugBuildPath") {
+    group = "debugging"
+    description = "Shows build paths and generated files"
+    doLast {
+        println "=== BUILD PATHS ==="
+        println "Build Dir: ${buildDir}"
+        println "Libs Dir: ${project.layout.buildDirectory.dir('libs').get().asFile}"
+        println "Classes Dir: ${sourceSets.main.output.classesDirs.asPath}"
+        println "Resources Dir: ${sourceSets.main.output.resourcesDir}"
+        println ""
+
+        println "=== JAR INFORMATION ==="
+        println "JAR Task Archive Name: ${jar.archiveFileName.get()}"
+        println "JAR Task Destination: ${jar.destinationDirectory.get()}"
+        println "JAR Full Path: ${jar.destinationDirectory.get()}/${jar.archiveFileName.get()}"
+
+        def jarFile = new File("${jar.destinationDirectory.get()}/${jar.archiveFileName.get()}")
+        println "JAR File Exists: ${jarFile.exists()}"
+        if (jarFile.exists()) {
+            println "JAR File Size: ${(jarFile.length()/1024).intValue()}KB"
+            println "JAR File Modified: ${new Date(jarFile.lastModified())}"
+        }
+        println ""
+
+        println "=== GENERATED SOURCES ==="
+        def genSources = file('src/generated/resources')
+        println "Generated Resources Dir: ${genSources.absolutePath}"
+        println "Generated Resources Exist: ${genSources.exists()}"
+        if (genSources.exists()) {
+            genSources.eachFileRecurse { file ->
+                if (file.isFile()) {
+                    println "  - ${file.absolutePath.replace(projectDir.absolutePath, '')}"
+                }
+            }
+        }
+    }
+}
+
+tasks.register("debugNeoForge") {
+    group = "debugging"
+    description = "Shows NeoForge configuration and run configurations"
+    doLast {
+        println "=== NEOFORGE CONFIGURATION ==="
+        println "NeoForge Version: ${project.neo_version}"
+        println "Minecraft Version: ${project.minecraft_version}"
+        println "Parchment Mappings: ${project.parchment_mappings_version}"
+        println "Parchment MC Version: ${project.parchment_minecraft_version}"
+        println ""
+
+        println "=== RUN CONFIGURATIONS ==="
+        neoForge.runs.each { runConfig ->
+            println "Run: ${runConfig.name}"
+            println "  Type: ${runConfig.type.get()}"
+            println "  Game Directory: ${runConfig.gameDirectory.get()}"
+            println "  Working Directory: ${runConfig.workingDirectory.get()}"
+            if (!runConfig.programArguments.get().isEmpty()) {
+                println "  Program Args: ${runConfig.programArguments.get().join(' ')}"
+            }
+            if (!runConfig.systemProperties.get().isEmpty()) {
+                println "  System Properties:"
+                runConfig.systemProperties.get().each { key, value ->
+                    println "    ${key} = ${value}"
+                }
+            }
+            println ""
+        }
+    }
+}
+
+tasks.register("debugChangelog") {
+    group = "debugging"
+    description = "Shows changelog status and content preview"
+    doLast {
+        println "=== CHANGELOG FILES ==="
+
+        def changelogFiles = [
+                [file: file("CHANGELOG.md"), name: "Main Changelog"],
+                [file: file("CHANGELOG_LATEST.md"), name: "Latest Changelog"]
+        ]
+
+        changelogFiles.each { info ->
+            println "\n${info.name}:"
+            println "  File: ${info.file.absolutePath}"
+            println "  Exists: ${info.file.exists()}"
+
+            if (info.file.exists()) {
+                println "  Size: ${info.file.length()} bytes"
+                println "  Last Modified: ${new Date(info.file.lastModified())}"
+
+                def lines = info.file.readLines()
+                println "  Lines: ${lines.size()}"
+
+                if (lines.size() > 0) {
+                    println "  First 5 lines:"
+                    lines.take(5).eachWithIndex { line, index ->
+                        println "    ${index + 1}: ${line}"
+                    }
+                }
+
+                // Count version headers
+                def versionHeaders = lines.findAll { it.startsWith("# v.") }
+                println "  Version Headers: ${versionHeaders.size()}"
+                if (versionHeaders.size() > 0) {
+                    println "  Latest Version: ${versionHeaders[0]}"
+                }
+            }
+        }
+
+        println "\n=== GENERATED CHANGELOG PREVIEW ==="
+        try {
+            def generatedChangelog = generateLatestChangelog()
+            println "Generated Changelog Length: ${generatedChangelog.length()} chars"
+            println "Generated Changelog Preview (first 300 chars):"
+            println generatedChangelog.take(300)
+            if (generatedChangelog.length() > 300) {
+                println "... (truncated)"
+            }
+        } catch (Exception e) {
+            println "Error generating changelog: ${e.message}"
+        }
+    }
+}
+
+tasks.register("debugGit") {
+    group = "debugging"
+    description = "Shows Git status and repository information"
+    doLast {
+        println "=== GIT REPOSITORY INFO ==="
+
+        try {
+            // Check if we're in a git repository
+            def proc = "git rev-parse --git-dir".execute()
+            proc.waitFor()
+
+            if (proc.exitValue() == 0) {
+                println "Git Repository: ✓"
+
+                // Current branch
+                proc = "git branch --show-current".execute()
+                def currentBranch = proc.text.trim()
+                println "Current Branch: ${currentBranch}"
+
+                // Latest commit
+                proc = "git log -1 --pretty=format:%H %s".execute()
+                def latestCommit = proc.text.trim()
+                println "Latest Commit: ${latestCommit}"
+
+                // Check for uncommitted changes
+                proc = "git status --porcelain".execute()
+                def changes = proc.text.trim()
+                if (changes) {
+                    println "Uncommitted Changes: ✓"
+                    changes.split('\n').each { change ->
+                        println "  ${change}"
+                    }
+                } else {
+                    println "Uncommitted Changes: ✗"
+                }
+
+                // Latest tag
+                proc = "git describe --tags --abbrev=0".execute()
+                if (proc.waitFor() == 0) {
+                    def latestTag = proc.text.trim()
+                    println "Latest Tag: ${latestTag}"
+                } else {
+                    println "Latest Tag: None found"
+                }
+
+                // Remote information
+                proc = "git remote -v".execute()
+                def remotes = proc.text.trim()
+                if (remotes) {
+                    println "Remotes:"
+                    remotes.split('\n').each { remote ->
+                        println "  ${remote}"
+                    }
+                }
+
+            } else {
+                println "Git Repository: ✗ (Not a git repository)"
+            }
+        } catch (Exception e) {
+            println "Git Error: ${e.message}"
+        }
+    }
+}
+
+tasks.register("debugPublishingReadiness") {
+    group = "debugging"
+    description = "Checks if the project is ready for publishing"
+    doLast {
+        println "=== PUBLISHING READINESS CHECK ==="
+
+        def issues = []
+        def warnings = []
+
+        // Check required properties
+        def requiredProps = ['mod_id', 'mod_name', 'mod_version', 'minecraft_version', 'mr_id', 'cf_id']
+        requiredProps.each { prop ->
+            def value = project.findProperty(prop)
+            if (!value) {
+                issues.add("Missing required property: ${prop}")
+            } else {
+                println "✓ ${prop}: ${value}"
+            }
+        }
+
+        // Check tokens
+        def modrinthToken = System.getenv("MODRINTH_TOKEN") ?: project.findProperty("modrinthToken")
+        def cfToken = System.getenv("CURSEFORGE_TOKEN") ?: project.findProperty("curseforgeToken")
+
+        if (!modrinthToken) {
+            issues.add("Missing MODRINTH_TOKEN")
+        } else {
+            println "✓ Modrinth Token: SET"
+        }
+
+        if (!cfToken) {
+            issues.add("Missing CURSEFORGE_TOKEN")
+        } else {
+            println "✓ CurseForge Token: SET"
+        }
+
+        // Check changelog
+        def latestChangelog = file("CHANGELOG_LATEST.md")
+        if (!latestChangelog.exists()) {
+            warnings.add("CHANGELOG_LATEST.md not found - will use git-based generation")
+        } else {
+            println "✓ CHANGELOG_LATEST.md: EXISTS"
+        }
+
+        // Check JAR file
+        def jarFile = new File("${jar.destinationDirectory.get()}/${jar.archiveFileName.get()}")
+        if (!jarFile.exists()) {
+            warnings.add("JAR file not built yet - run 'gradle build' first")
+        } else {
+            println "✓ JAR File: EXISTS (${(jarFile.length()/1024).intValue()}KB)"
+        }
+
+        // Check version format
+        def version = project.findProperty("mod_version")
+        if (version && !version.matches(/\d+\.\d+\.\d+/)) {
+            warnings.add("Version format should be x.y.z (semantic versioning)")
+        }
+
+        println "\n=== SUMMARY ==="
+        if (issues.isEmpty()) {
+            println "✅ READY FOR PUBLISHING"
+        } else {
+            println "❌ NOT READY FOR PUBLISHING"
+            println "\nISSUES TO FIX:"
+            issues.each { issue ->
+                println "  ❌ ${issue}"
+            }
+        }
+
+        if (!warnings.isEmpty()) {
+            println "\nWARNINGS:"
+            warnings.each { warning ->
+                println "  ⚠️ ${warning}"
+            }
+        }
+
+        println "\nNEXT STEPS:"
+        if (issues.isEmpty() && jarFile.exists()) {
+            println "  Run: gradle #publishNewVersion"
+        } else {
+            if (!jarFile.exists()) {
+                println "  1. Run: gradle build"
+            }
+            if (!issues.isEmpty()) {
+                println "  2. Fix the issues listed above"
+            }
+            println "  3. Run: gradle #publishNewVersion"
+        }
+    }
+}
+
+tasks.register("debugClean") {
+    group = "debugging"
+    description = "Cleans debug outputs and temporary files"
+    doLast {
+        println "=== CLEANING DEBUG FILES ==="
+
+        def filesToClean = [
+                'CHANGELOG_BACKUP_*.md',
+                'CHANGELOG_RAW.md',
+                'CHANGELOG_OLD.tmp',
+                'CHANGELOG_BEFORE.tmp',
+                'CHANGELOG_AFTER.tmp'
+        ]
+
+        def cleaned = 0
+        filesToClean.each { pattern ->
+            def files = fileTree(dir: projectDir, include: pattern)
+            files.each { file ->
+                if (file.delete()) {
+                    println "  Deleted: ${file.name}"
+                    cleaned++
+                }
+            }
+        }
+
+        println "Cleaned ${cleaned} files"
+    }
+}

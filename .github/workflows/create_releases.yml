@@ -1,0 +1,168 @@
+name: Create releases
+
+on:
+  push:
+    # listens to any tag push
+    tags:
+      - '**'
+
+jobs:
+  create-dev-release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (fetch all tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read mod name from gradle.properties
+        id: get_mod_name
+        run: |
+          MOD_NAME=$(grep "^mod_name=" gradle.properties | cut -d'=' -f2)
+          echo "mod_name=$MOD_NAME" >> $GITHUB_OUTPUT
+
+      - name: Build image and page URL from repo with fallbacks
+        id: get_repository_content
+        run: |
+          REPO="${{ github.repository }}"
+          PATH="src/main/resources/logo.png"
+          FALLBACK_PAGE="https://github.com/XxRexRaptorxX?tab=repositories"
+          FALLBACK_IMAGE="https://raw.githubusercontent.com/XxRexRaptorxX/General/main/icons/profile_pic.png"
+
+          if [ -f "${GITHUB_WORKSPACE}/${PATH}" ]; then
+            RAW_URL="https://raw.githubusercontent.com/${REPO}/${{ github.sha }}/${PATH}"
+            echo "image_url=${RAW_URL}" >> $GITHUB_OUTPUT
+            echo "page_url=https://github.com/${REPO}" >> $GITHUB_OUTPUT
+          else
+            echo "image_url=${FALLBACK_IMAGE}" >> $GITHUB_OUTPUT
+            echo "page_url=${FALLBACK_PAGE}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Show resolved image & page URL
+        run: |
+          echo "-> image_url: ${{ steps.get_repository_content.outputs.image_url }}"
+          echo "-> page_url : ${{ steps.get_repository_content.outputs.page_url }}"
+
+      - name: Send Discord message
+        id: send_discord
+        uses: sarisia/actions-status-discord@v1
+        if: >
+          github.event.head_commit &&
+          (startsWith(github.event.head_commit.message, 'feat') ||
+            startsWith(github.event.head_commit.message, 'fix') ||
+            startsWith(github.event.head_commit.message, 'refactor'))
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "New ${{ steps.get_mod_name.outputs.mod_name }} stuff is coming soon!"
+          url: ${{ steps.get_repository_content.outputs.page_url }}
+          image: ${{ steps.get_repository_content.outputs.image_url }}
+          username: Villager News
+          avatar_url: "https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/villager_news.png?raw=true"
+          noprefix: true
+
+      - name: Create release containing previous version's Dev tags
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get the pushed tag, strip refs/tags/
+            const pushedRef = process.env.GITHUB_REF;
+            const pushedTag = pushedRef.replace('refs/tags/', '');
+
+            function stripV(s) { return s.startsWith('v') ? s.slice(1) : s; }
+            function parseBaseVersion(s) { return s.split('.').map(p => Number(p || 0)); }
+            function semverCompare(a, b) {
+              const pa = parseBaseVersion(a), pb = parseBaseVersion(b);
+              for (let i = 0; i < 3; i++) {
+                const da = pa[i] || 0, db = pb[i] || 0;
+                if (da < db) return -1;
+                if (da > db) return 1;
+              }
+              return 0;
+            }
+            function baseFromTag(tag) {
+              const m = tag.match(/^v?(\d+\.\d+\.\d+)(?:-dev\d+)?$/);
+              return m ? m[1] : null;
+            }
+            function devNumberFromTag(tag) {
+              const m = tag.match(/-dev(\d+)$/);
+              return m ? Number(m[1]) : null;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const currentTag = stripV(pushedTag);
+            const currentBase = currentTag.replace(/-dev\d+$/, '');
+
+            const allTags = await github.paginate(github.rest.repos.listTags, { owner, repo, per_page: 100 });
+            const devTags = allTags.map(t => t.name)
+                                   .filter(n => /^v?\d+\.\d+\.\d+-dev\d+$/.test(n))
+                                   .map(n => stripV(n));
+
+            const groups = {};
+            for (const t of devTags) {
+              const base = baseFromTag(t);
+              const devNum = devNumberFromTag(t);
+              if (!base || devNum === null) continue;
+              if (!groups[base]) groups[base] = [];
+              groups[base].push({ tag: t, dev: devNum });
+            }
+
+            let prevBase = null;
+            for (const b of Object.keys(groups)) {
+              if (semverCompare(b, currentBase) < 0) {
+                if (!prevBase || semverCompare(b, prevBase) > 0) prevBase = b;
+              }
+            }
+
+            if (!prevBase) {
+              core.info(`No previous base version found before ${currentBase}. Nothing to do.`);
+              return;
+            }
+
+            groups[prevBase].sort((a,b) => a.dev - b.dev);
+            const devList = groups[prevBase].map(x => x.tag);
+
+            const bodyLines = [
+              `This release collects the Dev tags for version **${prevBase}**.`,
+              '',
+              'Included Dev tags:',
+              ''
+            ];
+            for (const t of devList) {
+              bodyLines.push(`- ${t} — https://github.com/${owner}/${repo}/releases/tag/${t}`);
+            }
+            const body = bodyLines.join('\n');
+
+            const latestDev = groups[prevBase].slice().sort((a,b)=>b.dev-a.dev)[0];
+            const tagObj = allTags.find(x => stripV(x.name) === latestDev.tag);
+            const targetCommitish = tagObj ? tagObj.commit.sha : context.sha;
+
+            const tagNameToUse = prevBase;
+            let existingRelease = null;
+            try {
+              const got = await github.rest.repos.getReleaseByTag({ owner, repo, tag: tagNameToUse });
+              existingRelease = got.data;
+            } catch (e) { }
+
+            if (existingRelease) {
+              const existingBody = existingRelease.body || '';
+              let newBody = existingBody;
+              for (const t of devList) {
+                if (!existingBody.includes(t)) newBody += `\n- ${t} — https://github.com/${owner}/${repo}/releases/tag/${t}`;
+              }
+              await github.rest.repos.updateRelease({
+                owner, repo, release_id: existingRelease.id,
+                body: newBody, target_commitish: targetCommitish,
+                name: `Devs for ${prevBase}`, draft: false, prerelease: false
+              });
+              core.info(`Updated existing release for tag ${tagNameToUse}`);
+            } else {
+              await github.rest.repos.createRelease({
+                owner, repo, tag_name: tagNameToUse,
+                name: `Devs for ${prevBase}`, body,
+                draft: false, prerelease: false,
+                target_commitish: targetCommitish
+              });
+              core.info(`Created release for ${tagNameToUse} including ${devList.length} Dev tags.`);
+            }

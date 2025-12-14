@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/../.." && pwd))
+cd "$PROJECT_DIR" || exit 1
+MSG=$(git log -1 --pretty=%B 2>/dev/null || true)
+if echo "$MSG" | grep -qi "\[skip hooks\]"; then
+  echo "post-commit: commit contains [skip hooks] -> skipping hook actions"
+  exit 0
+fi
+MOD_VERSION=$(grep '^mod_version=' gradle.properties | cut -d'=' -f2 || true)
+if [ -z "$MOD_VERSION" ]; then
+  echo "post-commit: mod_version not found, aborting" >&2
+  exit 1
+fi
+LAST_TAG=$(git tag --list "v.${MOD_VERSION}-dev*" --sort=-version:refname | head -n1 || true)
+if [ -z "$LAST_TAG" ]; then
+  NEXT=1
+else
+  N=$(echo "$LAST_TAG" | sed -E 's/.*-dev([0-9]+)$/\1/' || true)
+  if [[ "$N" =~ ^[0-9]+$ ]]; then
+    NEXT=$((N+1))
+  else
+    NEXT=1
+  fi
+fi
+DEV_TAG="v.${MOD_VERSION}-dev${NEXT}"
+git tag -a "$DEV_TAG" -m "dev ${NEXT} for version ${MOD_VERSION}" || true
+if git remote get-url origin >/dev/null 2>&1; then
+  echo "post-commit: pushing tag $DEV_TAG to origin"
+  git push origin "$DEV_TAG" || echo "post-commit: git push tag failed (check auth/remote)"
+else
+  echo "post-commit: no origin remote configured -> skipping push"
+fi
+if [ -x ./gradlew ]; then
+  ./gradlew updateChangelog --no-daemon --quiet || echo "post-commit: updateChangelog failed"
+elif [ -x ./gradlew.bat ]; then
+  ./gradlew.bat updateChangelog --no-daemon --quiet || echo "post-commit: updateChangelog failed"
+else
+  echo "post-commit: gradlew not found" >&2
+fi
+if git status --porcelain | grep -q "LATEST_CHANGELOG.md"; then
+  git add LATEST_CHANGELOG.md
+  git commit -m "chore: update LATEST_CHANGELOG.md [skip hooks]" || true
+  if git remote get-url origin >/dev/null 2>&1; then
+    git push origin HEAD || echo "post-commit: push of changelog commit failed"
+  fi
+fi
+exit 0

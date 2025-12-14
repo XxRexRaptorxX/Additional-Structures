@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles version="13">
+    <profile kind="CodeFormatterProfile" name="PalantirLike" version="13">
+
+        <!-- ====================================================================================== -->
+        <!-- LINE LENGTH AND WRAPPING SETTINGS                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Maximum line length before wrapping -->
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="180"/>
+
+        <!-- Comment line length -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="180"/>
+
+        <!-- Continuation indentation for wrapped lines -->
+        <setting id="org.eclipse.jdt.core.formatter.continuation_indentation" value="2"/>
+        <setting id="org.eclipse.jdt.core.formatter.continuation_indentation_for_array_initializer" value="2"/>
+
+        <!-- ====================================================================================== -->
+        <!-- INDENTATION AND TABS                                                                  -->
+        <!-- ====================================================================================== -->
+
+        <!-- Use spaces instead of tabs -->
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
+
+        <!-- Tab size and indentation size (4 spaces) -->
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"/>
+        <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
+
+        <!-- ====================================================================================== -->
+        <!-- BRACE POSITIONING (K&R Style)                                                         -->
+        <!-- ====================================================================================== -->
+
+        <!-- Opening braces on same line (K&R style) -->
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="END_OF_LINE"/>
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration" value="END_OF_LINE"/>
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block" value="END_OF_LINE"/>
+
+        <!-- Space before opening brace in blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_block" value="true"/>
+
+        <!-- ====================================================================================== -->
+        <!-- LAMBDA EXPRESSIONS                                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Keep lambda body on one line if it's a single item -->
+        <setting id="org.eclipse.jdt.core.formatter.keep_lambda_body_block_on_one_line" value="one_line_if_single_item"/>
+
+        <!-- Spaces around lambda arrow -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_lambda_arrow" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_lambda_arrow" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- CONTROL STRUCTURES                                                                     -->
+        <!-- ====================================================================================== -->
+
+        <!-- Keep simple if/else statements compact -->
+        <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.keep_else_statement_on_same_line" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.keep_simple_if_on_one_line" value="true"/>
+
+        !-- Spaces before opening brace for control blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_if" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_else" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_for" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_while" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_switch" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_catch" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_try" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_synchronized" value="insert"/>
+
+        <!-- Methods / constructors / blocks -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_method_declaration" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_constructor_declaration" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_block" value="insert"/>
+
+        <!-- Spaces between methods -->
+        <setting id="org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve" value="1"/>
+        <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_method" value="2"/>
+        <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_abstract_method" value="2"/>
+
+        <!-- ====================================================================================== -->
+        <!-- METHOD AND CONSTRUCTOR DECLARATIONS                                                    -->
+        <!-- ====================================================================================== -->
+
+        <!-- No space before parentheses in method/constructor declarations and invocations -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_invocation" value="do not insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_declaration" value="do not insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_constructor_declaration" value="do not insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- COMMA SPACING                                                                          -->
+        <!-- ====================================================================================== -->
+
+        <!-- Always insert space after commas -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_declaration_throws" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_constructor_declaration_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_allocation_expression" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_enum_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_local_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_multiple_field_declarations" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_parameters" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_arguments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_annotation" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_increments" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_for_inits" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- ENUM FORMATTING                                                                        -->
+        <!-- ====================================================================================== -->
+
+        <!-- Force each enum constant on a separate line (alignment value 49) -->
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_enum_constants" value="49"/>
+
+        <!-- Wrap enum constant arguments only when necessary (alignment value 16) -->
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_enum_constant" value="16"/>
+
+        <!-- Insert new lines in empty enum declarations and constants -->
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_in_empty_enum_constant" value="insert"/>
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_in_empty_enum_declaration" value="insert"/>
+
+        <!-- ====================================================================================== -->
+        <!-- JAVADOC AND COMMENT FORMATTING                                                        -->
+        <!-- ====================================================================================== -->
+
+        <!-- Enable formatting of Javadoc and block comments -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_javadoc_comments" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_block_comments" value="true"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_source_code" value="true"/>
+
+        <!-- Keep @param and description on same line -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.insert_new_line_for_parameter" value="do not insert"/>
+
+        <!-- Don't indent parameter descriptions (keep them aligned with @param) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.indent_parameter_description" value="false"/>
+
+        <!-- Don't align Javadoc tags in groups or columns (prevents strange spacing) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_descriptions_grouped" value="false"/>
+        <setting id="org.eclipse.jdt.core.formatter.comment.align_tags_names_descriptions" value="false"/>
+
+        <!-- Don't indent root tags (@param, @return, etc.) -->
+        <setting id="org.eclipse.jdt.core.formatter.comment.indent_root_tags" value="false"/>
+
+        <!-- ====================================================================================== -->
+        <!-- MISCELLANEOUS SETTINGS                                                                -->
+        <!-- ====================================================================================== -->
+
+        <!-- Preserve up to 2 consecutive empty lines -->
+        <setting id="org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve" value="2"/>
+
+        <!-- Formatter disable tag for selective formatting control -->
+        <setting id="org.eclipse.jdt.core.formatter.disabling_tag" value="@formatter:off"/>
+
+    </profile>
+</profiles>

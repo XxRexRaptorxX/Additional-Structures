@@ -1,0 +1,194 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+// ========================================
+// PUBLISHING TASKS
+// ========================================
+
+tasks.register("#publishNewVersion") {
+    group = "publishing"
+    description = "Publish to both Modrinth and CurseForge"
+
+    dependsOn "build", "modrinth", "publishCurseForge", "archiveChangelog", "updateVersionsJson", //"publishToMavenLocal"
+
+    doLast {
+        println "=== Publish Completed ==="
+        println "Mod Version: ${mod_version}"
+        println "Minecraft Version: ${minecraft_version}"
+        println "Published to Modrinth and CurseForge"
+        println "Updated versions.json with current version"
+    }
+}
+
+tasks.register("#publishModrinthOnly") {
+    group = "publishing"
+    description = "Publish only to Modrinth"
+
+    dependsOn "build", "modrinth", "updateVersionsJson"
+
+    doLast {
+        println "=== Modrinth Publish Completed ==="
+        println "Mod Version: ${mod_version}"
+        println "Published to Modrinth only"
+        println "Updated versions.json with current version"
+    }
+}
+
+tasks.register("#publishCurseForgeOnly") {
+    group = "publishing"
+    description = "Publish only to CurseForge"
+
+    dependsOn "build", "publishCurseForge", "updateVersionsJson"
+
+    doLast {
+        println "=== CurseForge Publish Completed ==="
+        println "Mod Version: ${mod_version}"
+        println "Published to CurseForge only"
+        println "Updated versions.json with current version"
+    }
+}
+
+tasks.register("dryRunPublish") {
+    group = "publishing"
+    description = "Dry run - shows what would be published without actually publishing"
+
+    doLast {
+        println "=== DRY RUN - PUBLISH PREVIEW ==="
+        println "Mod ID: ${mod_id}"
+        println "Mod Name: ${mod_name}"
+        println "Mod Version: ${mod_version}"
+        println "Minecraft Version: ${minecraft_version}"
+        println "Release Type: ${release_type}"
+        println "Game Versions: ${project.findProperty("game_versions")}"
+        println ""
+        println "Modrinth Project ID: ${mr_id}"
+        println "CurseForge Project ID: ${project.findProperty("cf_id")}"
+        println ""
+        println "JAR File: ${jar.archiveFileName.get()}"
+        println "JAR Path: ${jar.destinationDirectory.get()}/${jar.archiveFileName.get()}"
+        println ""
+
+        def changelogContent = generateLatestChangelog()
+        println "Changelog Preview:"
+        println "==================="
+        println changelogContent.take(500) + (changelogContent.length() > 500 ? "..." : "")
+        println "==================="
+        println ""
+
+        println "versions.json changes that would be made:"
+        def currentVersion = mod_version
+        def currentMcVersion = minecraft_version
+        println "  ${currentMcVersion}-latest: ${currentVersion}"
+        println "  ${currentMcVersion}-recommended: ${currentVersion}"
+        println ""
+
+        println "Environment Variables:"
+        println "MODRINTH_TOKEN: ${System.getenv("MODRINTH_TOKEN") ? 'SET' : 'NOT SET'}"
+        println "CURSEFORGE_TOKEN: ${System.getenv("CURSEFORGE_TOKEN") ? 'SET' : 'NOT SET'}"
+    }
+}
+
+ext.validateTokens = {
+    def modrinthToken = System.getenv("MODRINTH_TOKEN") ?: project.findProperty("modrinthToken")?.toString()
+    def cfToken = System.getenv("CURSEFORGE_TOKEN") ?: project.findProperty("curseforgeToken")?.toString()
+
+    if (modrinthToken == null) {
+        throw new GradleException("Missing MODRINTH_TOKEN: set it either as ENV (MODRINTH_TOKEN) or in ~/.gradle/gradle.properties (modrinthToken)")
+    }
+
+    if (cfToken == null) {
+        throw new GradleException("Missing CURSEFORGE_TOKEN: set it either as ENV (CURSEFORGE_TOKEN) or in ~/.gradle/gradle.properties (curseforgeToken)")
+    }
+
+    return [modrinthToken, cfToken]
+}
+
+// Read Gradle properties
+def modVersion = project.findProperty('mod_version')?.toString() ?: '0.0.0'
+def gameVersions = (project.findProperty('game_versions')?.toString() ?: '')
+        .split(',')
+        .collect { it.trim() }
+        .findAll { it }
+def releaseType = project.findProperty('release_type')?.toString()?.trim()?.toLowerCase() ?: 'stable'
+def onlyLatest = ['alpha', 'beta'].contains(releaseType)
+
+tasks.register('updateVersionsJson') {
+    group = 'publishing'
+    description = 'Update versions.json promos for each game version to the current mod_version. If release_type is "alpha" or "beta", only the "-latest" entries are modified.'
+
+    doLast {
+        // 1) load versions.json
+        def file = file('versions.json')
+        if (!file.exists()) {
+            throw new GradleException("versions.json not found at: ${file.absolutePath}. Create one, or use the 'setupVersionsJson' initialization task")
+        }
+
+        def json
+        try {
+            json = new JsonSlurper().parseText(file.text)
+        } catch (Exception e) {
+            throw new GradleException("Failed to parse versions.json: ${e.message}. Please ensure the file is valid JSON.")
+        }
+
+        if (json == null) json = [:]
+        if (json.promos == null) json.promos = [:]
+
+        // 2) update promos according to game_versions + release_type
+        def updatedKeys = []
+        gameVersions.each { v ->
+            def latestKey = "${v}-latest"
+            def recommendedKey = "${v}-recommended"
+
+            def oldLatest = json.promos[latestKey]
+            if (oldLatest != modVersion) {
+                json.promos[latestKey] = modVersion
+                updatedKeys << latestKey
+            }
+
+            if (!onlyLatest) {
+                def oldRec = json.promos[recommendedKey]
+                if (oldRec != modVersion) {
+                    json.promos[recommendedKey] = modVersion
+                    updatedKeys << recommendedKey
+                }
+            }
+        }
+
+        if (updatedKeys.isEmpty()) {
+            println "No promos updated (mod_version=${modVersion}, release_type=${releaseType}). Nothing to commit."
+            return
+        }
+
+        // 3) write pretty JSON back to file
+        file.text = JsonOutput.prettyPrint(JsonOutput.toJson(json)) + System.lineSeparator()
+        println "Wrote ${file.path} — updated keys: ${updatedKeys.join(', ')}"
+
+        // 4) git add / commit / push --all (gracefully handle 'nothing to commit')
+        def addRes = project.exec {
+            commandLine 'git', 'add', 'versions.json'
+            ignoreExitValue = true
+        }
+
+        def commitMessage = "chore: update versions.json (${updatedKeys.join(', ')} -> ${modVersion}; release_type=${releaseType})"
+        def commitRes = project.exec {
+            commandLine 'git', 'commit', '-m', commitMessage
+            ignoreExitValue = true
+        }
+
+        if (commitRes.exitValue != 0) {
+            println "git commit returned exit code ${commitRes.exitValue} — probably nothing to commit or git not configured. Skipping push."
+            return
+        }
+
+        def pushRes = project.exec {
+            commandLine 'git', 'push', '--all'
+            ignoreExitValue = true
+        }
+
+        if (pushRes.exitValue != 0) {
+            throw new GradleException("git push --all failed with exit code ${pushRes.exitValue}")
+        }
+
+        println "Committed and pushed updates to all branches."
+    }
+}

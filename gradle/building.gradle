@@ -1,0 +1,37 @@
+// ========================================
+// MOD BUILDING TASKS
+// ========================================
+
+tasks.named('jar').configure {
+    archiveBaseName.set(mod_name.replace(" ", ""))
+    archiveVersion.set("${minecraft_version}-(v.${mod_version}-${mod_loader})")
+}
+
+tasks.matching { it.name == 'runData' }.configureEach {
+    finalizedBy('spotlessApply')
+}
+
+tasks.matching { it.name == 'runClient' }.configureEach {
+    dependsOn('spotlessApply')
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        eclipse().configFile("${rootDir}/eclipse-java-formatter.xml")
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    json {
+        target 'src/**/*.json'
+        gson().indentWithSpaces(2)
+        endWithNewline()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
