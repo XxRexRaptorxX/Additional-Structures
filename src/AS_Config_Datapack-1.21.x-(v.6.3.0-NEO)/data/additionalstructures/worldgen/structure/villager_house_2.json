@@ -1,5 +1,5 @@
 {
-    "start_pool": "additionalstructures:villager_house_2",
+  "start_pool": "additionalstructures:villager_house_2",
   "biomes": "#additionalstructures:has_structure/villager_house",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
