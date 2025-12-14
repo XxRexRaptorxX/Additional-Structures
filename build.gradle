@@ -132,11 +132,11 @@ dependencies {
     //compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     //runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
     //REI
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+    //runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    //compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    //compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
     //JADE
-    runtimeOnly("curse.maven:jade-324717:${jade_version}")
+    //runtimeOnly("curse.maven:jade-324717:${jade_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
