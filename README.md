@@ -80,7 +80,7 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 - **Mystcraft** [MC 1.12]
     - Feature symbols of AS structures added
     - [CurseForge][cf_mc] | [Modrinth][mr_mc]
-- **Antique Atlas** [≥ MC 1.21]
+- **Antique Atlas** [≥ MC 1.21.2]
     - Map marker for some structures on the map
     - [CurseForge][cf_aa] | [Modrinth][mr_aa]
 
