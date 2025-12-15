@@ -1,5 +1,5 @@
 {
-  "start_pool": "additionalstructures:nether_skeleton_skull",
+  "start_pool": "additionalstructures:nether_skulls_1",
   "biomes": "#additionalstructures:has_structure/nether_skull",
   "type": "minecraft:jigsaw",
   "step": "surface_structures",
