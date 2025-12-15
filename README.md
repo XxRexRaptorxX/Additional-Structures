@@ -13,11 +13,11 @@
 
 ## 📖 Description
 
-This mod adds ~155 new small and medium-sized structures into the game to expand your world!
+This mod adds ~250 new small and medium-sized structures into the game to expand your world!
 
 - supports biome generation mods, like Terralith, Traverse, Biomes O' Plenty, Biome Bundle and more!
-- Mystcraft integration (1.12)
-- with config options to change the spawn values of each structure type! (1.12)
+- Mystcraft integration (MC 1.12)
+- with config options to change the spawn values of each structure type! (MC 1.12)
 - works with the /locate command
 - with update-checker
 - different structures generates in vanilla and modded biomes in the overworld and the end!
@@ -72,14 +72,17 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 ## 🗃️ Dependencies
 
 ### Required:
-- **Magma Core**
-  - Provides basic code and features such as update-checker
-  - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
-  
+- **Magma Core** [≥ MC 1.21.5]
+    - Provides basic code and features such as update-checker
+    - [CurseForge][cf_magmacore] | [Modrinth][mr_magmacore]
+
 ### Supported:
-- **Mystcraft** [only 1.12]
-  - Feature symbols of AS structures added
-  - [CurseForge][cf_mc] | [Modrinth][mr_mc]
+- **Mystcraft** [MC 1.12]
+    - Feature symbols of AS structures added
+    - [CurseForge][cf_mc] | [Modrinth][mr_mc]
+- **Antique Atlas** [≥ MC 1.21.2]
+    - Map marker for some structures on the map
+    - [CurseForge][cf_aa] | [Modrinth][mr_aa]
 
 <p align="center">
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
@@ -132,6 +135,7 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 
 [cf_magmacore]: https://www.curseforge.com/minecraft/mc-mods/magma-core
 [mr_magmacore]: https://modrinth.com/mod/magma-core
-
 [cf_mc]: https://www.curseforge.com/minecraft/mc-mods/mystcraft
 [mr_mc]: https://modrinth.com/mod/mystcraft
+[cf_aa]: https://www.curseforge.com/minecraft/mc-mods/antique-atlas
+[mr_aa]: https://modrinth.com/mod/antique-atlas
