@@ -1,4 +1,4 @@
-# [v.6.4.0 for MC 1.21.2, 1.21.3, 1.21.4, 1.21.5](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.6.4.0-dev1...v.6.4.0-dev9)
+# [v.6.4.0 for MC 1.21.2, 1.21.3, 1.21.4, 1.21.5](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.6.4.0-dev1...v.6.4.0-dev10)
 
 ## ✨ Features
 
