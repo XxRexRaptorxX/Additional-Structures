@@ -1,11 +1,11 @@
 {
   "structures": [
     {
-      "structure": "additionalstructures:wither_skull",
+      "structure": "additionalstructures:skeleton_skull",
       "weight": 1
     },
     {
-      "structure": "additionalstructures:skeleton_skull",
+      "structure": "additionalstructures:nether_skeleton_skull",
       "weight": 1
     }
   ],
