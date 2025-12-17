@@ -39,19 +39,40 @@ repositories {
 
 dependencies {
     // MagamCore
-    implementation "xxrexraptorxx:magmacore:2.0.0"
+    implementation "xxrexraptorxx:magmacore:${magma_core_version}"
     //implementation "curse.maven:MagmaCore-1267885:${magma_core_version}"
+
     // JEI
-    compileOnly("mezz.jei:jei-1.21.9-neoforge-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
     // REI
     compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
     //runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+
     // EMI
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+
     // JADE
     runtimeOnly "curse.maven:jade-324717:${jade_version}"
+
     // Curios
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.5:api"
+    //compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+1.21.5:api"
     //runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"
+
+    //GuideME
+    //compileOnly "org.appliedenergistics:guideme:${guideme_version}:api"
+    //runtimeOnly "org.appliedenergistics:guideme:${guideme_version}"
+
+    // Continuity
+    //runtimeOnly "curse.maven:continuity-531351:${continuity_version}"
+
+    // JEED
+    //runtimeOnly "curse.maven:jeed-532286:${jeed_version}"
+
+    //others:
+    //runtimeOnly "curse.maven:energized-power-782147:${energized_power_version}"
+    //runtimeOnly "curse.maven:mekanism-268560:${mekanism_version}"
+
 }

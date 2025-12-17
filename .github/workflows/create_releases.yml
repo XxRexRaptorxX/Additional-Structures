@@ -1,4 +1,4 @@
-name: Create previous-version Dev release
+name: Create releases
 
 on:
   push:
@@ -60,12 +60,6 @@ jobs:
           username: Villager News
           avatar_url: "https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/villager_news.png?raw=true"
           noprefix: true
-
-      - name: Show discord payload
-        if: always()
-        run: |
-          echo "-> discord payload:"
-          echo "${{ steps.send_discord.outputs.payload }}"
 
       - name: Create release containing previous version's Dev tags
         uses: actions/github-script@v7
