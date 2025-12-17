@@ -1,4 +1,4 @@
-# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev6)
+# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev7)
 
 ## ✨ Features
 
