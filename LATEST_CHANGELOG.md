@@ -1,4 +1,4 @@
-# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev4)
+# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev5)
 
 ## 🔧 Bug Fixes
 
@@ -7,5 +7,6 @@
 
 ## 🔨 Refactoring
 
+- skull generation improved ([5908f6b](https://github.com/XxRexRaptorxX/Additional-Structures/commit/5908f6bef7bc4f460f32d0aaac216bc464341c67))
 - nether structures improved ([4b7d50d](https://github.com/XxRexRaptorxX/Additional-Structures/commit/4b7d50de92e48f78486a3c054e5e06ededee668c))
 
