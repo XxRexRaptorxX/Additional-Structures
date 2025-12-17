@@ -1,0 +1,21 @@
+{
+  "start_pool": "additionalstructures:end_crystal",
+  "biomes": "#additionalstructures:has_structure/end_crystal",
+  "type": "minecraft:jigsaw",
+  "step": "surface_structures",
+  "project_start_to_heightmap": "MOTION_BLOCKING_NO_LEAVES",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "size": 1,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "above_bottom": 1
+    },
+    "max_inclusive": {
+      "above_bottom": 3
+    }
+  },
+  "max_distance_from_center": 30,
+  "use_expansion_hack": false
+}
