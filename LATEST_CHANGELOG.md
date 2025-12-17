@@ -1,4 +1,8 @@
-# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev5)
+# [v.8.1.0 for MC 1.21.10, 1.21.9](https://github.com/XxRexRaptorxX/Additional-Structures/compare/v.8.1.0-dev1...v.8.1.0-dev6)
+
+## ✨ Features
+
+- new skull structures ([b92252e](https://github.com/XxRexRaptorxX/Additional-Structures/commit/b92252e38691a5339015068cc087ea0f770ace27))
 
 ## 🔧 Bug Fixes
 
