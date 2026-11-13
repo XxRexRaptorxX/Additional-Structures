@@ -3,8 +3,10 @@
   <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures-fabric"><img src="http://cf.way2muchnoise.eu/short_585782_Fabric.svg?badge_style=flat" alt="Curseforge"></a> 
   <a href="https://modrinth.com/mod/additional-structures"><img src="https://img.shields.io/modrinth/dt/additional-structures?logo=modrinth&label=&suffix=%20&style=flat&color=242629&labelColor=5ca424&logoColor=1c1c1c" alt="Modrinth"></a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/additional-structures"><img src="https://cf.way2muchnoise.eu/versions/297680(266fff).svg?badge_style=flat" alt="Supported Versions"></a>
+  <a href="https://github.com/XxRexRaptorxX/General/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/License-ARR_%2B_Permissions-242629?style=flat&labelColor=34aeeb" alt="License"></a>
   <a href="https://discord.com/invite/ycRJJk8EXV"><img src="https://img.shields.io/discord/523112426913267713?color=282828&logo=discord&style=flat&label=&labelColor=B6BCEA" alt="Discord"></a>
 </p>
+
 <p align="center">
   <img src="https://github.com/XxRexRaptorxX/Additional-Structures/blob/master/src/main/resources/logo.png?raw=true" alt="logo" width="500"/><br>
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line_curved.png?raw=true" alt="line" width="2000"/>
@@ -83,6 +85,26 @@ Do you use Fabric or Quilt? Then use [this version](https://www.curseforge.com/m
 - **Antique Atlas** [≥ MC 1.21]
     - Map marker for some structures on the map
     - [CurseForge][cf_aa] | [Modrinth][mr_aa]
+
+<p align="center">
+  <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
+</p>
+
+## License 
+
+[![License](https://img.shields.io/badge/license-ARR_+_Permissions-blue)](https://github.com/XxRexRaptorxX/General/blob/main/LICENSE.md)
+[![Sunset](https://img.shields.io/badge/sunset-LGPL--3.0_after_48_months-informational)](https://github.com/XxRexRaptorxX/General/blob/main/LICENSE.md#sunset)
+
+This mod is **not** open source, but contributions are explicitly welcome.
+You may fork the repository, build it, modify it for your own use, and
+submit pull requests. What you may not do is publish compiled builds —
+modified or not — outside the official channels, or sell the mod.
+
+If no release is published for 48 months, the mod becomes available under
+LGPL-3.0-or-later, so the project can be continued by others if I ever
+stop maintaining it.
+
+See [LICENSE.md](https://github.com/XxRexRaptorxX/General/blob/main/LICENSE.md) for the exact terms.
 
 <p align="center">
   <img src="https://github.com/XxRexRaptorxX/General/blob/main/page_decorations/line.png?raw=true" alt="line" width="2000"/>
